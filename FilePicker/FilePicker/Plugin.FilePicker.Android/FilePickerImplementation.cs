@@ -121,7 +121,7 @@ namespace Plugin.FilePicker
 
 		public void OpenFile(string fileToOpen)
 		{
-			File myFile = new File(Android.OS.Environment.ExternalStorageState, fileToOpen.FileName);
+			File myFile = new File(Android.OS.Environment.ExternalStorageState, fileToOpen);
 
 			OpenFile(myFile);
 		}
