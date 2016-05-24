@@ -25,9 +25,8 @@ Simple cross-platform plug-in that allows Pick files, save files and open the ar
 
 Call **CrossFilePicker.Current** from any project or PCL to gain access to APIs.
 
-### **IMPORTANT !**
-**Android: **
-
+### **IMPORTANT**
+**Android:**
 The `WRITE_EXTERNAL_STORAGE` & `READ_EXTERNAL_STORAGE` permissions are required.
 
 **iOS** 
