@@ -25,6 +25,15 @@ Simple cross-platform plug-in that allows Pick files, save files and open the ar
 
 Call **CrossFilePicker.Current** from any project or PCL to gain access to APIs.
 
+### **IMPORTANT !**
+**Android: **
+
+The `WRITE_EXTERNAL_STORAGE` & `READ_EXTERNAL_STORAGE` permissions are required.
+
+**iOS** 
+
+Need [Configure iCloud Driver for your app](https://developer.xamarin.com/guides/ios/platform_features/intro_to_cloudkit)
+
 #### Contributors
 * [rafaelrmou](https://github.com/rafaelrmou)
  
