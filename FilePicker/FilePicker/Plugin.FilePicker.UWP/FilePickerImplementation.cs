@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.System;
 
 namespace Plugin.FilePicker
 {
@@ -54,14 +55,14 @@ namespace Plugin.FilePicker
 
 	
 
-		public void OpenFile(string fileToOpen)
+		public async void OpenFile(string fileToOpen)
 		{
 
 			try {
 				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen);
 
 				if(file!=null){
-					await Launcher.LaunchFileAsync(file)
+                    await Launcher.LaunchFileAsync(file);
 				}
 			}
 			catch (System.IO.FileNotFoundException ex) {
@@ -78,7 +79,7 @@ namespace Plugin.FilePicker
 				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen.FileName);
 
 				if(file!=null){
-					await Launcher.LaunchFileAsync(file)
+                    await Launcher.LaunchFileAsync(file);
 				}
 			}
 			catch (System.IO.FileNotFoundException ex) {
