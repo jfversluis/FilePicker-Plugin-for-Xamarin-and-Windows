@@ -36,6 +36,60 @@ namespace Plugin.FilePicker
             }
         }
 
+		public async Task<bool> SaveFile(FileData fileToSave)
+		{
+			try
+			{
+				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
+
+				await FileIO.WriteBytesAsync(file,fileToSave.DataArray);
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+				return false;
+			}
+		}
+
+	
+
+		public void OpenFile(string fileToOpen)
+		{
+
+			try {
+				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen);
+
+				if(file!=null){
+					await Launcher.LaunchFileAsync(file)
+				}
+			}
+			catch (System.IO.FileNotFoundException ex) {
+				
+			}
+			catch (System.Exception ex) {
+				
+			}
+		}
+
+		public async void OpenFile(FileData fileToOpen)
+		{
+			try {
+				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen.FileName);
+
+				if(file!=null){
+					await Launcher.LaunchFileAsync(file)
+				}
+			}
+			catch (System.IO.FileNotFoundException ex) {
+				await SaveFile(fileToOpen);
+				OpenFile(fileToOpen);
+			}
+			catch (System.Exception ex) {
+				
+			}
+		}
+
         public async Task<byte[]> ReadFile(StorageFile file)
         {
             byte[] fileBytes = null;
