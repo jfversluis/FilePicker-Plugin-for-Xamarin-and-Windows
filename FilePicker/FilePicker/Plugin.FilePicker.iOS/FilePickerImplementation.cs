@@ -155,7 +155,7 @@ namespace Plugin.FilePicker
 
 		public void OpenFile(NSUrl fileUrl)
 		{
-			var docControl = UIDocumentInteractionController.FromUrl(url);
+			var docControl = UIDocumentInteractionController.FromUrl(fileUrl);
 
 			var window = UIApplication.SharedApplication.KeyWindow;
 			var subViews = window.Subviews;
