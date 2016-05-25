@@ -16,8 +16,8 @@ Simple cross-platform plug-in that allows Pick files, save files and open the ar
 |Xamarin.iOS Unified|Yes|iOS 6+|
 |Xamarin.Android|Yes|API 10+|
 |Windows Phone Silverlight|NO||
-|Windows Phone RT|NO||
-|Windows Store RT|NO||
+|Windows Phone RT|Yes|8.1+|
+|Windows Store RT|Yes|8.1+|
 |Windows 10 UWP|Yes|10+|
 |Xamarin.Mac|No||
 
