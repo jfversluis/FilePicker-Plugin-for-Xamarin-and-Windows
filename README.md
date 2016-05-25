@@ -5,7 +5,7 @@ Simple cross-platform plug-in that allows Pick files, save files and open the ar
 
 ### Setup
 
-* Available on NuGet: soon
+* Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xam.Plugin.FilePicker)
 * Install into your PCL project and Client projects.
 
 **Platform Support**
