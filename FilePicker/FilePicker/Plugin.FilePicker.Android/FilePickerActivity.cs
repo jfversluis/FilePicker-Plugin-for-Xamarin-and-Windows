@@ -47,6 +47,8 @@ namespace Plugin.FilePicker
 
             if (resultCode == Result.Canceled)
             {
+                // Notify user file picking was cancelled.
+                OnFilePickCancelled();
                 Finish();
             }
             else
@@ -69,6 +71,8 @@ namespace Plugin.FilePicker
                 }
                 catch (System.Exception readEx)
                 {
+                    // Notify user file picking failed.
+                    OnFilePickCancelled();
                     System.Diagnostics.Debug.Write(readEx);
                 }
                 finally
@@ -104,6 +108,12 @@ namespace Plugin.FilePicker
         }
 
         internal static event EventHandler<FilePickerEventArgs> FilePicked;
+        internal static event EventHandler<EventArgs> FilePickCancelled;
+
+        private static void OnFilePickCancelled()
+        {
+	        FilePickCancelled?.Invoke(null, null);
+        }
 
         private static void OnFilePicked(FilePickerEventArgs e)
         {

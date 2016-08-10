@@ -49,6 +49,7 @@ namespace Plugin.FilePicker
 				this.context.StartActivity(pickerIntent);
 
 				EventHandler<FilePickerEventArgs> handler = null;
+				EventHandler<EventArgs> cancelledHandler = null;
 
 				handler = (s, e) =>
 				{
@@ -63,6 +64,16 @@ namespace Plugin.FilePicker
 					});
 				};
 
+				cancelledHandler = (s, e) =>
+				{
+					var tcs = Interlocked.Exchange(ref this.completionSource, null);
+
+					FilePickerActivity.FilePickCancelled -= cancelledHandler;
+
+					tcs.SetResult(null);
+				};
+
+				FilePickerActivity.FilePickCancelled += cancelledHandler;
 				FilePickerActivity.FilePicked += handler;
 			}
 			catch (Exception exAct)
