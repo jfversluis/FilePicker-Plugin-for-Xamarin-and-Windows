@@ -20,7 +20,7 @@ namespace Plugin.FilePicker
                 Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
             picker.FileTypeFilter.Add("*");
 
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            StorageFile file = await picker.PickSingleFileAsync();
             if (file != null)
             {
                 var array = await ReadFile(file);
@@ -28,7 +28,8 @@ namespace Plugin.FilePicker
                 return new FileData
                 {
                     DataArray = array,
-                    FileName = file.Name
+                    FileName = file.Name,
+                    FilePath = file.Path
                 };
             }
             else
@@ -37,67 +38,70 @@ namespace Plugin.FilePicker
             }
         }
 
-		public async Task<bool> SaveFile(FileData fileToSave)
-		{
-			try
-			{
-				var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
+        public async Task<bool> SaveFile(FileData fileToSave)
+        {
+            try
+            {
+                var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
 
-				await FileIO.WriteBytesAsync(file,fileToSave.DataArray);
+                await FileIO.WriteBytesAsync(file, fileToSave.DataArray);
 
-				return true;
-			}
-			catch (Exception ex)
-			{
-				return false;
-			}
-		}
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
-	
+        public async void OpenFile(string fileToOpen)
+        {
+            try
+            {
+                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen);
 
-		public async void OpenFile(string fileToOpen)
-		{
-
-			try {
-				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen);
-
-				if(file!=null){
+                if (file != null)
+                {
                     await Launcher.LaunchFileAsync(file);
-				}
-			}
-			catch (System.IO.FileNotFoundException ex) {
-				
-			}
-			catch (System.Exception ex) {
-				
-			}
-		}
+                }
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
+            }
+            catch (System.Exception ex)
+            {
+            }
+        }
 
-		public async void OpenFile(FileData fileToOpen)
-		{
-			try {
-				var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen.FileName);
+        public async void OpenFile(FileData fileToOpen)
+        {
+            try
+            {
+                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen.FileName);
 
-				if(file!=null){
+                if (file != null)
+                {
                     await Launcher.LaunchFileAsync(file);
-				}
-			}
-			catch (System.IO.FileNotFoundException ex) {
-				await SaveFile(fileToOpen);
-				OpenFile(fileToOpen);
-			}
-			catch (System.Exception ex) {
-				
-			}
-		}
+                }
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
+                await SaveFile(fileToOpen);
+                OpenFile(fileToOpen);
+            }
+            catch (System.Exception ex)
+            {
+            }
+        }
 
         public async Task<byte[]> ReadFile(StorageFile file)
         {
-            byte[] fileBytes = null;
-            using (IRandomAccessStreamWithContentType stream = await file.OpenReadAsync())
+            byte[] fileBytes;
+
+            using (var stream = await file.OpenReadAsync())
             {
                 fileBytes = new byte[stream.Size];
-                using (DataReader reader = new DataReader(stream))
+                using (var reader = new DataReader(stream))
                 {
                     await reader.LoadAsync((uint)stream.Size);
                     reader.ReadBytes(fileBytes);
