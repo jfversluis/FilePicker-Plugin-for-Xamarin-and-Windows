@@ -29,9 +29,8 @@ namespace Plugin.FilePicker
 
             intent.AddCategory (Intent.CategoryOpenable);
             try {
-                StartActivityForResult (Intent.CreateChooser (intent, "Selecione o arquivo a ser enviado"),
-                      0);
-            } catch (System.Exception exAct) {
+                StartActivityForResult (Intent.CreateChooser (intent, "Select file"), 0);
+            } catch (Exception exAct) {
                 System.Diagnostics.Debug.Write (exAct);
             }
         }
@@ -49,14 +48,14 @@ namespace Plugin.FilePicker
                 try {
                     var _uri = data.Data;
 
-                    string filePath = IOUtil.getPath (this.context, _uri);
+                    var filePath = IOUtil.getPath (context, _uri);
 
                     if (string.IsNullOrEmpty (filePath))
                         filePath = _uri.Path;
 
                     var file = IOUtil.readFile (filePath);
 
-                    var fileName = GetFileName (this.context, _uri);
+                    var fileName = GetFileName (context, _uri);
 
                     OnFilePicked (new FilePickerEventArgs (file, fileName, filePath));
                 } catch (Exception readEx) {
@@ -69,12 +68,12 @@ namespace Plugin.FilePicker
             }
         }
 
-        string GetFileName (Context context, Android.Net.Uri uri)
+        string GetFileName (Context ctx, Android.Net.Uri uri)
         {
 
             string [] projection = { MediaStore.MediaColumns.DisplayName };
 
-            var cr = context.ContentResolver;
+            var cr = ctx.ContentResolver;
             var name = "";
             var metaCursor = cr.Query (uri, projection, null, null, null);
 

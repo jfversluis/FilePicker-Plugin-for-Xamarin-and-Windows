@@ -28,6 +28,7 @@ namespace Plugin.FilePicker
         private void OnFilePicked (FilePickerEventArgs e)
         {
             var picked = handler;
+
             if (picked != null)
                 picked (null, e);
         }
@@ -68,7 +69,8 @@ namespace Plugin.FilePicker
             int id = GetRequestId ();
 
             var ntcs = new TaskCompletionSource<FileData> (id);
-            if (Interlocked.CompareExchange (ref this.completionSource, ntcs, null) != null)
+
+            if (Interlocked.CompareExchange (ref completionSource, ntcs, null) != null)
                 throw new InvalidOperationException ("Only one operation can be active at a time");
 
             var allowedUTIs = new string [] {
@@ -83,8 +85,9 @@ namespace Plugin.FilePicker
                 UTType.FileURL
             };
 
-            UIDocumentMenuViewController importMenu =
+            var importMenu =
                 new UIDocumentMenuViewController (allowedUTIs, UIDocumentPickerMode.Import);
+
             importMenu.Delegate = this;
 
             importMenu.ModalPresentationStyle = UIModalPresentationStyle.Popover;
@@ -101,7 +104,7 @@ namespace Plugin.FilePicker
             handler = null;
 
             handler = (s, e) => {
-                var tcs = Interlocked.Exchange (ref this.completionSource, null);
+                var tcs = Interlocked.Exchange (ref completionSource, null);
 
                 tcs.SetResult (new FileData {
                     DataArray = e.FileByte,
@@ -110,20 +113,17 @@ namespace Plugin.FilePicker
                 });
             };
 
-
             return completionSource.Task;
-
         }
 
         public void WasCancelled (UIDocumentMenuViewController documentMenu)
-        {
-
-        }
+        { }
 
         private int GetRequestId ()
         {
             int id = requestId;
-            if (requestId == Int32.MaxValue)
+
+            if (requestId == int.MaxValue)
                 requestId = 0;
             else
                 requestId++;

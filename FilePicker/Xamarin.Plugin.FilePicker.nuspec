@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
    <metadata minClientVersion="2.8.1">
-       <id>Xam.Plugin.FilePicker</id>
-       <version>1.0</version>
-       <title>FilePicker Plugin for Xamarin and Windows</title>
-       <authors>Rafael Moura</authors>
-       <owners>Rafael Moura</owners>
-       <licenseUrl>https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows/blob/master/LICENSE</licenseUrl>
-       <projectUrl>https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows</projectUrl>
-       <iconUrl>https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows</iconUrl>
+       <id>Xamarin.Plugin.FilePicker</id>
+       <version>1.2</version>
+       <title>FilePicker Plugin for Xamarin.Forms</title>
+       <authors>Gerald Versluis, rafaelrmou</authors>
+       <owners>Gerald Versluis</owners>
+       <licenseUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows/blob/master/LICENSE</licenseUrl>
+       <projectUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows</projectUrl>
+       <!-- <iconUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows</iconUrl> -->
        <requireLicenseAcceptance>false</requireLicenseAcceptance>
        <description>
-         FilePicker Plugin for Xamarin and Windows
-
-Simple cross-platform plug-in that allows Pick files, save files and open the archive application standards.      
+         Simple cross-platform plug-in that allows you to pick files from the filesystem (iCloud drive in case of iOS) and work with them.
        </description>
-       <summary>Simple cross-platform plug-in that allows Pick files, save files and open the archive in default application across Xamarin.iOS, Xamarin.Android and Windows. View full project page for README
+       <summary>Simple cross-platform plug-in that allows you to pick files from the filesystem (iCloud drive in case of iOS) and work with them. View full project page for README
        </summary>
      <releaseNotes>
+        [1.2] - Retrieve full file path from selected file
+        [1.1] - Support Windows Phone 8, 8.1 e Windows Store.
         [1.0] - Pick files, save files and open the archive in Default App.
      </releaseNotes>
        <tags>xamarin, file, picker, filepicker, filebrowser, pcl, xam.pcl, plugin, plugin for xamarin, windows phone, winphone, wp8, winrt, android, xamarin.forms, ios</tags>
    </metadata>
    <files>
-     <file src="readme.txt" target="readme.txt" />
+     <!--<file src="readme.txt" target="readme.txt" />-->
     <!--Core-->
      <file src="FilePicker\Plugin.FilePicker\bin\Release\Plugin.FilePicker.dll" target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.FilePicker.dll" />
      <file src="FilePicker\Plugin.FilePicker\bin\Release\Plugin.FilePicker.xml" target="lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.FilePicker.xml" />
@@ -72,13 +72,12 @@ Simple cross-platform plug-in that allows Pick files, save files and open the ar
      <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.dll" target="lib\MonoTouch10\Plugin.FilePicker.Abstractions.dll" />
      <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.xml" target="lib\MonoTouch10\Plugin.FilePicker.Abstractions.xml" />
     
-       <!--UWP-->
-       <file src="FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.dll" target="lib\UAP10\Plugin.FilePicker.dll" />
-       <file src="FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.xml" target="lib\UAP10\Plugin.FilePicker.xml" />
-       <file src="FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.pdb" target="lib\UAP10\Plugin.FilePicker.pdb" />
-       <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.dll" target="lib\UAP10\Plugin.FilePicker.Abstractions.dll" />
-       <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.xml" target="lib\UAP10\Plugin.FilePicker.Abstractions.xml" />
-       <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.pdb" target="lib\UAP10\Plugin.FilePicker.Abstractions.pdb" />
-
+     <!--UWP-->
+     <file src="FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.dll" target="lib\UAP10\Plugin.FilePicker.dll" />
+     <file src="FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.xml" target="lib\UAP10\Plugin.FilePicker.xml" />
+     <file src="FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.pdb" target="lib\UAP10\Plugin.FilePicker.pdb" />
+     <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.dll" target="lib\UAP10\Plugin.FilePicker.Abstractions.dll" />
+     <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.xml" target="lib\UAP10\Plugin.FilePicker.Abstractions.xml" />
+     <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.pdb" target="lib\UAP10\Plugin.FilePicker.Abstractions.pdb" />
    </files>
 </package>

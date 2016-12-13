@@ -23,7 +23,7 @@ namespace Plugin.FilePicker
 
         public FilePickerImplementation ()
         {
-            this.context = Application.Context;
+            context = Application.Context;
         }
 
         public async Task<FileData> PickFile ()
@@ -38,7 +38,7 @@ namespace Plugin.FilePicker
             int id = GetRequestId ();
 
             var ntcs = new TaskCompletionSource<FileData> (id);
-            if (Interlocked.CompareExchange (ref this.completionSource, ntcs, null) != null)
+            if (Interlocked.CompareExchange (ref completionSource, ntcs, null) != null)
                 throw new InvalidOperationException ("Only one operation can be active at a time");
 
             try {
@@ -51,7 +51,7 @@ namespace Plugin.FilePicker
                 EventHandler<EventArgs> cancelledHandler = null;
 
                 handler = (s, e) => {
-                    var tcs = Interlocked.Exchange (ref this.completionSource, null);
+                    var tcs = Interlocked.Exchange (ref completionSource, null);
 
                     FilePickerActivity.FilePicked -= handler;
 
@@ -63,7 +63,7 @@ namespace Plugin.FilePicker
                 };
 
                 cancelledHandler = (s, e) => {
-                    var tcs = Interlocked.Exchange (ref this.completionSource, null);
+                    var tcs = Interlocked.Exchange (ref completionSource, null);
 
                     FilePickerActivity.FilePickCancelled -= cancelledHandler;
 
@@ -82,7 +82,7 @@ namespace Plugin.FilePicker
         private int GetRequestId ()
         {
             int id = requestId;
-            if (requestId == Int32.MaxValue)
+            if (requestId == int.MaxValue)
                 requestId = 0;
             else
                 requestId++;

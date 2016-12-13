@@ -234,3 +234,9 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+FilePicker/.DS_Store
+
+.DS_Store
+
+*.userprefs
