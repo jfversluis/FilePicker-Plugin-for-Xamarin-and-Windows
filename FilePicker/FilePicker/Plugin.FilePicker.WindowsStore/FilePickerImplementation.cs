@@ -1,5 +1,6 @@
 using Plugin.FilePicker.Abstractions;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
@@ -26,12 +27,7 @@ namespace Plugin.FilePicker
             {
                 var array = await ReadFile(file);
 
-                return new FileData
-                {
-                    DataArray = array,
-                    FileName = file.Name,
-                    FilePath = file.Path
-                };
+                return new FileData(file.Path, file.Name, () => file.OpenStreamForReadAsync().Result);
             }
             else
             {

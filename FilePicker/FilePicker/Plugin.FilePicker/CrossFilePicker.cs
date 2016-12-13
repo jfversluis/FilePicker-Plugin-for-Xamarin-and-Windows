@@ -8,33 +8,36 @@ namespace Plugin.FilePicker
     /// </summary>
     public class CrossFilePicker
     {
-        static Lazy<IFilePicker> Implementation = new Lazy<IFilePicker> (() => CreateFilePicker (), System.Threading.LazyThreadSafetyMode.PublicationOnly);
+        private static Lazy<IFilePicker> Implementation = new Lazy<IFilePicker>(() => CreateFilePicker(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
         /// <summary>
         /// Current settings to use
         /// </summary>
-        public static IFilePicker Current {
-            get {
+        public static IFilePicker Current
+        {
+            get
+            {
                 var ret = Implementation.Value;
-                if (ret == null) {
-                    throw NotImplementedInReferenceAssembly ();
+                if (ret == null)
+                {
+                    throw NotImplementedInReferenceAssembly();
                 }
                 return ret;
             }
         }
 
-        static IFilePicker CreateFilePicker ()
+        private static IFilePicker CreateFilePicker()
         {
 #if PORTABLE
             return null;
 #else
-            return new FilePickerImplementation ();
+            return new FilePickerImplementation();
 #endif
         }
 
-        internal static Exception NotImplementedInReferenceAssembly ()
+        internal static Exception NotImplementedInReferenceAssembly()
         {
-            return new NotImplementedException ("This functionality is not implemented in the portable version of this assembly.  You should reference the NuGet package from your main application project in order to reference the platform-specific implementation.");
+            return new NotImplementedException("This functionality is not implemented in the portable version of this assembly.  You should reference the NuGet package from your main application project in order to reference the platform-specific implementation.");
         }
     }
 }
