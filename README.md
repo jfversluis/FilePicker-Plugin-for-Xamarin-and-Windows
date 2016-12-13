@@ -7,7 +7,7 @@ Since the [original project](https://github.com/Studyxnet/FilePicker-Plugin-for-
 ### Setup
 [![Build status](https://ci.appveyor.com/api/projects/status/4jbyfpc5hsjak3hx?svg=true)](https://ci.appveyor.com/project/jfversluis/filepicker-plugin-for-xamarin-and-windows)
 
-* Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xam.Plugin.FilePicker)
+* Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xamarin.Plugin.FilePicker)
 * Install into your PCL project and Client projects.
 
 **Platform Support**
@@ -17,7 +17,7 @@ Since the [original project](https://github.com/Studyxnet/FilePicker-Plugin-for-
 |Xamarin.iOS|Yes|iOS 6+|
 |Xamarin.iOS Unified|Yes|iOS 6+|
 |Xamarin.Android|Yes|API 10+|
-|Windows Phone Silverlight|NO||
+|Windows Phone Silverlight|No||
 |Windows Phone RT|Yes|8.1+|
 |Windows Store RT|Yes|8.1+|
 |Windows 10 UWP|Yes|10+|
