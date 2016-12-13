@@ -5,7 +5,7 @@ Simple cross-platform plug-in that allows you to pick files from the filesystem 
 Since the [original project](https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows) seems abondoned I've forked my own so I could update it. PRs are very welcome!
 
 ### Setup
-[![Build status](https://ci.appveyor.com/api/projects/status/4jbyfpc5hsjak3hx?svg=true)](https://ci.appveyor.com/project/jfversluis/filepicker-plugin-for-xamarin-and-windows)
+[![Build status](https://ci.appveyor.com/api/projects/status/4jbyfpc5hsjak3hx?svg=true)](https://ci.appveyor.com/project/jfversluis/filepicker-plugin-for-xamarin-and-windows) [![NuGet version](https://badge.fury.io/nu/Xamarin.Plugin.Filepicker.svg)](https://badge.fury.io/nu/Xamarin.Plugin.Filepicker)
 
 * Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xamarin.Plugin.FilePicker)
 * Install into your PCL project and Client projects.
