@@ -2,12 +2,10 @@
 
 Simple cross-platform plug-in that allows you to pick files from the filesystem (iCloud drive in case of iOS) and work with them.
 
-Since the [original project](https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows) seems abondoned I've forked my own so I could update it. PRs are very welcome!
-
 ### Setup
-[![Build status](https://ci.appveyor.com/api/projects/status/4jbyfpc5hsjak3hx?svg=true)](https://ci.appveyor.com/project/jfversluis/filepicker-plugin-for-xamarin-and-windows) [![NuGet version](https://badge.fury.io/nu/Xamarin.Plugin.Filepicker.svg)](https://badge.fury.io/nu/Xamarin.Plugin.Filepicker)
+[![NuGet version](https://badge.fury.io/nu/Xam.Plugin.FilePicker.svg)](https://badge.fury.io/nu/Xam.Plugin.FilePicker)
 
-* Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xamarin.Plugin.FilePicker)
+* Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xam.Plugin.FilePicker)
 * Install into your PCL project and Client projects.
 
 **Platform Support**
@@ -35,11 +33,8 @@ The `WRITE_EXTERNAL_STORAGE` & `READ_EXTERNAL_STORAGE` permissions are required.
 Need [Configure iCloud Driver for your app](https://developer.xamarin.com/guides/ios/platform_features/intro_to_cloudkit)
 
 #### Contributors
-* [jfversluis](https://github.com/jfversluis)
-
-Original version by:
-
 * [rafaelrmou](https://github.com/rafaelrmou)
+* [jfversluis](https://github.com/jfversluis)
  
 Thanks!
 
