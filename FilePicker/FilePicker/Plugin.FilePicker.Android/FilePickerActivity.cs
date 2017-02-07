@@ -14,7 +14,6 @@ namespace Plugin.FilePicker
     public class FilePickerActivity : Activity
     {
         private Context context;
-        private Task<Tuple<string, bool>> path;
 
         protected override void OnCreate (Bundle savedInstanceState)
         {
@@ -22,7 +21,6 @@ namespace Plugin.FilePicker
 
             context = Application.Context;
 
-            var b = (savedInstanceState ?? Intent.Extras);
 
             var intent = new Intent (Intent.ActionGetContent);
             intent.SetType ("*/*");
