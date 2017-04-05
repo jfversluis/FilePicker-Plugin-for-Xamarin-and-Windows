@@ -19,7 +19,9 @@ Simple cross-platform plug-in that allows you to pick files from the filesystem 
 |Windows Phone RT|Yes|8.1+|
 |Windows Store RT|Yes|8.1+|
 |Windows 10 UWP|Yes|10+|
-|Xamarin.Mac|No||
+|Xamarin.Mac|Yes|* 10.12+|
+
+\* The Xamarin.Mac implementaiton has only been tested on MacOS 10.12.
 
 ### API Usage
 
