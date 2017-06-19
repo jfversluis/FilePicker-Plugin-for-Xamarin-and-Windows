@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.System;
 
 namespace Plugin.FilePicker
@@ -22,13 +23,11 @@ namespace Plugin.FilePicker
             picker.FileTypeFilter.Add("*");
 
             var file = await picker.PickSingleFileAsync();
+            if (null == file)
+                return null;
 
-            if (file != null)
-            {
-                return new FileData(file.Path, file.Name, () => File.OpenRead(file.Path));
-            }
-
-            return null;
+            StorageApplicationPermissions.FutureAccessList.Add(file);
+            return new FileData(file.Path, file.Name, () => File.OpenRead(file.Path));
         }
 
         public async Task<bool> SaveFile(FileData fileToSave)
