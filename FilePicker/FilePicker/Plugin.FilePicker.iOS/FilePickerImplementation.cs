@@ -50,14 +50,12 @@ namespace Plugin.FilePicker
             System.Runtime.InteropServices.Marshal.Copy (data.Bytes, dataBytes, 0, Convert.ToInt32 (data.Length));
 
             string filename = doc.LocalizedName;
+            string pathname = doc.FileUrl?.ToString();
 
             // iCloud drive can return null for LocalizedName.
             if (filename == null) {
                 // Retrieve actual filename by taking the last entry after / in FileURL.
                 // e.g. /path/to/file.ext -> file.ext
-
-                // pathname is either a string or null.
-                var pathname = doc.FileUrl?.ToString ();
 
                 // filesplit is either:
                 // 0 (pathname is null, or last / is at position 0)
@@ -68,7 +66,7 @@ namespace Plugin.FilePicker
                 filename = pathname?.Substring (filesplit + 1);
             }
 
-            OnFilePicked (new FilePickerEventArgs (dataBytes, filename));
+            OnFilePicked (new FilePickerEventArgs (dataBytes, filename, pathname));
         }
 
         /// <summary>
