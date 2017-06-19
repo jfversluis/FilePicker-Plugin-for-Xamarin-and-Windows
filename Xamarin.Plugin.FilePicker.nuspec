@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
    <metadata minClientVersion="2.8.1">
        <id>Xamarin.Plugin.FilePicker</id>
-       <version>1.3.0-beta</version>
+       <version>1.4.0-beta</version>
        <title>FilePicker Plugin for Xamarin.Forms</title>
        <authors>Gerald Versluis, rafaelrmou</authors>
        <owners>Gerald Versluis</owners>
@@ -16,6 +16,7 @@
        <summary>Simple cross-platform plug-in that allows you to pick files from the filesystem (iCloud drive in case of iOS) and work with them. View full project page for README
        </summary>
      <releaseNotes>
+     	[1.4] - Support Xamarin.Mac
 		[1.3] - FileData now has a GetStream() method to retrieve the binary data as a Stream
 		[1.2] - Retrieve full file path from selected file
 		[1.1] - Support Windows Phone 8, 8.1 e Windows Store.
@@ -72,6 +73,12 @@
      <file src="FilePicker\Plugin.FilePicker.iOS\bin\iPhone\Release\Plugin.FilePicker.xml" target="lib\MonoTouch10\Plugin.FilePicker.xml" />
      <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.dll" target="lib\MonoTouch10\Plugin.FilePicker.Abstractions.dll" />
      <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.xml" target="lib\MonoTouch10\Plugin.FilePicker.Abstractions.xml" />
+
+     <!--Xamarin.Mac-->
+     <file src="FilePicker\Plugin.FilePicker.Mac\bin\Release\Plugin.FilePicker.dll" target="lib\Xamarin.Mac20\Plugin.FilePicker.dll" />
+     <file src="FilePicker\Plugin.FilePicker.Mac\bin\Release\Plugin.FilePicker.xml" target="lib\Xamarin.Mac20\Plugin.FilePicker.xml" />
+     <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.dll" target="lib\Xamarin.Mac20\Plugin.FilePicker.Abstractions.dll" />
+     <file src="FilePicker\Plugin.FilePicker.Abstractions\bin\Release\Plugin.FilePicker.Abstractions.xml" target="lib\Xamarin.Mac20\Plugin.FilePicker.Abstractions.xml" />
     
      <!--UWP-->
      <file src="FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.dll" target="lib\UAP10\Plugin.FilePicker.dll" />
