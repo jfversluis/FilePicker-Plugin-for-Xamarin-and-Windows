@@ -5,6 +5,9 @@ using Android.Provider;
 using Android.Database;
 using Java.IO;
 using Android.Webkit;
+using System.IO;
+using System.Collections.Generic;
+using Plugin.FilePicker.Abstractions;
 
 namespace Plugin.FilePicker
 {
@@ -62,7 +65,7 @@ namespace Plugin.FilePicker
                 }
             }
             // MediaStore (and general)
-            else if ("content".Equals (uri.Scheme, StringComparison.OrdinalIgnoreCase)) {
+            if (isMediaStore(uri.Scheme)) {
                 return getDataColumn (context, uri, null, null);
             }
             // File
@@ -73,19 +76,21 @@ namespace Plugin.FilePicker
             return null;
         }
 
-        public static string getDataColumn (Context context, Android.Net.Uri uri, string selection,
-        string [] selectionArgs)
+        public static bool isMediaStore(String scheme)
+        {
+            return scheme.StartsWith("content");//.Equals(scheme, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static string getDataColumn (Context context, Android.Net.Uri uri, 
+            string selection, string [] selectionArgs)
         {
 
             ICursor cursor = null;
-            var column = "_data";
-            string [] projection = {
-                column
-            };
-
+            var column = MediaStore.Files.FileColumns.Data;
+            string [] projection = { column };
             try {
-                cursor = context.ContentResolver.Query (uri, projection, selection, selectionArgs,
-                        null);
+                cursor = context.ContentResolver.Query (uri,
+                    projection, selection, selectionArgs, null);
                 if (cursor != null && cursor.MoveToFirst ()) {
                     int column_index = cursor.GetColumnIndexOrThrow (column);
                     return cursor.GetString (column_index);
@@ -124,17 +129,23 @@ namespace Plugin.FilePicker
             return "com.android.providers.media.documents".Equals (uri.Authority);
         }
 
+        public static Byte[] readFile(Context context, Android.Net.Uri uri)
+        {
+            using (var inStream = context.ContentResolver.OpenInputStream(uri))
+                return FileData.ReadFully(inStream);
+        }
+
         public static byte [] readFile (string file)
         {
             try {
-                return readFile (new File (file));
+                return readFile (new Java.IO.File(file));
             } catch (Exception ex) {
                 System.Diagnostics.Debug.Write (ex);
                 return new byte [0];
             }
         }
 
-        public static byte [] readFile (File file)
+        public static byte [] readFile (Java.IO.File file)
         {
             // Open file
             var f = new RandomAccessFile (file, "r");
@@ -145,7 +156,7 @@ namespace Plugin.FilePicker
                 var length = (int)longlength;
 
                 if (length != longlength)
-                    throw new IOException ("Filesize exceeds allowed size");
+                    throw new Java.IO.IOException("Filesize exceeds allowed size");
                 // Read file and return data
                 byte [] data = new byte [length];
                 f.ReadFully (data);

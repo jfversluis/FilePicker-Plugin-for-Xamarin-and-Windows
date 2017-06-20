@@ -12,7 +12,6 @@ namespace Plugin.FilePicker.Abstractions
 
         public FilePickerEventArgs ()
         {
-
         }
 
         public FilePickerEventArgs (byte [] fileByte)

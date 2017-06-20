@@ -7,6 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.IO;
 
 namespace Plugin.FilePicker
 {
@@ -56,7 +57,14 @@ namespace Plugin.FilePicker
 
                     FilePickerActivity.FilePicked -= handler;
 
-                    tcs?.SetResult (new FileData (e.FilePath, e.FileName, () => System.IO.File.OpenRead (e.FilePath)));
+                    tcs?.SetResult (new FileData (e.FilePath, e.FileName, 
+                        () =>
+                        {
+                            if (IOUtil.isMediaStore(e.FilePath))
+                                return new MemoryStream(e.FileByte);
+                            else
+                                return System.IO.File.OpenRead(e.FilePath);
+                        }));
                 };
 
                 cancelledHandler = (s, e) => {
@@ -91,7 +99,7 @@ namespace Plugin.FilePicker
         public async Task<bool> SaveFile (FileData fileToSave)
         {
             try {
-                var myFile = new File (Android.OS.Environment.ExternalStorageDirectory, fileToSave.FileName);
+                var myFile = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory, fileToSave.FileName);
 
                 if (myFile.Exists ())
                     return true;
@@ -108,7 +116,7 @@ namespace Plugin.FilePicker
             }
         }
 
-        public void OpenFile (File fileToOpen)
+        public void OpenFile (Java.IO.File fileToOpen)
         {
             var uri = Android.Net.Uri.FromFile (fileToOpen);
             var intent = new Intent ();
@@ -123,14 +131,14 @@ namespace Plugin.FilePicker
 
         public void OpenFile (string fileToOpen)
         {
-            var myFile = new File (Android.OS.Environment.ExternalStorageState, fileToOpen);
+            var myFile = new Java.IO.File(Android.OS.Environment.ExternalStorageState, fileToOpen);
 
             OpenFile (myFile);
         }
 
         public async void OpenFile (FileData fileToOpen)
         {
-            var myFile = new File (Android.OS.Environment.ExternalStorageState, fileToOpen.FileName);
+            var myFile = new Java.IO.File(Android.OS.Environment.ExternalStorageState, fileToOpen.FileName);
 
             if (!myFile.Exists ())
                 await SaveFile (fileToOpen);

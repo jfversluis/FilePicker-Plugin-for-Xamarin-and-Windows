@@ -50,8 +50,11 @@ namespace Plugin.FilePicker
 
                     if (string.IsNullOrEmpty (filePath))
                         filePath = _uri.Path;
-
-                    var file = IOUtil.readFile (filePath);
+                    byte[] file;
+                    if (IOUtil.isMediaStore(filePath))
+                        file = IOUtil.readFile(context, _uri);
+                    else
+                        file = IOUtil.readFile (filePath);
 
                     var fileName = GetFileName (context, _uri);
 
