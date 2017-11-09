@@ -136,7 +136,20 @@ namespace Plugin.FilePicker
             Handler = (s, e) => {
                 var tcs = Interlocked.Exchange (ref _completionSource, null);
 
-                tcs?.SetResult (new FileData (e.FilePath, e.FileName, () => File.OpenRead (e.FilePath)));
+                tcs?.SetResult (new FileData (e.FilePath, e.FileName, () =>
+                { 
+                    // Handles were the iCloud give back filePath with file:/private/var .ect
+                    if (e.FilePath.StartsWith("file:"))
+                       {
+                           var url = new Foundation.NSUrl(e.FilePath);
+                           return new FileStream(url.Path, FileMode.Open, FileAccess.Read);
+                       }
+ 				       // If it's not an iCloud item (Not sure this will ever be the case) then treat it normaly
+                       else
+                       {
+                           return File.OpenRead(e.FilePath);
+                       }
+                }));
             };
 
             return _completionSource.Task;
