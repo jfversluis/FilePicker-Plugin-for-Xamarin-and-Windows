@@ -36,8 +36,17 @@ namespace Plugin.FilePicker
         {
             documentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
             documentPicker.WasCancelled += DocumentPicker_WasCancelled;
-
+            documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
             UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (documentPicker, true, null);
+        }
+
+        private void DocumentPicker_DidPickDocumentAtUrls(object sender, UIDocumentPickedAtUrlsEventArgs e)
+        {
+            var control = (UIDocumentPickerViewController)sender;
+            foreach (var url in e.Urls)
+                DocumentPicker_DidPickDocument(control, new UIDocumentPickedEventArgs(url));
+
+            control.Dispose();
         }
 
         private void DocumentPicker_DidPickDocument (object sender, UIDocumentPickedEventArgs e)
