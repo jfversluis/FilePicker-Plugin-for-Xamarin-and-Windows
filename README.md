@@ -3,7 +3,7 @@
 Simple cross-platform plug-in that allows you to pick files from the filesystem (iCloud drive in case of iOS) and work with them.
 
 ### Setup
-[![NuGet version](https://badge.fury.io/nu/Xam.Plugin.FilePicker.svg)](https://badge.fury.io/nu/Xam.Plugin.FilePicker)
+[![NuGet version](https://badge.fury.io/nu/pt.Xamarin.Plugin.FilePicker.svg)](https://badge.fury.io/nu/pt.Xamarin.Plugin.FilePicker)
 
 * Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xam.Plugin.FilePicker)
 * Install into your PCL project and Client projects.
