@@ -88,16 +88,24 @@ namespace Plugin.FilePicker
             ICursor cursor = null;
             var column = MediaStore.Files.FileColumns.Data;
             string [] projection = { column };
-            try {
-                cursor = context.ContentResolver.Query (uri,
+            try
+            {
+                cursor = context.ContentResolver.Query(uri,
                     projection, selection, selectionArgs, null);
-                if (cursor != null && cursor.MoveToFirst ()) {
-                    int column_index = cursor.GetColumnIndexOrThrow (column);
-                    return cursor.GetString (column_index);
+                if (cursor != null && cursor.MoveToFirst())
+                {
+                    int column_index = cursor.GetColumnIndexOrThrow(column);
+                    return cursor.GetString(column_index);
                 }
-            } finally {
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Write(ex);
+            }
+            finally
+            {
                 if (cursor != null)
-                    cursor.Close ();
+                    cursor.Close();
             }
             return null;
         }
