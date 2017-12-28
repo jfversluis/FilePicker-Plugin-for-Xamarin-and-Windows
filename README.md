@@ -2,7 +2,7 @@
 
 Simple cross-platform plug-in that allows you to pick files and work with them.
 
-The original project van be found here, but seems abandoned, this one was forked and further developed.
+The original project can be found [here](https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows/), but seems abandoned, this one was forked and further developed.
 
 ### Setup
 [![Build status](https://ci.appveyor.com/api/projects/status/bbdou6ptk14tbak5?svg=true)](https://ci.appveyor.com/project/jfversluis/filepicker-plugin-for-xamarin-and-windows-5pvwc)
