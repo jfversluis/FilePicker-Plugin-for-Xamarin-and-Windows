@@ -5,7 +5,7 @@ Simple cross-platform plug-in that allows you to pick files from the filesystem 
 ### Setup
 [![NuGet version](https://badge.fury.io/nu/pt.Xamarin.Plugin.FilePicker.svg)](https://badge.fury.io/nu/pt.Xamarin.Plugin.FilePicker)
 
-* Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xam.Plugin.FilePicker)
+* Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/pt.Xamarin.Plugin.FilePicker/)
 * Install into your PCL project and Client projects.
 
 **Platform Support**
