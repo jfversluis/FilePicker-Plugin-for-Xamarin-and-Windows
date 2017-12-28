@@ -27,6 +27,23 @@ Simple cross-platform plug-in that allows you to pick files from the filesystem 
 
 Call **CrossFilePicker.Current** from any project or PCL to gain access to APIs.
 
+#### Example
+
+            try
+            {
+                FileData fileData = new FileData();
+                fileData = await CrossFilePicker.Current.PickFile();
+                string fileName = fileData.FileName;
+                string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
+
+                System.Console.WriteLine("File name chosen: " + fileName);
+                System.Console.WriteLine("File data: " + contents);
+
+            }
+            catch (Exception e) {
+                System.Console.WriteLine("Exception choosing file: " + e.ToString());
+            }
+
 ### **IMPORTANT**
 **Android:**
 The `WRITE_EXTERNAL_STORAGE` & `READ_EXTERNAL_STORAGE` permissions are required.
