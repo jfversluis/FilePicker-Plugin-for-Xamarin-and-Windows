@@ -240,3 +240,5 @@ FilePicker/.DS_Store
 .DS_Store
 
 *.userprefs
+
+src/.droidres/.filepicker.droidres.db
