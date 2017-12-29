@@ -83,11 +83,11 @@
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\Plugin.FilePicker.Abstractions.csproj">
+    <ProjectReference Include="..\..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\Plugin.FilePicker.Abstractions.csproj">
       <Project>{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}</Project>
       <Name>Plugin.FilePicker.Abstractions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.Mac\Plugin.FilePicker.Mac.csproj">
+    <ProjectReference Include="..\..\src\Plugin.FilePicker\Plugin.FilePicker.Mac\Plugin.FilePicker.Mac.csproj">
       <Project>{C1E6D43D-38EB-4673-A9AA-8B1116CE9C10}</Project>
       <Name>Plugin.FilePicker.Mac</Name>
     </ProjectReference>

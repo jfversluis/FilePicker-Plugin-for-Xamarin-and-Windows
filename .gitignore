@@ -246,3 +246,5 @@ src/.droidres/.filepicker.droidres.db
 samples/Plugin.FilePicker.Sample.Forms/.droidres/.plugin.filepicker.sample.forms.droidres.db
 
 samples/Plugin.FilePicker.Sample.Forms/.droidres/.plugin.filepicker.sample.macos.droidres.db
+
+samples/.droidres/.plugin.filepicker.sample.forms.droidres.db
