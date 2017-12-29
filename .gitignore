@@ -242,3 +242,5 @@ FilePicker/.DS_Store
 *.userprefs
 
 src/.droidres/.filepicker.droidres.db
+
+samples/Plugin.FilePicker.Sample.Forms/.droidres/.plugin.filepicker.sample.forms.droidres.db
