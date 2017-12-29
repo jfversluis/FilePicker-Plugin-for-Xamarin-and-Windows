@@ -6,6 +6,7 @@ using Android.Runtime;
 using System.Threading.Tasks;
 using Plugin.FilePicker.Abstractions;
 using Android.Provider;
+using System.Net;
 
 namespace Plugin.FilePicker
 {
@@ -84,7 +85,11 @@ namespace Plugin.FilePicker
                     metaCursor.Close ();
                 }
             }
-            return name;
+
+            if (!string.IsNullOrWhiteSpace(name))
+                return name;
+            else
+                return System.IO.Path.GetFileName(WebUtility.UrlDecode(uri.ToString()));
         }
 
         internal static event EventHandler<FilePickerEventArgs> FilePicked;
