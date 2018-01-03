@@ -1,14 +1,7 @@
-using Plugin.FilePicker.Abstractions;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.System;
-
 namespace Plugin.FilePicker
 {
     /// <summary>
-    /// Implementation for FilePicker
+    /// Implementation for Feature
     /// </summary>
     public class FilePickerImplementation : IFilePicker
     {
@@ -19,29 +12,23 @@ namespace Plugin.FilePicker
                 ViewMode = Windows.Storage.Pickers.PickerViewMode.List,
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
             };
-
             picker.FileTypeFilter.Add("*");
 
             var file = await picker.PickSingleFileAsync();
+            if (null == file)
+                return null;
 
-            if (file != null)
-                return new FileData(file.Path, file.Name, () => File.OpenRead(file.Path));
-
-            return null;
+            StorageApplicationPermissions.FutureAccessList.Add(file);
+            return new FileData(file.Path, file.Name, () => File.OpenRead(file.Path));
         }
 
         public async Task<bool> SaveFile(FileData fileToSave)
         {
             try
             {
-                var local = ApplicationData.Current.LocalFolder;
+                var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
 
-                var file = await local.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
-
-                using (var s = await file.OpenStreamForWriteAsync())
-                {
-                    s.Write(fileToSave.DataArray, 0, fileToSave.DataArray.Length);
-                }
+                await FileIO.WriteBytesAsync(file, fileToSave.DataArray);
 
                 return true;
             }
@@ -58,7 +45,9 @@ namespace Plugin.FilePicker
                 var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen);
 
                 if (file != null)
+                {
                     await Launcher.LaunchFileAsync(file);
+                }
             }
             catch (FileNotFoundException ex)
             {
@@ -75,7 +64,9 @@ namespace Plugin.FilePicker
                 var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen.FileName);
 
                 if (file != null)
+                {
                     await Launcher.LaunchFileAsync(file);
+                }
             }
             catch (FileNotFoundException ex)
             {

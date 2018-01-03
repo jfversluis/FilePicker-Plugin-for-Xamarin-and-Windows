@@ -1,14 +1,4 @@
-using System;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using System.Threading.Tasks;
-using Plugin.FilePicker.Abstractions;
-using Android.Provider;
-using System.Net;
-
-namespace Plugin.FilePicker
+namespace Plugin.FilePicker.Platforms.monoandroid
 {
     [Activity (ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     [Preserve (AllMembers = true)]

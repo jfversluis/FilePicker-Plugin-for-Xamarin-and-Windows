@@ -1,12 +1,4 @@
-using System;
-using Android.Content;
-using Android.OS;
-using Android.Provider;
-using Android.Database;
-using Java.IO;
-using Android.Webkit;
-
-namespace Plugin.FilePicker
+namespace Plugin.FilePicker.Platforms.monoandroid
 {
     public class IOUtil
     {

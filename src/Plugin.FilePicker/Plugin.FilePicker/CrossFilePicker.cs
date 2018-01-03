@@ -1,5 +1,4 @@
-﻿using Plugin.FilePicker.Abstractions;
-using System;
+﻿using System;
 
 namespace Plugin.FilePicker
 {
@@ -28,7 +27,7 @@ namespace Plugin.FilePicker
 
         private static IFilePicker CreateFilePicker()
         {
-#if PORTABLE
+#if NETSTANDARD1_4
             return null;
 #else
             return new FilePickerImplementation();
