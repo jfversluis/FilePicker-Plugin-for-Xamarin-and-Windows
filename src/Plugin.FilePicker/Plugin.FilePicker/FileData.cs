@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Plugin.FilePicker.Abstractions
+namespace Plugin.FilePicker
 {
     /// <summary>
     /// The object used as a wrapper for the file picked by the user

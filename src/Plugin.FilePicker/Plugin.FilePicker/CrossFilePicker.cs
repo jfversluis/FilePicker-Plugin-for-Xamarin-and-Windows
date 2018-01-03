@@ -1,5 +1,4 @@
-﻿using Plugin.FilePicker.Abstractions;
-using System;
+﻿using System;
 
 namespace Plugin.FilePicker
 {

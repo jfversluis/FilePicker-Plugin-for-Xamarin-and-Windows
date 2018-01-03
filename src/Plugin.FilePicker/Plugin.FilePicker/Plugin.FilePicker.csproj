@@ -1,12 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFrameworks>netstandard1.4;xamarinandroid;uap;xamarinios;xamarinmac20</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Plugin.FilePicker.Abstractions\Plugin.FilePicker.Abstractions.csproj" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <Compile Remove="Platforms\**" />
+    <EmbeddedResource Remove="Platforms\**" />
+    <None Remove="Platforms\**" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'uap' ">
+    <Compile Include="Platforms\uap\**" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.4.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'monoandroid' ">
+    <Compile Include="Platforms\monoandroid\**" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'xamarinios' ">
+    <Compile Include="Platforms\xamarinios\**" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'xamarinmac20' ">
+    <Compile Include="Platforms\xamarinmac\**" />
+  </ItemGroup>
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 </Project>

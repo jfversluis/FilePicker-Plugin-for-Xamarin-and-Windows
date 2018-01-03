@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Plugin.FilePicker.Abstractions
+namespace Plugin.FilePicker
 {
     public class FilePickerEventArgs : EventArgs
     {

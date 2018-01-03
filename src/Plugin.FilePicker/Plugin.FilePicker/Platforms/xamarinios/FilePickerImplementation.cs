@@ -1,14 +1,3 @@
-using Foundation;
-using MobileCoreServices;
-using Plugin.FilePicker.Abstractions;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using UIKit;
-using System.Diagnostics;
-
 namespace Plugin.FilePicker
 {
     /// <summary>
