@@ -145,7 +145,11 @@ namespace Plugin.FilePicker
             Handler = (s, e) => {
                 var tcs = Interlocked.Exchange (ref _completionSource, null);
 
-                tcs?.SetResult (new FileData (e.FilePath, e.FileName, () => File.OpenRead (e.FilePath)));
+                tcs?.SetResult(new FileData(e.FilePath, e.FileName, () =>
+                {
+                    var url = new NSUrl(e.FilePath);
+                    return new FileStream(url.Path, FileMode.Open, FileAccess.Read);
+                }));
             };
 
             return _completionSource.Task;
