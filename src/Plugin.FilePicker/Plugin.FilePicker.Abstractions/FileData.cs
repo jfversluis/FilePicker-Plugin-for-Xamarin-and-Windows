@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Plugin.FilePicker.Abstractions
@@ -17,7 +18,8 @@ namespace Plugin.FilePicker.Abstractions
         public FileData()
         { }
 
-        public FileData(string filePath, string fileName, Func<Stream> streamGetter, Action<bool> dispose = null)
+        public FileData(string filePath, string fileName, 
+            Func<Stream> streamGetter, Action<bool> dispose = null)
         {
             _filePath = filePath;
             _fileName = fileName;
@@ -25,17 +27,26 @@ namespace Plugin.FilePicker.Abstractions
             _streamGetter = streamGetter;
         }
 
+        public static byte[] ReadFully(Stream input)
+        {
+            var buffer = new byte[16 * 1024];
+            using (var ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+
         public byte[] DataArray
         {
             get
             {
                 using (var stream = GetStream())
-                {
-                    var resultBytes = new byte[stream.Length];
-                    stream.Read(resultBytes, 0, (int)stream.Length);
-
-                    return resultBytes;
-                }
+                    return ReadFully(stream);
             }
         }
 
