@@ -122,7 +122,11 @@ namespace Plugin.FilePicker
                 UTType.PDF,
                 UTType.Image,
                 UTType.UTF16PlainText,
-                UTType.FileURL
+                UTType.FileURL,
+                UTType.MP3,
+                UTType.WaveformAudio,
+                UTType.AppleProtectedMPEG4Audio,
+                "public.aac-audio"
             };
 
             var importMenu =
