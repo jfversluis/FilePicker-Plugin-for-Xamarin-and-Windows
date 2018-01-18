@@ -102,10 +102,7 @@ namespace Plugin.FilePicker
 
         private static void OnFilePicked (FilePickerEventArgs e)
         {
-            var picked = FilePicked;
-
-            if (picked != null)
-                picked (null, e);
+            FilePicked?.Invoke(null, e);
         }
     }
 }

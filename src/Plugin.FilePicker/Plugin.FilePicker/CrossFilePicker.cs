@@ -8,7 +8,7 @@ namespace Plugin.FilePicker
     /// </summary>
     public class CrossFilePicker
     {
-        private static Lazy<IFilePicker> Implementation = new Lazy<IFilePicker>(() => CreateFilePicker(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
+        private static Lazy<IFilePicker> Implementation = new Lazy<IFilePicker>(CreateFilePicker, System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
         /// <summary>
         /// Current settings to use
