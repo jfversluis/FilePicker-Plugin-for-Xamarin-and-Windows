@@ -122,7 +122,11 @@ namespace Plugin.FilePicker
                 UTType.PDF,
                 UTType.Image,
                 UTType.UTF16PlainText,
-                UTType.FileURL
+                UTType.FileURL,
+                UTType.MP3,
+                UTType.WaveformAudio,
+                UTType.AppleProtectedMPEG4Audio,
+                "public.aac-audio"
             };
 
             var importMenu =
@@ -174,7 +178,7 @@ namespace Plugin.FilePicker
             return id;
         }
 
-        public async Task<bool> SaveFile (FileData fileToSave)
+        public Task<bool> SaveFile (FileData fileToSave)
         {
             try {
                 var documents = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
@@ -182,10 +186,10 @@ namespace Plugin.FilePicker
 
                 File.WriteAllBytes (fileName, fileToSave.DataArray);
 
-                return true;
+                return Task.FromResult(true);
             } catch (Exception ex) {
                 Debug.WriteLine (ex.Message);
-                return false;
+                return Task.FromResult(false);
             }
         }
 

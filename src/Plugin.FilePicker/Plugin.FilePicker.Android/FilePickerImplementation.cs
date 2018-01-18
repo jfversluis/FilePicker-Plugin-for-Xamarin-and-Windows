@@ -88,23 +88,23 @@ namespace Plugin.FilePicker
             return id;
         }
 
-        public async Task<bool> SaveFile (FileData fileToSave)
+        public Task<bool> SaveFile (FileData fileToSave)
         {
             try {
                 var myFile = new File (Android.OS.Environment.ExternalStorageDirectory, fileToSave.FileName);
 
                 if (myFile.Exists ())
-                    return true;
+                    return Task.FromResult(true);
 
                 var fos = new FileOutputStream (myFile.Path);
 
                 fos.Write (fileToSave.DataArray);
                 fos.Close ();
 
-                return true;
+                return Task.FromResult(true);
             } catch (Exception ex) {
                 Debug.WriteLine (ex.Message);
-                return false;
+                return Task.FromResult(false);
             }
         }
 

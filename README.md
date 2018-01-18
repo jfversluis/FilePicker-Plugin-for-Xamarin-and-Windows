@@ -44,4 +44,4 @@ Need [Configure iCloud Driver for your app](https://developer.xamarin.com/guides
 Thanks!
 
 #### License
-Licensed under main repo license
+[MIT Licence](LICENSE)
