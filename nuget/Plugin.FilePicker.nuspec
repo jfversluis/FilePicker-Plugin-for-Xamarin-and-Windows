@@ -17,11 +17,11 @@
        </summary>
      <releaseNotes>
        [2.0] - Support for .NET Standard, removed Windows Phone 8 and Windows 8/8.1 support
-    [1.4] - Support Xamarin.Mac
-		[1.3] - FileData now has a GetStream() method to retrieve the binary data as a Stream
-		[1.2] - Retrieve full file path from selected file
-		[1.1] - Support Windows Phone 8, 8.1 e Windows Store.
-		[1.0] - Pick files, save files and open the archive in Default App.
+       [1.4] - Support Xamarin.Mac
+       [1.3] - FileData now has a GetStream() method to retrieve the binary data as a Stream
+       [1.2] - Retrieve full file path from selected file
+       [1.1] - Support Windows Phone 8, 8.1 e Windows Store.
+       [1.0] - Pick files, save files and open the archive in Default App.
      </releaseNotes>
     <tags>xamarin, file, picker, filepicker, filebrowser, netstandard, plugin, plugin for xamarin, android, xamarin.forms, ios</tags>
    </metadata>
