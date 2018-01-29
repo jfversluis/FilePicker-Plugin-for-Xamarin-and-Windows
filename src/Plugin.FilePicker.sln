@@ -18,8 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5D9C3EE-C113-4BD5-9D91-248957142A8D}"
 	ProjectSection(SolutionItems) = preProject
 		..\LICENSE = ..\LICENSE
+		..\nuget\Plugin.FilePicker.nuspec = ..\nuget\Plugin.FilePicker.nuspec
 		..\README.md = ..\README.md
-		..\Xamarin.Plugin.FilePicker.nuspec = ..\Xamarin.Plugin.FilePicker.nuspec
 	EndProjectSection
 EndProject
 Global
