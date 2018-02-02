@@ -28,7 +28,7 @@ namespace Plugin.FilePicker
 
         private static IFilePicker CreateFilePicker()
         {
-#if PORTABLE
+#if NETSTANDARD1_0
             return null;
 #else
             return new FilePickerImplementation();

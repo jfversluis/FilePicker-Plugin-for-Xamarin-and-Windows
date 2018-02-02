@@ -9,26 +9,26 @@ The original project can be found [here](https://github.com/Studyxnet/FilePicker
  [![NuGet version](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker.svg)](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker)
 
 * Available on NuGet: [FilePicker Nuget](https://www.nuget.org/packages/Xamarin.Plugin.FilePicker/)
-* Install into your PCL project **and** Client projects.
+* Install into your Xamarin.Android, Xamarin.iOS, Xamarin.Forms, Xamarin.Mac project and Client projects.
 
 **Platform Support**
 
-|Platform|Supported|Version|
-| ------------------- | :-----------: | :------------------: |
-|Xamarin.iOS|Yes|iOS 6+|
-|Xamarin.iOS Unified|Yes|iOS 6+|
-|Xamarin.Android|Yes|API 10+|
-|Windows Phone Silverlight|No||
-|Windows Phone RT|Yes|8.1+|
-|Windows Store RT|Yes|8.1+|
-|Windows 10 UWP|Yes|10+|
-|Xamarin.Mac|Yes|* 10.12+|
+|Platform|Supported|Version|Remarks|
+| ------------------- | :-----------: | :------------------: | :------------------: |
+|Xamarin.iOS|Yes|iOS 6+||
+|Xamarin.iOS Unified|Yes|iOS 6+||
+|Xamarin.Android|Yes|API 10+||
+|Windows Phone Silverlight|No|||
+|Windows Phone RT|Yes|8.1+|Up to package version 1.4.x|
+|Windows Store RT|Yes|8.1+|Up to package version 1.4.x|
+|Windows 10 UWP|Yes|10+||
+|Xamarin.Mac|Yes|* 10.12+||
 
 \* The Xamarin.Mac implementaiton has only been tested on MacOS 10.12.
 
 ### API Usage
 
-Call **CrossFilePicker.Current** from any project or PCL to gain access to APIs.
+Call **CrossFilePicker.Current** from any platform or .NET Standard project to gain access to APIs.
 
 ### **IMPORTANT**
 **Android:**
@@ -40,6 +40,7 @@ Need [Configure iCloud Driver for your app](https://developer.xamarin.com/guides
 #### Contributors
 * [jfversluis](https://github.com/jfversluis)
 * [rafaelrmou](https://github.com/rafaelrmou) (original author)
+* [vividos](https://github.com/vividos)
  
 Thanks!
 
