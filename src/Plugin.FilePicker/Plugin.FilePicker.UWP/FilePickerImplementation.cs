@@ -13,14 +13,36 @@ namespace Plugin.FilePicker
     /// </summary>
     public class FilePickerImplementation : IFilePicker
     {
-        public async Task<FileData> PickFile()
+        public async Task<FileData> PickFile(string[] allowedTypes)
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker
             {
                 ViewMode = Windows.Storage.Pickers.PickerViewMode.List,
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
             };
-            picker.FileTypeFilter.Add("*");
+
+            if (allowedTypes != null)
+            {
+                var hasAtleastOneType = false;
+
+                foreach (var type in allowedTypes)
+                {
+                    if (type.StartsWith("."))
+                    {
+                        picker.FileTypeFilter.Add(type);
+                        hasAtleastOneType = true;
+                    }
+                }
+
+                if (!hasAtleastOneType)
+                {
+                    picker.FileTypeFilter.Add("*");
+                }
+            }
+            else
+            {
+                picker.FileTypeFilter.Add("*");
+            }
 
             var file = await picker.PickSingleFileAsync();
             if (null == file)

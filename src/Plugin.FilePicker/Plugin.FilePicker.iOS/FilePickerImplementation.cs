@@ -14,7 +14,7 @@ namespace Plugin.FilePicker
     /// <summary>
     /// Implementation for FilePicker
     /// </summary>
-    public class FilePickerImplementation : NSObject, IUIDocumentMenuDelegate, IFilePicker
+    public class FilePickerImplementation : NSObject, IFilePicker
     {
         private int _requestId;
         private TaskCompletionSource<FileData> _completionSource;
@@ -30,14 +30,6 @@ namespace Plugin.FilePicker
         private void OnFilePicked (FilePickerEventArgs e)
         {
             Handler?.Invoke (null, e);
-        }
-
-        public void DidPickDocumentPicker (UIDocumentMenuViewController documentMenu, UIDocumentPickerViewController documentPicker)
-        {
-            documentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
-            documentPicker.WasCancelled += DocumentPicker_WasCancelled;
-            documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
-            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (documentPicker, true, null);
         }
 
         private void DocumentPicker_DidPickDocumentAtUrls(object sender, UIDocumentPickedAtUrlsEventArgs e)
@@ -97,14 +89,14 @@ namespace Plugin.FilePicker
         /// For iOS iCloud drive needs to be configured
         /// </summary>
         /// <returns></returns>
-        public async Task<FileData> PickFile ()
+        public async Task<FileData> PickFile (string[] allowedTypes)
         {
-            var media = await TakeMediaAsync ();
+            var media = await TakeMediaAsync (allowedTypes);
 
             return media;
         }
 
-        private Task<FileData> TakeMediaAsync ()
+        private Task<FileData> TakeMediaAsync (string[] allowedTypes)
         {
             var id = GetRequestId ();
 
@@ -129,15 +121,22 @@ namespace Plugin.FilePicker
                 "public.aac-audio"
             };
 
-            var importMenu =
-                new UIDocumentMenuViewController (allowedUtis, UIDocumentPickerMode.Import) {
-                    Delegate = this,
-                    ModalPresentationStyle = UIModalPresentationStyle.Popover
-                };
+            if (allowedTypes != null)
+            {
+                allowedUtis = allowedTypes;
+            }
 
-            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (importMenu, true, null);
+            var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Import) {
+                ModalPresentationStyle = UIModalPresentationStyle.Popover
+            };
 
-            var presPopover = importMenu.PopoverPresentationController;
+            documentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
+            documentPicker.WasCancelled += DocumentPicker_WasCancelled;
+            documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
+
+            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (documentPicker, true, null);
+
+            var presPopover = documentPicker.PopoverPresentationController;
 
             if (presPopover != null) {
                 presPopover.SourceView = UIApplication.SharedApplication.KeyWindow.RootViewController.View;
@@ -157,13 +156,6 @@ namespace Plugin.FilePicker
             };
 
             return _completionSource.Task;
-        }
-
-        public void WasCancelled (UIDocumentMenuViewController documentMenu)
-        {
-            var tcs = Interlocked.Exchange (ref _completionSource, null);
-
-            tcs?.SetResult (null);
         }
 
         private int GetRequestId ()

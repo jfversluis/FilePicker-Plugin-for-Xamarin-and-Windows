@@ -26,14 +26,16 @@ namespace Plugin.FilePicker
             _context = Application.Context;
         }
 
-        public async Task<FileData> PickFile ()
+        public async Task<FileData> PickFile (string[] allowedTypes)
         {
-            var media = await TakeMediaAsync ("file/*", Intent.ActionGetContent);
+            //var media = await TakeMediaAsync ("file/*", Intent.ActionGetContent);
+            var media = await TakeMediaAsync(allowedTypes, Intent.ActionGetContent);
 
             return media;
         }
 
-        private Task<FileData> TakeMediaAsync (string type, string action)
+        //private Task<FileData> TakeMediaAsync (string type, string action)
+        private Task<FileData> TakeMediaAsync(string[] allowedTypes, string action)
         {
             var id = GetRequestId ();
 
@@ -45,6 +47,8 @@ namespace Plugin.FilePicker
             try {
                 var pickerIntent = new Intent (this._context, typeof (FilePickerActivity));
                 pickerIntent.SetFlags (ActivityFlags.NewTask);
+
+                pickerIntent.PutExtra(nameof(allowedTypes), allowedTypes);
 
                 this._context.StartActivity (pickerIntent);
 

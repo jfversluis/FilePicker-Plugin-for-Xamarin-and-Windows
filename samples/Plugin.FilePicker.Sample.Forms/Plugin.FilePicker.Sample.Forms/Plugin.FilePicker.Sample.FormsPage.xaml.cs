@@ -21,18 +21,21 @@ namespace Plugin.FilePicker.Sample.Forms
 
             var pickedFile = await CrossFilePicker.Current.PickFile();
 
-            FileNameLabel.Text = pickedFile.FileName;
-            FilePathLabel.Text = pickedFile.FilePath;
+            if (pickedFile != null)
+            {
+                FileNameLabel.Text = pickedFile.FileName;
+                FilePathLabel.Text = pickedFile.FilePath;
 
-            if (pickedFile.FileName.EndsWith("jpg", StringComparison.Ordinal)
-                || pickedFile.FileName.EndsWith("png", StringComparison.Ordinal))
-            {
-                FileImagePreview.Source = ImageSource.FromStream(() => pickedFile.GetStream());
-                FileImagePreview.IsVisible = true;
-            }
-            else
-            {
-                FileImagePreview.IsVisible = false;
+                if (pickedFile.FileName.EndsWith("jpg", StringComparison.Ordinal)
+                    || pickedFile.FileName.EndsWith("png", StringComparison.Ordinal))
+                {
+                    FileImagePreview.Source = ImageSource.FromStream(() => pickedFile.GetStream());
+                    FileImagePreview.IsVisible = true;
+                }
+                else
+                {
+                    FileImagePreview.IsVisible = false;
+                }
             }
         }
     }
