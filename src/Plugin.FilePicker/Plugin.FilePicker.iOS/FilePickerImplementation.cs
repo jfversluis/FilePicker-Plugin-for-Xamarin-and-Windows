@@ -51,7 +51,7 @@ namespace Plugin.FilePicker
             System.Runtime.InteropServices.Marshal.Copy (data.Bytes, dataBytes, 0, Convert.ToInt32 (data.Length));
 
             string filename = doc.LocalizedName;
-            string pathname = doc.FileUrl?.ToString();
+            string pathname = doc.FileUrl?.Path;
 
             // iCloud drive can return null for LocalizedName.
             if (filename == null) {
