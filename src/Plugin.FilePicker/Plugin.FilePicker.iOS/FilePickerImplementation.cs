@@ -68,6 +68,8 @@ namespace Plugin.FilePicker
             }
 
             OnFilePicked (new FilePickerEventArgs (dataBytes, filename, pathname));
+
+            e.Url.StopAccessingSecurityScopedResource();
         }
 
         /// <summary>
@@ -106,19 +108,9 @@ namespace Plugin.FilePicker
                 throw new InvalidOperationException ("Only one operation can be active at a time");
 
             var allowedUtis = new string [] {
-                UTType.UTF8PlainText,
-                UTType.PlainText,
-                UTType.RTF,
-                UTType.PNG,
-                UTType.Text,
-                UTType.PDF,
-                UTType.Image,
-                UTType.UTF16PlainText,
-                UTType.FileURL,
-                UTType.MP3,
-                UTType.WaveformAudio,
-                UTType.AppleProtectedMPEG4Audio,
-                "public.aac-audio"
+                UTType.Content,
+                UTType.Item,
+                "public.data"
             };
 
             if (allowedTypes != null)
@@ -126,22 +118,16 @@ namespace Plugin.FilePicker
                 allowedUtis = allowedTypes;
             }
 
-            var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Import) {
-                ModalPresentationStyle = UIModalPresentationStyle.Popover
-            };
+            // NOTE: Importing makes a local copy of the document, while opening opens the document directly
+            var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Import);
+            //var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open);
 
             documentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
             documentPicker.WasCancelled += DocumentPicker_WasCancelled;
             documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
 
-            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (documentPicker, true, null);
-
-            var presPopover = documentPicker.PopoverPresentationController;
-
-            if (presPopover != null) {
-                presPopover.SourceView = UIApplication.SharedApplication.KeyWindow.RootViewController.View;
-                presPopover.PermittedArrowDirections = UIPopoverArrowDirection.Down;
-            }
+            var rootViewController = UIApplication.SharedApplication.KeyWindow.RootViewController;
+            rootViewController.PresentViewController(documentPicker, true, null);
 
             Handler = null;
 

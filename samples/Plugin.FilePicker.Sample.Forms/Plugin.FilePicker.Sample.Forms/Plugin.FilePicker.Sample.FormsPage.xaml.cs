@@ -12,13 +12,6 @@ namespace Plugin.FilePicker.Sample.Forms
 
         private async void Handle_Clicked(object sender, EventArgs args)
         {
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                await DisplayAlert("TODO", "Whoops, for iOS the sample is to be implemented", "OK");
-
-                return;
-            }
-
             var pickedFile = await CrossFilePicker.Current.PickFile();
 
             if (pickedFile != null)
