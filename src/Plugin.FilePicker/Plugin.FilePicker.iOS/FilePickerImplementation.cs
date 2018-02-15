@@ -113,21 +113,7 @@ namespace Plugin.FilePicker
             if (Interlocked.CompareExchange (ref _completionSource, ntcs, null) != null)
                 throw new InvalidOperationException ("Only one operation can be active at a time");
 
-            var allowedUtis = new string [] {
-                UTType.UTF8PlainText,
-                UTType.PlainText,
-                UTType.RTF,
-                UTType.PNG,
-                UTType.Text,
-                UTType.PDF,
-                UTType.Image,
-                UTType.UTF16PlainText,
-                UTType.FileURL,
-                UTType.MP3,
-                UTType.WaveformAudio,
-                UTType.AppleProtectedMPEG4Audio,
-                "public.aac-audio"
-            };
+            var allowedUtis = GetAllowedUTIs();
 
             var importMenu =
                 new UIDocumentMenuViewController (allowedUtis, UIDocumentPickerMode.Import) {
@@ -232,5 +218,34 @@ namespace Plugin.FilePicker
                 OpenFile (fileToOpen);
             }
         }
+
+        #region Protected Virtual Methods
+
+        /// <summary>
+        /// Override this method to determine the allowed UTIs
+        /// Use MobileCoreServices.UTType.[PDF] for predefined types
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string[]  GetAllowedUTIs()
+        {
+             return   new string[] {
+                    UTType.UTF8PlainText,
+                    UTType.PlainText,
+                    UTType.RTF,
+                    UTType.PNG,
+                    UTType.Text,
+                    UTType.PDF,
+                    UTType.Image,
+                    UTType.UTF16PlainText,
+                    UTType.FileURL,
+                    UTType.MP3,
+                    UTType.WaveformAudio,
+                    UTType.AppleProtectedMPEG4Audio,
+                    "public.aac-audio"
+                };
+        }
+
+        #endregion
+
     }
 }
