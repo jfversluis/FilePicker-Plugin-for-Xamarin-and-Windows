@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Plugin.FilePicker.Abstractions;
 using Android.Provider;
 using System.Net;
+using System.Linq;
 
 namespace Plugin.FilePicker
 {
@@ -21,11 +22,32 @@ namespace Plugin.FilePicker
             base.OnCreate (savedInstanceState);
 
             context = Application.Context;
-
-
+            
             var intent = new Intent (Intent.ActionGetContent);
-            intent.SetType ("*/*");
-
+            
+            //Determine Allowed MIME Types
+            var mimeTypesAllowed  = Intent.GetStringArrayListExtra("MIMETypesAllowed");
+            if (mimeTypesAllowed != null && mimeTypesAllowed.Count > 0)
+            {
+                if(mimeTypesAllowed.Count  == 1)
+                {
+                    //There's only one MIME Type, perhaps there is an App
+                    //which best suits this type of file so specify it explicitly
+                    intent.SetType(mimeTypesAllowed.First());
+                }
+                else
+                {
+                    //Let the App which responds to our Intent know that
+                    //we only want files specific MIME types.
+                    intent.PutExtra(Intent.ExtraMimeTypes, mimeTypesAllowed.ToArray());
+                    intent.SetType("*/*");
+                }
+            }
+            else
+            {
+                intent.SetType("*/*");
+            }
+            
             intent.AddCategory (Intent.CategoryOpenable);
             try {
                 StartActivityForResult (Intent.CreateChooser (intent, "Select file"), 0);
