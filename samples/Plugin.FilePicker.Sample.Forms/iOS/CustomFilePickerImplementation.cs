@@ -12,7 +12,9 @@ namespace Plugin.FilePicker.Sample.Forms.iOS
         {
             return new string[] {
                     UTType.PDF,
-                    UTType.Image
+                    UTType.Image,
+                    //iOS unrecognished File type...
+                    UTType.CreatePreferredIdentifier(UTType.TagClassFilenameExtension, "docx", null)
                 };
 
         }
