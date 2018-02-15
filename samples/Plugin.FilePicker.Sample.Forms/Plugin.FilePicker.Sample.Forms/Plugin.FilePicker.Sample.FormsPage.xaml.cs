@@ -5,9 +5,13 @@ namespace Plugin.FilePicker.Sample.Forms
 {
     public partial class Plugin_FilePicker_Sample_FormsPage : ContentPage
     {
+        private readonly Abstractions.IFilePicker _filePicker;
+
         public Plugin_FilePicker_Sample_FormsPage()
         {
             InitializeComponent();
+
+            _filePicker = DependencyService.Get<Abstractions.IFilePicker>();
         }
 
         private async void Handle_Clicked(object sender, EventArgs args)
@@ -18,8 +22,8 @@ namespace Plugin.FilePicker.Sample.Forms
 
                 return;
             }
-
-            var pickedFile = await CrossFilePicker.Current.PickFile();
+            
+            var pickedFile = await _filePicker.PickFile();
 
             FileNameLabel.Text = pickedFile.FileName;
             FilePathLabel.Text = pickedFile.FilePath;
