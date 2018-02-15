@@ -20,7 +20,20 @@ namespace Plugin.FilePicker
                 ViewMode = Windows.Storage.Pickers.PickerViewMode.List,
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
             };
-            picker.FileTypeFilter.Add("*");
+
+            var fileTypeFilters = GetFileTypeFilters();
+            if (fileTypeFilters == null)
+            {
+                picker.FileTypeFilter.Add("*");
+            }
+            else
+            {
+                foreach(string filter in fileTypeFilters)
+                {
+                    picker.FileTypeFilter.Add(filter);
+                }
+            }
+           
 
             var file = await picker.PickSingleFileAsync();
             if (null == file)
@@ -29,7 +42,7 @@ namespace Plugin.FilePicker
             StorageApplicationPermissions.FutureAccessList.Add(file);
             return new FileData(file.Path, file.Name, () => File.OpenRead(file.Path));
         }
-
+        
         public async Task<bool> SaveFile(FileData fileToSave)
         {
             try
@@ -85,5 +98,20 @@ namespace Plugin.FilePicker
             {
             }
         }
+
+        #region Protected Virtual Methods
+
+        /// <summary>
+        /// Override this method to specify file type filters for UWP
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string[] GetFileTypeFilters()
+        {
+            return null;
+        }
+
+        #endregion
+
+
     }
 }
