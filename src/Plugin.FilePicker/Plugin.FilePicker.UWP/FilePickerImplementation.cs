@@ -27,7 +27,7 @@ namespace Plugin.FilePicker
                 return null;
 
             StorageApplicationPermissions.FutureAccessList.Add(file);
-            return new FileData(file.Path, file.Name, () => File.OpenRead(file.Path));
+            return new FileData(file.Path, file.Name, () => file.OpenStreamForReadAsync().Result);
         }
 
         public async Task<bool> SaveFile(FileData fileToSave)
