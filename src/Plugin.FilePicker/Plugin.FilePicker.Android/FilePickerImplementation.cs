@@ -28,12 +28,19 @@ namespace Plugin.FilePicker
 
         public async Task<FileData> PickFile ()
         {
-            var media = await TakeMediaAsync ("file/*", Intent.ActionGetContent);
+            var media = await TakeMediaAsync ("file/*", Intent.ActionGetContent, 0);
 
             return media;
         }
 
-        private Task<FileData> TakeMediaAsync (string type, string action)
+        public async Task<FileData> PickFile (int maximumFileSize)
+        {
+            var media = await TakeMediaAsync ("file/*", Intent.ActionGetContent, maximumFileSize);
+
+            return media;
+        }
+
+        private Task<FileData> TakeMediaAsync (string type, string action, int maximumFileSize)
         {
             var id = GetRequestId ();
 
@@ -45,6 +52,7 @@ namespace Plugin.FilePicker
             try {
                 var pickerIntent = new Intent (this._context, typeof (FilePickerActivity));
                 pickerIntent.SetFlags (ActivityFlags.NewTask);
+                pickerIntent.PutExtra ("MaximumFileSize", maximumFileSize);
 
                 this._context.StartActivity (pickerIntent);
 
@@ -56,7 +64,7 @@ namespace Plugin.FilePicker
 
                     FilePickerActivity.FilePicked -= handler;
 
-                    tcs?.SetResult (new FileData (e.FilePath, e.FileName,
+                    tcs?.SetResult (new FileData(e.FilePath, e.FileName, e.IsFileSizeTooLarge,
                         () =>
                         {
                             if (IOUtil.isMediaStore(e.FilePath))

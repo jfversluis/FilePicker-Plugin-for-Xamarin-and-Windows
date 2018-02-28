@@ -18,6 +18,7 @@ namespace Plugin.FilePicker
     {
         private int _requestId;
         private TaskCompletionSource<FileData> _completionSource;
+        private int _maximumFileSize;
 
         /// <summary>
         /// Event which is invoked when a file was picked
@@ -54,28 +55,46 @@ namespace Plugin.FilePicker
             var securityEnabled = e.Url.StartAccessingSecurityScopedResource ();
             var doc = new UIDocument (e.Url);
             var data = NSData.FromUrl (e.Url);
-            var dataBytes = new byte [data.Length];
-
-            System.Runtime.InteropServices.Marshal.Copy (data.Bytes, dataBytes, 0, Convert.ToInt32 (data.Length));
-
             string filename = doc.LocalizedName;
             string pathname = doc.FileUrl?.ToString();
 
-            // iCloud drive can return null for LocalizedName.
-            if (filename == null) {
-                // Retrieve actual filename by taking the last entry after / in FileURL.
-                // e.g. /path/to/file.ext -> file.ext
+            ReadFileResult readFileResult;
 
-                // filesplit is either:
-                // 0 (pathname is null, or last / is at position 0)
-                // -1 (no / in pathname)
-                // positive int (last occurence of / in string)
-                var filesplit = pathname?.LastIndexOf ('/') ?? 0;
+            if (_maximumFileSize > 0 && data.Length > (nuint)_maximumFileSize)
+            {
+                readFileResult = new ReadFileResult
+                {
+                    IsFileSizeTooLarge = true
+                };
+            }
+            else
+            {
+                var dataBytes = new byte [data.Length];
 
-                filename = pathname?.Substring (filesplit + 1);
+                System.Runtime.InteropServices.Marshal.Copy (data.Bytes, dataBytes, 0, Convert.ToInt32 (data.Length));
+
+                // iCloud drive can return null for LocalizedName.
+                if (filename == null) {
+                    // Retrieve actual filename by taking the last entry after / in FileURL.
+                    // e.g. /path/to/file.ext -> file.ext
+
+                    // filesplit is either:
+                    // 0 (pathname is null, or last / is at position 0)
+                    // -1 (no / in pathname)
+                    // positive int (last occurence of / in string)
+                    var filesplit = pathname?.LastIndexOf ('/') ?? 0;
+
+                    filename = pathname?.Substring (filesplit + 1);
+                }
+
+                readFileResult = new ReadFileResult
+                {
+                    Data = dataBytes,
+                    IsFileSizeTooLarge = false
+                };
             }
 
-            OnFilePicked (new FilePickerEventArgs (dataBytes, filename, pathname));
+            OnFilePicked (new FilePickerEventArgs (readFileResult, filename, pathname));
         }
 
         /// <summary>
@@ -99,12 +118,19 @@ namespace Plugin.FilePicker
         /// <returns></returns>
         public async Task<FileData> PickFile ()
         {
-            var media = await TakeMediaAsync ();
+            var media = await TakeMediaAsync (0);
 
             return media;
         }
 
-        private Task<FileData> TakeMediaAsync ()
+        public async Task<FileData> PickFile(int maximumFileSize)
+        {
+            var media = await TakeMediaAsync(maximumFileSize);
+
+            return media;
+        }
+
+        private Task<FileData> TakeMediaAsync (int maximumFileSize)
         {
             var id = GetRequestId ();
 
@@ -129,6 +155,8 @@ namespace Plugin.FilePicker
                 "public.aac-audio"
             };
 
+            _maximumFileSize = maximumFileSize;
+
             var importMenu =
                 new UIDocumentMenuViewController (allowedUtis, UIDocumentPickerMode.Import) {
                     Delegate = this,
@@ -149,7 +177,7 @@ namespace Plugin.FilePicker
             Handler = (s, e) => {
                 var tcs = Interlocked.Exchange (ref _completionSource, null);
 
-                tcs?.SetResult(new FileData(e.FilePath, e.FileName, () =>
+                tcs?.SetResult(new FileData(e.FilePath, e.FileName, e.IsFileSizeTooLarge, () =>
                 {
                     var url = new NSUrl(e.FilePath);
                     return new FileStream(url.Path, FileMode.Open, FileAccess.Read);

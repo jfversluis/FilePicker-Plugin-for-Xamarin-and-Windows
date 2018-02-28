@@ -11,6 +11,13 @@ namespace Plugin.FilePicker
 {
     public class IOUtil
     {
+        public static long getFileSize(Context context, Android.Net.Uri uri)
+        {
+            using (var fileDescriptor = context.ContentResolver.OpenFileDescriptor(uri, "r"))
+            {
+                return fileDescriptor.StatSize;
+            }
+        }
 
         public static string getPath (Context context, Android.Net.Uri uri)
         {

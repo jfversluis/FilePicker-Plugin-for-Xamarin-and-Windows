@@ -9,6 +9,8 @@ namespace Plugin.FilePicker.Abstractions
     {
         Task<FileData> PickFile ();
 
+        Task<FileData> PickFile (int maximumFileSize);
+
         Task<bool> SaveFile (FileData fileToSave);
 
         void OpenFile (string fileToOpen);

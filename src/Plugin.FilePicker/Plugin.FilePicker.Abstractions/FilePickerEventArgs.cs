@@ -10,24 +10,27 @@ namespace Plugin.FilePicker.Abstractions
 
         public string FilePath { get; set; }
 
+        public bool IsFileSizeTooLarge { get; set; }
+
         public FilePickerEventArgs ()
         {
 
         }
 
-        public FilePickerEventArgs (byte [] fileByte)
+        public FilePickerEventArgs (ReadFileResult readFileResult)
         {
-            FileByte = fileByte;
+            FileByte = readFileResult.Data;
+            IsFileSizeTooLarge = readFileResult.IsFileSizeTooLarge;
         }
 
-        public FilePickerEventArgs (byte [] fileByte, string fileName)
-            : this (fileByte)
+        public FilePickerEventArgs (ReadFileResult readFileResult, string fileName)
+            : this (readFileResult)
         {
             FileName = fileName;
         }
 
-        public FilePickerEventArgs (byte [] fileByte, string fileName, string filePath)
-            : this (fileByte, fileName)
+        public FilePickerEventArgs (ReadFileResult readFileResult, string fileName, string filePath)
+            : this (readFileResult, fileName)
         {
             FilePath = filePath;
         }

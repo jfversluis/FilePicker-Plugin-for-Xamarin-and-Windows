@@ -33,11 +33,16 @@ namespace Plugin.FilePicker
                 if (url != null)
                 {
                     var path = url.Path;
-                    data = new FileData(path, fileName, () => File.OpenRead(path));
+                    data = new FileData(path, fileName, false, () => File.OpenRead(path));
                 }
             }
 
             return Task.FromResult(data);
+        }
+
+        public Task<FileData> PickFile(int maximumFileSize)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<bool> SaveFile(FileData fileToSave)

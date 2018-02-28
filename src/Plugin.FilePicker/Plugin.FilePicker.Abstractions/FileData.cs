@@ -8,6 +8,7 @@ namespace Plugin.FilePicker.Abstractions
     /// </summary>
     public class FileData : IDisposable
     {
+        private bool _isFileSizeAllowed;
         private string _fileName;
         private string _filePath;
         private bool _isDisposed;
@@ -17,10 +18,11 @@ namespace Plugin.FilePicker.Abstractions
         public FileData()
         { }
 
-        public FileData(string filePath, string fileName, Func<Stream> streamGetter, Action<bool> dispose = null)
+        public FileData(string filePath, string fileName, bool isFileSizeAllowed, Func<Stream> streamGetter, Action<bool> dispose = null)
         {
             _filePath = filePath;
             _fileName = fileName;
+            _isFileSizeAllowed = isFileSizeAllowed;
             _dispose = dispose;
             _streamGetter = streamGetter;
         }
@@ -105,6 +107,28 @@ namespace Plugin.FilePicker.Abstractions
                 throw new ObjectDisposedException(null);
 
             return _streamGetter();
+        }
+
+        public bool IsFilSizeAllowed
+        {
+            get
+            {
+                if (_isDisposed)
+                {
+                    throw new ObjectDisposedException(null);
+                }
+
+                return _isFileSizeAllowed;
+            }
+            set
+            {
+                if (_isDisposed)
+                {
+                    throw new ObjectDisposedException(null);
+                }
+
+                _isFileSizeAllowed = value;
+            }
         }
 
         public void Dispose()

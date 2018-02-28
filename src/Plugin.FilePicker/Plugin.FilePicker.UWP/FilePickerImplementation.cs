@@ -15,6 +15,16 @@ namespace Plugin.FilePicker
     {
         public async Task<FileData> PickFile()
         {
+            return await TakeMediaAsync(0);
+        }
+
+        public async Task<FileData> PickFile(int maximumFileSize)
+        {
+            return await TakeMediaAsync(maximumFileSize);
+        }
+
+        private async Task<FileData> TakeMediaAsync(int maximumFileSize)
+        {
             var picker = new Windows.Storage.Pickers.FileOpenPicker
             {
                 ViewMode = Windows.Storage.Pickers.PickerViewMode.List,
@@ -26,8 +36,15 @@ namespace Plugin.FilePicker
             if (null == file)
                 return null;
 
+            var fileProperties = await file.GetBasicPropertiesAsync();
+            var isFileSizeTooLarge = false;
+            if (maximumFileSize > 0 && fileProperties.Size > (ulong)maximumFileSize)
+            {
+                isFileSizeTooLarge = true;
+            }
+
             StorageApplicationPermissions.FutureAccessList.Add(file);
-            return new FileData(file.Path, file.Name, () => file.OpenStreamForReadAsync().Result);
+            return new FileData(file.Path, file.Name, isFileSizeTooLarge, () => file.OpenStreamForReadAsync().Result);
         }
 
         public async Task<bool> SaveFile(FileData fileToSave)

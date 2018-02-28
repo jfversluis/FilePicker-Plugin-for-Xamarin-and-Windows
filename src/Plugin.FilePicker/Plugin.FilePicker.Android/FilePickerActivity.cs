@@ -1,11 +1,10 @@
-using System;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using System.Threading.Tasks;
-using Plugin.FilePicker.Abstractions;
 using Android.Provider;
+using Android.Runtime;
+using Plugin.FilePicker.Abstractions;
+using System;
 using System.Net;
 
 namespace Plugin.FilePicker
@@ -15,6 +14,7 @@ namespace Plugin.FilePicker
     public class FilePickerActivity : Activity
     {
         private Context context;
+        private int maximumFileSize;
 
         protected override void OnCreate (Bundle savedInstanceState)
         {
@@ -27,6 +27,9 @@ namespace Plugin.FilePicker
             intent.SetType ("*/*");
 
             intent.AddCategory (Intent.CategoryOpenable);
+
+            maximumFileSize = Intent.GetIntExtra("MaximumFileSize", 0);
+
             try {
                 StartActivityForResult (Intent.CreateChooser (intent, "Select file"), 0);
             } catch (Exception exAct) {
@@ -47,19 +50,37 @@ namespace Plugin.FilePicker
                 try {
                     var _uri = data.Data;
 
+                    ReadFileResult readFileResult;
+                    var fileSize = IOUtil.getFileSize (context, _uri);
                     var filePath = IOUtil.getPath (context, _uri);
 
-                    if (string.IsNullOrEmpty (filePath))
-                        filePath = IOUtil.isMediaStore(_uri.Scheme) ? _uri.ToString() : _uri.Path;
-                    byte[] file;
-                    if (IOUtil.isMediaStore(_uri.Scheme))
-                        file = IOUtil.readFile(context, _uri);
+                    if (fileSize > maximumFileSize)
+                    {
+                        readFileResult = new ReadFileResult
+                        {
+                            IsFileSizeTooLarge = true
+                        };
+                    }
                     else
-                        file = IOUtil.readFile (filePath);
+                    {
+                        if (string.IsNullOrEmpty (filePath))
+                            filePath = IOUtil.isMediaStore(_uri.Scheme) ? _uri.ToString() : _uri.Path;
+                        byte[] file;
+                        if (IOUtil.isMediaStore(_uri.Scheme))
+                            file = IOUtil.readFile(context, _uri);
+                        else
+                            file = IOUtil.readFile (filePath);
+
+                        readFileResult = new ReadFileResult
+                        {
+                            Data = file,
+                            IsFileSizeTooLarge = false
+                        };
+                    }
 
                     var fileName = GetFileName (context, _uri);
 
-                    OnFilePicked (new FilePickerEventArgs (file, fileName, filePath));
+                    OnFilePicked (new FilePickerEventArgs (readFileResult, fileName, filePath));
                 } catch (Exception readEx) {
                     // Notify user file picking failed.
                     OnFilePickCancelled ();
