@@ -109,7 +109,7 @@ namespace Plugin.FilePicker.Abstractions
             return _streamGetter();
         }
 
-        public bool IsFilSizeAllowed
+        public bool IsFileSizeAllowed
         {
             get
             {
