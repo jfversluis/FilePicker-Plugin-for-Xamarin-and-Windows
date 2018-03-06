@@ -25,16 +25,32 @@ namespace Plugin.FilePicker.Abstractions
             _streamGetter = streamGetter;
         }
 
+        //Updated with BUG Fix for Content picked files.See Original Repo: https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows/commit/997f85f309f939c6ca2a87efedd4d8bb7618b6df#diff-2cc24c90e81a2832630bd9d47d6948e1
+        /// <summary>
+        /// Completely reads all bytes from the input stream and returns it as byte array. Can be
+        /// used when the returned file data consists of a stream, not a real filename.
+        /// </summary>
+        /// <param name="input">input stream</param>
+        /// <returns>byte array</returns>
+        public static byte[] ReadFully(Stream input)
+        {
+            using (var ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+        //END
+
         public byte[] DataArray
         {
             get
             {
                 using (var stream = GetStream())
                 {
-                    var resultBytes = new byte[stream.Length];
-                    stream.Read(resultBytes, 0, (int)stream.Length);
-
-                    return resultBytes;
+                    //Updated with BUG Fix for Content picked files. See Original Repo: https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows/commit/997f85f309f939c6ca2a87efedd4d8bb7618b6df#diff-2cc24c90e81a2832630bd9d47d6948e1
+                    return ReadFully(stream);
+                    //END
                 }
             }
         }

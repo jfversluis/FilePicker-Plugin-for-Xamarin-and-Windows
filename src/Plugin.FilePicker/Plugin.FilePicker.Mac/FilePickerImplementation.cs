@@ -16,10 +16,14 @@ namespace Plugin.FilePicker
         {
             // for consistency with other platforms, only allow selecting of a single file.
             // would be nice if we passed a "file options" to override picking multiple files & directories
-            var openPanel = new NSOpenPanel(); ;
+            var openPanel = new NSOpenPanel();
             openPanel.CanChooseFiles = true;
             openPanel.AllowsMultipleSelection = false;
             openPanel.CanChooseDirectories = false;
+
+            var allowedTypes = GetAllowedFileTypes();
+            if (allowedTypes != null)
+                openPanel.AllowedFileTypes = allowedTypes;
 
             FileData data = null;
 
@@ -107,5 +111,15 @@ namespace Plugin.FilePicker
             {
             }
         }
+
+        #region Protected virtual methods
+
+        protected virtual string[] GetAllowedFileTypes()
+        {
+            return null;
+        }
+
+        #endregion
+
     }
 }

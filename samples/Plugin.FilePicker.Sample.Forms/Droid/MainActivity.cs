@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define CUSTOM_PICKER
+
+using System;
 
 using Android.App;
 using Android.Content;
@@ -7,6 +9,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Plugin.FilePicker.Abstractions;
 
 namespace Plugin.FilePicker.Sample.Forms.Droid
 {
@@ -22,7 +25,22 @@ namespace Plugin.FilePicker.Sample.Forms.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
+            ConfigureDependencies();
+
             LoadApplication(new App());
+        }
+
+        private void ConfigureDependencies()
+        {
+
+#if CUSTOM_PICKER
+            //Use custom file picker implementation
+            Xamarin.Forms.DependencyService.Register<CustomFilePickerImplementation>();
+#else
+            //Use default file picker implementation
+            Xamarin.Forms.DependencyService.Register<FilePickerImplementation>();
+#endif
+
         }
     }
 }
