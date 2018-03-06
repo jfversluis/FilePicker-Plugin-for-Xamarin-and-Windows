@@ -64,7 +64,20 @@ namespace Plugin.FilePicker
 
                     FilePickerActivity.FilePicked -= handler;
 
-                    tcs?.SetResult(new FileData(e.FilePath, e.FileName, () => System.IO.File.OpenRead(e.FilePath)));
+
+                    //tcs?.SetResult(new FileData(e.FilePath, e.FileName, () => System.IO.File.OpenRead(e.FilePath)));
+
+                    //Updated with BUG Fix for Content picked files. See Original Repo: https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows/commit/997f85f309f939c6ca2a87efedd4d8bb7618b6df#diff-2cc24c90e81a2832630bd9d47d6948e1
+                    tcs?.SetResult(new FileData(e.FilePath, e.FileName,
+                        () =>
+                        {
+                            if (IOUtil.isMediaStore(e.FilePath))
+                                return new System.IO.MemoryStream(e.FileByte);
+                            else
+                                return System.IO.File.OpenRead(e.FilePath);
+                        }));
+                    //End Bug fix code
+
                 };
 
                 cancelledHandler = (s, e) =>
