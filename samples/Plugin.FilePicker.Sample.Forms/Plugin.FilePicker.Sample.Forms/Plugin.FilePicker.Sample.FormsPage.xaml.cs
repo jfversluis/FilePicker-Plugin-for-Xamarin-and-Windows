@@ -22,21 +22,27 @@ namespace Plugin.FilePicker.Sample.Forms
 
                 return;
             }
-            
+
             var pickedFile = await _filePicker.PickFile();
 
-            FileNameLabel.Text = pickedFile.FileName;
-            FilePathLabel.Text = pickedFile.FilePath;
+            FileNameLabel.Text = pickedFile?.FileName;
+            FilePathLabel.Text = pickedFile?.FilePath;
 
-            if (pickedFile.FileName.EndsWith("jpg", StringComparison.Ordinal)
-                || pickedFile.FileName.EndsWith("png", StringComparison.Ordinal))
+            if (pickedFile != null)
             {
-                FileImagePreview.Source = ImageSource.FromStream(() => pickedFile.GetStream());
-                FileImagePreview.IsVisible = true;
-            }
-            else
-            {
-                FileImagePreview.IsVisible = false;
+                if (pickedFile.FileName.EndsWith("jpg", StringComparison.Ordinal)
+                    || pickedFile.FileName.EndsWith("png", StringComparison.Ordinal))
+                {
+                    FileImagePreview.Source = ImageSource.FromStream(() => pickedFile.GetStream());
+                    FileImagePreview.IsVisible = true;
+                }
+                else
+                {
+                    FileImagePreview.IsVisible = false;
+                }
+
+                //Test that Stream can be read.
+                var stream = pickedFile.GetStream();
             }
         }
     }
