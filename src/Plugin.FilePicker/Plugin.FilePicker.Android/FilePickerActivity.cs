@@ -6,7 +6,6 @@ using Android.Runtime;
 using System.Threading.Tasks;
 using Plugin.FilePicker.Abstractions;
 using Android.Provider;
-using System.Net;
 
 namespace Plugin.FilePicker
 {
@@ -50,9 +49,12 @@ namespace Plugin.FilePicker
                     var filePath = IOUtil.getPath (context, _uri);
 
                     if (string.IsNullOrEmpty (filePath))
-                        filePath = _uri.Path;
-
-                    var file = IOUtil.readFile (filePath);
+                        filePath = IOUtil.isMediaStore(_uri.Scheme) ? _uri.ToString() : _uri.Path;
+                    byte[] file;
+                    if (IOUtil.isMediaStore(_uri.Scheme))
+                        file = IOUtil.readFile(context, _uri);
+                    else
+                        file = IOUtil.readFile (filePath);
 
                     var fileName = GetFileName (context, _uri);
 
@@ -85,11 +87,7 @@ namespace Plugin.FilePicker
                     metaCursor.Close ();
                 }
             }
-
-            if (!string.IsNullOrWhiteSpace(name))
-                return name;
-            else
-                return System.IO.Path.GetFileName(WebUtility.UrlDecode(uri.ToString()));
+            return name;
         }
 
         internal static event EventHandler<FilePickerEventArgs> FilePicked;
