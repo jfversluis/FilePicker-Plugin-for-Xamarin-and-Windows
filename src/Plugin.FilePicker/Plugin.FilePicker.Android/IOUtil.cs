@@ -96,7 +96,9 @@ namespace Plugin.FilePicker
                 cursor = context.ContentResolver.Query (uri, projection, selection, selectionArgs,
                         null);
                 if (cursor != null && cursor.MoveToFirst ()) {
-                    int column_index = cursor.GetColumnIndexOrThrow (column);
+                    int column_index = cursor.GetColumnIndex(column);
+                    if (column_index == -1)
+                        return null;
                     return cursor.GetString (column_index);
                 }
             } finally {
