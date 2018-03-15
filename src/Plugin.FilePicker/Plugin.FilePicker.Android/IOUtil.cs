@@ -5,6 +5,7 @@ using Android.Provider;
 using Android.Database;
 using Java.IO;
 using Android.Webkit;
+using Plugin.FilePicker.Abstractions;
 
 namespace Plugin.FilePicker
 {
@@ -62,7 +63,7 @@ namespace Plugin.FilePicker
                 }
             }
             // MediaStore (and general)
-            else if ("content".Equals (uri.Scheme, StringComparison.OrdinalIgnoreCase)) {
+            if (isMediaStore(uri.Scheme)) {
                 return getDataColumn (context, uri, null, null);
             }
             // File
@@ -73,21 +74,31 @@ namespace Plugin.FilePicker
             return null;
         }
 
+        /// <summary>
+        /// Checks if the scheme part of the URL matches the content:// scheme
+        /// </summary>
+        /// <param name="scheme">scheme part of URL</param>
+        /// <returns>true when it matches, false when not</returns>
+        public static bool isMediaStore(string scheme)
+        {
+            return scheme.StartsWith("content");
+        }
+
         public static string getDataColumn (Context context, Android.Net.Uri uri, string selection,
         string [] selectionArgs)
         {
 
             ICursor cursor = null;
-            var column = "_data";
-            string [] projection = {
-                column
-            };
+            string column = MediaStore.Files.FileColumns.Data;
+            string [] projection = { column };
 
             try {
                 cursor = context.ContentResolver.Query (uri, projection, selection, selectionArgs,
                         null);
                 if (cursor != null && cursor.MoveToFirst ()) {
-                    int column_index = cursor.GetColumnIndexOrThrow (column);
+                    int column_index = cursor.GetColumnIndex(column);
+                    if (column_index == -1)
+                        return null;
                     return cursor.GetString (column_index);
                 }
             } finally {
@@ -122,6 +133,12 @@ namespace Plugin.FilePicker
         public static bool isMediaDocument (Android.Net.Uri uri)
         {
             return "com.android.providers.media.documents".Equals (uri.Authority);
+        }
+
+        public static Byte[] readFile(Context context, Android.Net.Uri uri)
+        {
+            using (var inStream = context.ContentResolver.OpenInputStream(uri))
+                return FileData.ReadFully(inStream);
         }
 
         public static byte [] readFile (string file)
