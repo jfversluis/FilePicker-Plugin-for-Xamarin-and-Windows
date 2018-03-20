@@ -34,6 +34,13 @@ namespace Plugin.FilePicker
                 else if (isDownloadsDocument (uri)) {
 
                     string id = DocumentsContract.GetDocumentId (uri);
+
+                    if (!string.IsNullOrEmpty(id) &&
+                        id.StartsWith("raw:"))
+                    {
+                        return id.Substring(4);
+                    }
+
                     Android.Net.Uri contentUri = ContentUris.WithAppendedId (
                             Android.Net.Uri.Parse ("content://downloads/public_downloads"), long.Parse (id));
 
