@@ -21,6 +21,11 @@ namespace Plugin.FilePicker.Sample.Forms
 
             var pickedFile = await CrossFilePicker.Current.PickFile();
 
+            if (pickedFile == null)
+            {
+                return;
+            }
+
             FileNameLabel.Text = pickedFile.FileName;
             FilePathLabel.Text = pickedFile.FilePath;
 
