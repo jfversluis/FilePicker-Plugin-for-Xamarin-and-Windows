@@ -67,10 +67,21 @@ namespace Plugin.FilePicker
                     tcs?.SetResult (new FileData(e.FilePath, e.FileName, e.IsFileSizeTooLarge,
                         () =>
                         {
-                            if (IOUtil.isMediaStore(e.FilePath))
-                                return new System.IO.MemoryStream(e.FileByte);
+                            if (e.IsFileSizeTooLarge)
+                            {
+                                return new System.IO.MemoryStream();
+                            }
                             else
-                                return System.IO.File.OpenRead (e.FilePath);
+                            {
+                                if (IOUtil.isMediaStore(e.FilePath))
+                                {
+                                    return new System.IO.MemoryStream(e.FileByte);
+                                }
+                                else
+                                {
+                                    return System.IO.File.OpenRead(e.FilePath);
+                                }
+                            }
                         }));
                 };
 

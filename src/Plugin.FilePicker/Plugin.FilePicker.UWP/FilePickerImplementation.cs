@@ -36,15 +36,19 @@ namespace Plugin.FilePicker
             if (null == file)
                 return null;
 
+            StorageApplicationPermissions.FutureAccessList.Add(file);
+
             var fileProperties = await file.GetBasicPropertiesAsync();
             var isFileSizeTooLarge = false;
             if (maximumFileSize > 0 && fileProperties.Size > (ulong)maximumFileSize)
             {
                 isFileSizeTooLarge = true;
+                return new FileData(file.Path, file.Name, isFileSizeTooLarge, () => new MemoryStream());
             }
-
-            StorageApplicationPermissions.FutureAccessList.Add(file);
-            return new FileData(file.Path, file.Name, isFileSizeTooLarge, () => file.OpenStreamForReadAsync().Result);
+            else
+            {
+                return new FileData(file.Path, file.Name, isFileSizeTooLarge, () => file.OpenStreamForReadAsync().Result);
+            }
         }
 
         public async Task<bool> SaveFile(FileData fileToSave)
