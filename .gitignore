@@ -248,3 +248,7 @@ samples/Plugin.FilePicker.Sample.Forms/.droidres/.plugin.filepicker.sample.forms
 samples/Plugin.FilePicker.Sample.Forms/.droidres/.plugin.filepicker.sample.macos.droidres.db
 
 samples/.droidres/.plugin.filepicker.sample.forms.droidres.db
+
+src/.mfractor/.plugin.filepicker.db
+
+Resource.designer.cs
