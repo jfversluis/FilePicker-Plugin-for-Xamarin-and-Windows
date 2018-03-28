@@ -27,39 +27,18 @@
    </metadata>
    <files>
     <!--.NET Standard-->
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker\bin\Release\netstandard1.0\Plugin.FilePicker.dll" target="lib\netstandard1.0\Plugin.FilePicker.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker\bin\Release\netstandard1.0\Plugin.FilePicker.xml" target="lib\netstandard1.0\Plugin.FilePicker.xml" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker\bin\Release\netstandard1.0\Plugin.FilePicker.pdb" target="lib\netstandard1.0\Plugin.FilePicker.pdb" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.dll" target="lib\netstandard1.0\Plugin.FilePicker.Abstractions.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.xml" target="lib\netstandard1.0\Plugin.FilePicker.Abstractions.xml" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.pdb" target="lib\netstandard1.0\Plugin.FilePicker.Abstractions.pdb" />
+     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker\bin\Release\netstandard1.0\Plugin.FilePicker.*" target="lib\netstandard1.0" />
 
      <!--Xamarin.Android-->
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Android\bin\Release\Plugin.FilePicker.dll" target="lib\MonoAndroid10\Plugin.FilePicker.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Android\bin\Release\Plugin.FilePicker.xml" target="lib\MonoAndroid10\Plugin.FilePicker.xml" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Android\bin\Release\Plugin.FilePicker.pdb" target="lib\MonoAndroid10\Plugin.FilePicker.pdb" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.dll" target="lib\MonoAndroid10\Plugin.FilePicker.Abstractions.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.xml" target="lib\MonoAndroid10\Plugin.FilePicker.Abstractions.xml" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.pdb" target="lib\MonoAndroid10\Plugin.FilePicker.Abstractions.pdb" />
+     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Android\bin\Release\Plugin.FilePicker.*" target="lib\MonoAndroid10" />
 
      <!--Xamarin.iOS-->
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.iOS\bin\iPhone\Release\Plugin.FilePicker.dll" target="lib\MonoTouch10\Plugin.FilePicker.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.iOS\bin\iPhone\Release\Plugin.FilePicker.xml" target="lib\MonoTouch10\Plugin.FilePicker.xml" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.dll" target="lib\MonoTouch10\Plugin.FilePicker.Abstractions.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.xml" target="lib\MonoTouch10\Plugin.FilePicker.Abstractions.xml" />
+     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.iOS\bin\iPhone\Release\Plugin.FilePicker.*" target="lib\Xamarin.iOS10" />
 
      <!--Xamarin.Mac-->
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Mac\bin\Release\Plugin.FilePicker.dll" target="lib\Xamarin.Mac20\Plugin.FilePicker.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Mac\bin\Release\Plugin.FilePicker.xml" target="lib\Xamarin.Mac20\Plugin.FilePicker.xml" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.dll" target="lib\Xamarin.Mac20\Plugin.FilePicker.Abstractions.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.xml" target="lib\Xamarin.Mac20\Plugin.FilePicker.Abstractions.xml" />
+     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Mac\bin\Release\Plugin.FilePicker.*" target="lib\Xamarin.Mac20" />
 
      <!--UWP-->
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.dll" target="lib\UAP10\Plugin.FilePicker.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.xml" target="lib\UAP10\Plugin.FilePicker.xml" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.pdb" target="lib\UAP10\Plugin.FilePicker.pdb" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.dll" target="lib\UAP10\Plugin.FilePicker.Abstractions.dll" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.xml" target="lib\UAP10\Plugin.FilePicker.Abstractions.xml" />
-     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\bin\Release\netstandard1.0\Plugin.FilePicker.Abstractions.pdb" target="lib\UAP10\Plugin.FilePicker.Abstractions.pdb" />
+     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.*" target="lib\UAP10" />
    </files>
 </package>
