@@ -25,16 +25,28 @@ namespace Plugin.FilePicker.Abstractions
             _streamGetter = streamGetter;
         }
 
+        /// <summary>
+        /// Completely reads all bytes from the input stream and returns it as byte array. Can be
+        /// used when the returned file data consists of a stream, not a real filename.
+        /// </summary>
+        /// <param name="input">input stream</param>
+        /// <returns>byte array</returns>
+        public static byte[] ReadFully(Stream input)
+        {
+            using (var ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
         public byte[] DataArray
         {
             get
             {
                 using (var stream = GetStream())
                 {
-                    var resultBytes = new byte[stream.Length];
-                    stream.Read(resultBytes, 0, (int)stream.Length);
-
-                    return resultBytes;
+                    return ReadFully(stream);
                 }
             }
         }
@@ -86,7 +98,7 @@ namespace Plugin.FilePicker.Abstractions
         /// <summary>
         /// Get stream if available
         /// </summary>
-        /// <returns></returns>
+        /// <returns>stream object</returns>
         public Stream GetStream()
         {
             if (_isDisposed)
