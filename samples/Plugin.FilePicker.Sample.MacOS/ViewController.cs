@@ -21,11 +21,14 @@ namespace Plugin.FilePicker.Sample.MacOS
         {
             var pickedFile = await CrossFilePicker.Current.PickFile();
 
-            FileNameLabel.StringValue = pickedFile.FileName;
-            FilePathLabel.StringValue = pickedFile.FilePath;
+            if (pickedFile != null)
+            {
+                FileNameLabel.StringValue = pickedFile.FileName;
+                FilePathLabel.StringValue = pickedFile.FilePath;
 
-            if (pickedFile.FileName.EndsWith("png") || pickedFile.FileName.EndsWith("jpg"))
-                FileImagePreview.Image = NSImage.FromStream(pickedFile.GetStream());
+                if (pickedFile.FileName.EndsWith("png") || pickedFile.FileName.EndsWith("jpg"))
+                    FileImagePreview.Image = NSImage.FromStream(pickedFile.GetStream());
+            }
         }
 
         public override NSObject RepresentedObject
