@@ -147,7 +147,6 @@ namespace Plugin.FilePicker
 
                 tcs?.SetResult(new FileData(e.FilePath, e.FileName, () =>
                 {
-                    var url = new NSUrl(e.FilePath);
                     return new FileStream(url.Path, FileMode.Open, FileAccess.Read);
                 }));
             };
