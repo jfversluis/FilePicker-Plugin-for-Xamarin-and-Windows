@@ -14,7 +14,7 @@ namespace Plugin.FilePicker
     /// <summary>
     /// Implementation for FilePicker
     /// </summary>
-    public class FilePickerImplementation : NSObject, IUIDocumentMenuDelegate, IFilePicker
+    public class FilePickerImplementation : NSObject, IFilePicker
     {
         private int _requestId;
         private TaskCompletionSource<FileData> _completionSource;
@@ -22,7 +22,8 @@ namespace Plugin.FilePicker
         /// <summary>
         /// Event which is invoked when a file was picked
         /// </summary>
-        public EventHandler<FilePickerEventArgs> Handler {
+        public EventHandler<FilePickerEventArgs> Handler
+        {
             get;
             set;
         }
@@ -61,8 +62,11 @@ namespace Plugin.FilePicker
             string filename = doc.LocalizedName;
             string pathname = doc.FileUrl?.ToString();
 
+            e.Url.StopAccessingSecurityScopedResource();
+
             // iCloud drive can return null for LocalizedName.
-            if (filename == null) {
+            if (filename == null)
+            {
                 // Retrieve actual filename by taking the last entry after / in FileURL.
                 // e.g. /path/to/file.ext -> file.ext
 
@@ -75,20 +79,20 @@ namespace Plugin.FilePicker
                 filename = pathname?.Substring (filesplit + 1);
             }
 
-            OnFilePicked (new FilePickerEventArgs (dataBytes, filename, pathname));
+            OnFilePicked(new FilePickerEventArgs(dataBytes, filename, pathname));
         }
-
+        
         /// <summary>
         /// Handles when the file picker was cancelled. Either in the
         /// popup menu or later on.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void DocumentPicker_WasCancelled (object sender, EventArgs e)
+        public void DocumentPicker_WasCancelled(object sender, EventArgs e)
         {
             {
-                var tcs = Interlocked.Exchange (ref _completionSource, null);
-                tcs.SetResult (null);
+                var tcs = Interlocked.Exchange(ref _completionSource, null);
+                tcs.SetResult(null);
             }
         }
 
@@ -97,14 +101,14 @@ namespace Plugin.FilePicker
         /// For iOS iCloud drive needs to be configured
         /// </summary>
         /// <returns></returns>
-        public async Task<FileData> PickFile ()
+        public async Task<FileData> PickFile (string[] allowedTypes)
         {
-            var media = await TakeMediaAsync ();
+            var media = await TakeMediaAsync (allowedTypes);
 
             return media;
         }
 
-        private Task<FileData> TakeMediaAsync ()
+        private Task<FileData> TakeMediaAsync (string[] allowedTypes)
         {
             var id = GetRequestId ();
 
@@ -114,40 +118,32 @@ namespace Plugin.FilePicker
                 throw new InvalidOperationException ("Only one operation can be active at a time");
 
             var allowedUtis = new string [] {
-                UTType.UTF8PlainText,
-                UTType.PlainText,
-                UTType.RTF,
-                UTType.PNG,
-                UTType.Text,
-                UTType.PDF,
-                UTType.Image,
-                UTType.UTF16PlainText,
-                UTType.FileURL,
-                UTType.MP3,
-                UTType.WaveformAudio,
-                UTType.AppleProtectedMPEG4Audio,
-                "public.aac-audio"
+                UTType.Content,
+                UTType.Item,
+                "public.data"
             };
 
-            var importMenu =
-                new UIDocumentMenuViewController (allowedUtis, UIDocumentPickerMode.Import) {
-                    Delegate = this,
-                    ModalPresentationStyle = UIModalPresentationStyle.Popover
-                };
-
-            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (importMenu, true, null);
-
-            var presPopover = importMenu.PopoverPresentationController;
-
-            if (presPopover != null) {
-                presPopover.SourceView = UIApplication.SharedApplication.KeyWindow.RootViewController.View;
-                presPopover.PermittedArrowDirections = UIPopoverArrowDirection.Down;
+            if (allowedTypes != null)
+            {
+                allowedUtis = allowedTypes;
             }
+
+            // NOTE: Importing makes a local copy of the document, while opening opens the document directly
+            var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Import);
+            //var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open);
+
+            documentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
+            documentPicker.WasCancelled += DocumentPicker_WasCancelled;
+            documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
+
+            var rootViewController = UIApplication.SharedApplication.KeyWindow.RootViewController;
+            rootViewController.PresentViewController(documentPicker, true, null);
 
             Handler = null;
 
-            Handler = (s, e) => {
-                var tcs = Interlocked.Exchange (ref _completionSource, null);
+            Handler = (s, e) =>
+            {
+                var tcs = Interlocked.Exchange(ref _completionSource, null);
 
                 tcs?.SetResult(new FileData(e.FilePath, e.FileName, () =>
                 {
@@ -157,13 +153,6 @@ namespace Plugin.FilePicker
             };
 
             return _completionSource.Task;
-        }
-
-        public void WasCancelled (UIDocumentMenuViewController documentMenu)
-        {
-            var tcs = Interlocked.Exchange (ref _completionSource, null);
-
-            tcs?.SetResult (null);
         }
 
         private int GetRequestId ()
@@ -180,15 +169,18 @@ namespace Plugin.FilePicker
 
         public Task<bool> SaveFile (FileData fileToSave)
         {
-            try {
-                var documents = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
-                var fileName = Path.Combine (documents, fileToSave.FileName);
+            try
+            {
+                var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var fileName = Path.Combine(documents, fileToSave.FileName);
 
                 File.WriteAllBytes (fileName, fileToSave.DataArray);
 
                 return Task.FromResult(true);
-            } catch (Exception ex) {
-                Debug.WriteLine (ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
                 return Task.FromResult(false);
             }
         }
@@ -211,9 +203,10 @@ namespace Plugin.FilePicker
 
             var fileName = Path.Combine (documents, fileToOpen);
 
-            if (NSFileManager.DefaultManager.FileExists (fileName)) {
-                var url = new NSUrl (fileName, true);
-                OpenFile (url);
+            if (NSFileManager.DefaultManager.FileExists(fileName))
+            {
+                var url = new NSUrl(fileName, true);
+                OpenFile(url);
             }
         }
 
@@ -223,13 +216,16 @@ namespace Plugin.FilePicker
 
             var fileName = Path.Combine (documents, fileToOpen.FileName);
 
-            if (NSFileManager.DefaultManager.FileExists (fileName)) {
-                var url = new NSUrl (fileName, true);
+            if (NSFileManager.DefaultManager.FileExists(fileName))
+            {
+                var url = new NSUrl(fileName, true);
 
-                OpenFile (url);
-            } else {
-                await SaveFile (fileToOpen);
-                OpenFile (fileToOpen);
+                OpenFile(url);
+            }
+            else
+            {
+                await SaveFile(fileToOpen);
+                OpenFile(fileToOpen);
             }
         }
     }
