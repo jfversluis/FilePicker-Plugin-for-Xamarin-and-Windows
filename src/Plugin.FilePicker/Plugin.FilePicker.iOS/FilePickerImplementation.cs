@@ -147,7 +147,7 @@ namespace Plugin.FilePicker
 
                 tcs?.SetResult(new FileData(e.FilePath, e.FileName, () =>
                 {
-                    return new FileStream(url.Path, FileMode.Open, FileAccess.Read);
+                    return new FileStream(e.FilePath, FileMode.Open, FileAccess.Read);
                 }));
             };
 
