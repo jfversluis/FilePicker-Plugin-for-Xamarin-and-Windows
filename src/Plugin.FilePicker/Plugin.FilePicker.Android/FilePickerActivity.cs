@@ -22,9 +22,35 @@ namespace Plugin.FilePicker
 
             context = Application.Context;
 
+            string[] allowedTypes = Intent.GetStringArrayExtra("allowedTypes") ?? null;
 
             var intent = new Intent (Intent.ActionGetContent);
-            intent.SetType ("*/*");
+
+            if (allowedTypes != null)
+            {
+                var typeString = "";
+                for (var i = 0; i < allowedTypes.Length; i++)
+                {
+                    if (allowedTypes[i].Contains("/"))
+                    {
+                        typeString += allowedTypes[i];
+
+                        if (i != allowedTypes.Length - 1)
+                        {
+                            typeString += "|";
+                        }
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(typeString))
+                {
+                    typeString = "*/*";
+                }
+                intent.SetType(typeString);
+            }
+            else
+            {
+                intent.SetType("*/*");
+            }
 
             intent.AddCategory (Intent.CategoryOpenable);
             try {
