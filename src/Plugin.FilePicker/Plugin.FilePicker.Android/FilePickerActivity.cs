@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Plugin.FilePicker.Abstractions;
 using Android.Provider;
 using System.Net;
+using System.Linq;
 
 namespace Plugin.FilePicker
 {
@@ -22,34 +23,14 @@ namespace Plugin.FilePicker
 
             context = Application.Context;
 
-            string[] allowedTypes = Intent.GetStringArrayExtra("allowedTypes") ?? null;
+            string[] allowedTypes = Intent.GetStringArrayExtra("allowedTypes")?.Where(o => !string.IsNullOrEmpty(o) && o.Contains("/")).ToArray();
 
             var intent = new Intent (Intent.ActionGetContent);
 
-            if (allowedTypes != null)
-            {
-                var typeString = "";
-                for (var i = 0; i < allowedTypes.Length; i++)
-                {
-                    if (allowedTypes[i].Contains("/"))
-                    {
-                        typeString += allowedTypes[i];
+            intent.SetType("*/*");
 
-                        if (i != allowedTypes.Length - 1)
-                        {
-                            typeString += "|";
-                        }
-                    }
-                }
-                if (string.IsNullOrWhiteSpace(typeString))
-                {
-                    typeString = "*/*";
-                }
-                intent.SetType(typeString);
-            }
-            else
-            {
-                intent.SetType("*/*");
+            if (allowedTypes != null && allowedTypes.Any()) {
+                intent.PutExtra(Intent.ExtraMimeTypes, allowedTypes);
             }
 
             intent.AddCategory (Intent.CategoryOpenable);

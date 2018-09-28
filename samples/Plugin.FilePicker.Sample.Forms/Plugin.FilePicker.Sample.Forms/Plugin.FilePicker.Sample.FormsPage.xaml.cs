@@ -12,7 +12,14 @@ namespace Plugin.FilePicker.Sample.Forms
 
         private async void Handle_Clicked(object sender, EventArgs args)
         {
-            var pickedFile = await CrossFilePicker.Current.PickFile();
+
+            string[] allowedTypes = null;
+
+            if (Device.RuntimePlatform == Device.Android) {
+                allowedTypes = new string[] { "image/png", "image/jpeg" };
+            }
+
+            var pickedFile = await CrossFilePicker.Current.PickFile(allowedTypes);
 
             if (pickedFile != null)
             {
