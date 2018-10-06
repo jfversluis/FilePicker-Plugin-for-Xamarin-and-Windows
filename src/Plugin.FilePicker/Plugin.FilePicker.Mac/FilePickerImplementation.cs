@@ -35,11 +35,11 @@ namespace Plugin.FilePicker
             {
                 // Nab the first file
                 var url = openPanel.Urls[0];
-                var fileName = openPanel.Filenames[0];
 
                 if (url != null)
                 {
                     var path = url.Path;
+                    var fileName = Path.GetFileName(path);
                     data = new FileData(path, fileName, () => File.OpenRead(path));
                 }
             }
