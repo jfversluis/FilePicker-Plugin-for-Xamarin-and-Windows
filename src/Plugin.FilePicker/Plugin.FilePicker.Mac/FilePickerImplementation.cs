@@ -98,9 +98,9 @@ namespace Plugin.FilePicker
         {
             try
             {
-                if (!NSWorkspace.SharedWorkspace.OpenFile(fileToOpen.FileName))
+                if (!NSWorkspace.SharedWorkspace.OpenFile(fileToOpen.FilePath))
                 {
-                    Debug.WriteLine($"Unable to open file at path: {fileToOpen}.");
+                    Debug.WriteLine($"Unable to open file at path: {fileToOpen.FilePath}.");
                 }
             }
             catch (FileNotFoundException ex)
