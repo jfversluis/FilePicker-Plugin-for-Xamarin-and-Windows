@@ -87,9 +87,14 @@ namespace Plugin.FilePicker
 
                     OnFilePicked (new FilePickerEventArgs (file, fileName, filePath));
                 } catch (Exception readEx) {
+                    System.Diagnostics.Debug.Write(readEx);
                     // Notify user file picking failed.
-                    OnFilePickCancelled ();
-                    System.Diagnostics.Debug.Write (readEx);
+                    FilePickCancelled?.Invoke(
+                        this,
+                        new FilePickerCancelledEventArgs
+                        {
+                            Exception = readEx
+                        });
                 } finally {
                     Finish ();
                 }
@@ -122,7 +127,7 @@ namespace Plugin.FilePicker
         }
 
         internal static event EventHandler<FilePickerEventArgs> FilePicked;
-        internal static event EventHandler<EventArgs> FilePickCancelled;
+        internal static event EventHandler<FilePickerCancelledEventArgs> FilePickCancelled;
 
         private static void OnFilePickCancelled ()
         {
