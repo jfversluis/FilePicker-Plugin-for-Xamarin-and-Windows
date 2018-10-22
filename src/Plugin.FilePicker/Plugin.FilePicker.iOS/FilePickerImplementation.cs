@@ -33,14 +33,6 @@ namespace Plugin.FilePicker
             Handler?.Invoke (null, e);
         }
 
-        public void DidPickDocumentPicker (UIDocumentMenuViewController documentMenu, UIDocumentPickerViewController documentPicker)
-        {
-            documentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
-            documentPicker.WasCancelled += DocumentPicker_WasCancelled;
-            documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
-            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (documentPicker, true, null);
-        }
-
         private void DocumentPicker_DidPickDocumentAtUrls(object sender, UIDocumentPickedAtUrlsEventArgs e)
         {
             var control = (UIDocumentPickerViewController)sender;
