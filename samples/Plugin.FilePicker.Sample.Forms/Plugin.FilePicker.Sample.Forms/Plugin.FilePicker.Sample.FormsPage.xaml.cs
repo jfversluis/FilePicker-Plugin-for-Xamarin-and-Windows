@@ -19,8 +19,8 @@ namespace Plugin.FilePicker.Sample.Forms
                 FileNameLabel.Text = pickedFile.FileName;
                 FilePathLabel.Text = pickedFile.FilePath;
 
-                if (pickedFile.FileName.EndsWith("jpg", StringComparison.Ordinal)
-                    || pickedFile.FileName.EndsWith("png", StringComparison.Ordinal))
+                if (pickedFile.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase)
+                    || pickedFile.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
                 {
                     FileImagePreview.Source = ImageSource.FromStream(() => pickedFile.GetStream());
                     FileImagePreview.IsVisible = true;
