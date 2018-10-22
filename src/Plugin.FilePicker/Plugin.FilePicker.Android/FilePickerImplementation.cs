@@ -91,6 +91,7 @@ namespace Plugin.FilePicker
                 FilePickerActivity.FilePicked += handler;
             } catch (Exception exAct) {
                 Debug.Write (exAct);
+                _completionSource.SetException(exAct);
             }
 
             return _completionSource.Task;
