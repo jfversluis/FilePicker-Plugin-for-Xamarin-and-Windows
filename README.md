@@ -62,6 +62,25 @@ The `WRITE_EXTERNAL_STORAGE` & `READ_EXTERNAL_STORAGE` permissions are required.
 **iOS:** 
 Need [Configure iCloud Driver for your app](https://developer.xamarin.com/guides/ios/platform_features/intro_to_cloudkit)
 
+## Troubleshooting
+
+### All platforms
+
+**InvalidOperationException "Only one operation can be active at a time"**
+
+This occurs when `PickFile()` is called multiple times and the task being awaited didn't return or
+throws an exception that wasn't caught. Be sure to catch any exceptions and handle them
+appropriately. See the example code above.
+
+### Android
+
+**Exception "This functionality is not implemented in the portable version of this assembly. You should reference the NuGet package from your main application project in order to reference the platform-specific implementation."**
+
+This occurs when you are using the old-style NuGet references (not the PackageReference mechanism)
+and you forgot to add the NuGet package to the Android package. When using PackageReference this
+is not necessary anymore because the bait-and-switch assemblies of FilePicker are correctly
+resolved.
+
 ## Contributors
 * [jfversluis](https://github.com/jfversluis)
 * [rafaelrmou](https://github.com/rafaelrmou) (original author)
