@@ -136,8 +136,8 @@ namespace Plugin.FilePicker
             documentPicker.WasCancelled += DocumentPicker_WasCancelled;
             documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
 
-            var rootViewController = UIApplication.SharedApplication.KeyWindow.RootViewController;
-            rootViewController.PresentViewController(documentPicker, true, null);
+            UIViewController viewController = GetActiveViewController();
+            viewController.PresentViewController(documentPicker, true, null);
 
             Handler = null;
 
@@ -152,6 +152,23 @@ namespace Plugin.FilePicker
             };
 
             return _completionSource.Task;
+        }
+
+        /// <summary>
+        /// Finds active view controller to use to present document picker
+        /// </summary>
+        /// <returns>view controller to use</returns>
+        private static UIViewController GetActiveViewController()
+        {
+            UIWindow window = UIApplication.SharedApplication.KeyWindow;
+            UIViewController viewController = window.RootViewController;
+
+            while (viewController.PresentedViewController != null)
+            {
+                viewController = viewController.PresentedViewController;
+            }
+
+            return viewController;
         }
 
         private int GetRequestId ()
