@@ -88,7 +88,7 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Plugin.FilePicker.Sample.Forms\Plugin.FilePicker.Sample.Forms.csproj">
+    <ProjectReference Include="..\Forms\Plugin.FilePicker.Sample.Forms.csproj">
       <Project>{BC539575-3B77-4A4A-8F3A-2203BB590674}</Project>
       <Name>Plugin.FilePicker.Sample.Forms</Name>
     </ProjectReference>

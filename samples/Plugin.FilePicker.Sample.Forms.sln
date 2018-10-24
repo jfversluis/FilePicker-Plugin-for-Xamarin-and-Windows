@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Sample.Forms", "Plugin.FilePicker.Sample.Forms\Plugin.FilePicker.Sample.Forms\Plugin.FilePicker.Sample.Forms.csproj", "{BC539575-3B77-4A4A-8F3A-2203BB590674}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Sample.Forms", "Plugin.FilePicker.Sample.Forms\Forms\Plugin.FilePicker.Sample.Forms.csproj", "{BC539575-3B77-4A4A-8F3A-2203BB590674}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Sample.Forms.iOS", "Plugin.FilePicker.Sample.Forms\iOS\Plugin.FilePicker.Sample.Forms.iOS.csproj", "{32F6F5E8-CD92-40E5-B088-2C5D258AB9DE}"
 EndProject
