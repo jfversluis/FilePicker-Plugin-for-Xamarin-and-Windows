@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -46,8 +46,8 @@
     <Reference Include="Mono.Android" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Plugin.FilePicker.Sample.Forms\Plugin.FilePicker.Sample.Forms.csproj">
-      <Project>{BC539575-3B77-4A4A-8F3A-2203BB590674}</Project>
+    <ProjectReference Include="..\Forms\Plugin.FilePicker.Sample.Forms.csproj">
+      <Project>{bc539575-3b77-4a4a-8f3a-2203bb590674}</Project>
       <Name>Plugin.FilePicker.Sample.Forms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.Android\Plugin.FilePicker.Android.csproj">

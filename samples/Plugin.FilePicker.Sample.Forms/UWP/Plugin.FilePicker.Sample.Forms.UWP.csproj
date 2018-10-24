@@ -151,7 +151,7 @@
       <Project>{e34b516d-c0d8-450f-9db0-bb6a5b04aef1}</Project>
       <Name>Plugin.FilePicker.UWP</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Plugin.FilePicker.Sample.Forms\Plugin.FilePicker.Sample.Forms.csproj">
+    <ProjectReference Include="..\Forms\Plugin.FilePicker.Sample.Forms.csproj">
       <Project>{bc539575-3b77-4a4a-8f3a-2203bb590674}</Project>
       <Name>Plugin.FilePicker.Sample.Forms</Name>
     </ProjectReference>

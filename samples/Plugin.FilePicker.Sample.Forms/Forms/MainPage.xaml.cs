@@ -3,9 +3,9 @@ using Xamarin.Forms;
 
 namespace Plugin.FilePicker.Sample.Forms
 {
-    public partial class Plugin_FilePicker_Sample_FormsPage : ContentPage
+    public partial class MainPage : ContentPage
     {
-        public Plugin_FilePicker_Sample_FormsPage()
+        public MainPage()
         {
             InitializeComponent();
         }
