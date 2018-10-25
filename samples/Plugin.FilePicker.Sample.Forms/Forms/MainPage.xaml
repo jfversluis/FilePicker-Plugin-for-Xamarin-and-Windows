@@ -4,7 +4,10 @@
     x:Class="Plugin.FilePicker.Sample.Forms.MainPage">
 
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-        <Button Text="Pick file" Clicked="Handle_Clicked" VerticalOptions="Center" HorizontalOptions="Center" />
+        <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+            <Button Text="Pick file" Clicked="PickFile_Clicked" />
+            <Button Text="Pick image" Clicked="PickImage_Clicked" />
+        </StackLayout>
         <Label x:Name="FileNameLabel" Text="" VerticalOptions="Center" HorizontalOptions="Center" />
         <Label x:Name="FilePathLabel" Text="" VerticalOptions="Center" HorizontalOptions="Center" />
         <Image x:Name="FileImagePreview" VerticalOptions="Center" HorizontalOptions="Center" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Plugin.FilePicker.Sample.Forms
@@ -10,11 +11,28 @@ namespace Plugin.FilePicker.Sample.Forms
             InitializeComponent();
         }
 
-        private async void Handle_Clicked(object sender, EventArgs args)
+        private async void PickFile_Clicked(object sender, EventArgs args)
+        {
+            await PickAndShowFile(null);
+        }
+
+        private async void PickImage_Clicked(object sender, EventArgs args)
+        {
+            string[] fileTypes = null;
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                fileTypes = new string[] { "image/png", "image/jpeg" };
+            }
+
+            await PickAndShowFile(fileTypes);
+        }
+
+        private async Task PickAndShowFile(string[] fileTypes)
         {
             try
             {
-                var pickedFile = await CrossFilePicker.Current.PickFile();
+                var pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
 
                 if (pickedFile != null)
                 {
