@@ -33,14 +33,6 @@ namespace Plugin.FilePicker
             Handler?.Invoke (null, e);
         }
 
-        public void DidPickDocumentPicker (UIDocumentMenuViewController documentMenu, UIDocumentPickerViewController documentPicker)
-        {
-            documentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
-            documentPicker.WasCancelled += DocumentPicker_WasCancelled;
-            documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
-            UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController (documentPicker, true, null);
-        }
-
         private void DocumentPicker_DidPickDocumentAtUrls(object sender, UIDocumentPickedAtUrlsEventArgs e)
         {
             var control = (UIDocumentPickerViewController)sender;
@@ -52,36 +44,36 @@ namespace Plugin.FilePicker
 
         private void DocumentPicker_DidPickDocument (object sender, UIDocumentPickedEventArgs e)
         {
-            var securityEnabled = e.Url.StartAccessingSecurityScopedResource ();
-            var doc = new UIDocument (e.Url);
-            var data = NSData.FromUrl (e.Url);
-            var dataBytes = new byte [data.Length];
-
-            System.Runtime.InteropServices.Marshal.Copy (data.Bytes, dataBytes, 0, Convert.ToInt32 (data.Length));
-
-            string filename = doc.LocalizedName;
-            string pathname = doc.FileUrl?.ToString();
-
-            e.Url.StopAccessingSecurityScopedResource();
-
-            // iCloud drive can return null for LocalizedName.
-            if (filename == null)
+            try
             {
-                // Retrieve actual filename by taking the last entry after / in FileURL.
-                // e.g. /path/to/file.ext -> file.ext
+                var securityEnabled = e.Url.StartAccessingSecurityScopedResource ();
+                var doc = new UIDocument (e.Url);
+                var data = NSData.FromUrl (e.Url);
+                var dataBytes = new byte [data.Length];
 
-                // filesplit is either:
-                // 0 (pathname is null, or last / is at position 0)
-                // -1 (no / in pathname)
-                // positive int (last occurence of / in string)
-                var filesplit = pathname?.LastIndexOf ('/') ?? 0;
+                System.Runtime.InteropServices.Marshal.Copy (data.Bytes, dataBytes, 0, Convert.ToInt32 (data.Length));
 
-                filename = pathname?.Substring (filesplit + 1);
+                string filename = doc.LocalizedName;
+                string pathname = doc.FileUrl?.Path;
+
+                e.Url.StopAccessingSecurityScopedResource();
+
+                // iCloud drive can return null for LocalizedName.
+                if (filename == null && pathname != null)
+                {
+                    filename = Path.GetFileName(pathname);
+                }
+
+                OnFilePicked(new FilePickerEventArgs(dataBytes, filename, pathname));
             }
-
-            OnFilePicked(new FilePickerEventArgs(dataBytes, filename, pathname));
+            catch (Exception ex)
+            {
+                // pass exception to task so that it doesn't get lost in the UI main loop
+                var tcs = Interlocked.Exchange(ref _completionSource, null);
+                tcs.SetException(ex);
+            }
         }
-        
+
         /// <summary>
         /// Handles when the file picker was cancelled. Either in the
         /// popup menu or later on.
@@ -136,8 +128,8 @@ namespace Plugin.FilePicker
             documentPicker.WasCancelled += DocumentPicker_WasCancelled;
             documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
 
-            var rootViewController = UIApplication.SharedApplication.KeyWindow.RootViewController;
-            rootViewController.PresentViewController(documentPicker, true, null);
+            UIViewController viewController = GetActiveViewController();
+            viewController.PresentViewController(documentPicker, true, null);
 
             Handler = null;
 
@@ -152,6 +144,23 @@ namespace Plugin.FilePicker
             };
 
             return _completionSource.Task;
+        }
+
+        /// <summary>
+        /// Finds active view controller to use to present document picker
+        /// </summary>
+        /// <returns>view controller to use</returns>
+        private static UIViewController GetActiveViewController()
+        {
+            UIWindow window = UIApplication.SharedApplication.KeyWindow;
+            UIViewController viewController = window.RootViewController;
+
+            while (viewController.PresentedViewController != null)
+            {
+                viewController = viewController.PresentedViewController;
+            }
+
+            return viewController;
         }
 
         private int GetRequestId ()

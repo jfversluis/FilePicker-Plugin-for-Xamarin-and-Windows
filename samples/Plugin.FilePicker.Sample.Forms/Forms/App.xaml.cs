@@ -8,7 +8,7 @@ namespace Plugin.FilePicker.Sample.Forms
         {
             InitializeComponent();
 
-            MainPage = new Plugin_FilePicker_Sample_FormsPage();
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()
