@@ -37,6 +37,13 @@ namespace Plugin.FilePicker
         //private Task<FileData> TakeMediaAsync (string type, string action)
         private Task<FileData> TakeMediaAsync(string[] allowedTypes, string action)
         {
+            if (this._context.PackageManager.CheckPermission(
+                Android.Manifest.Permission.ReadExternalStorage,
+                this._context.PackageName) == Android.Content.PM.Permission.Denied)
+            {
+                throw new InvalidOperationException("Android permission READ_EXTERNAL_STORAGE is missing or was denied by user");
+            }
+
             var id = GetRequestId ();
 
             var ntcs = new TaskCompletionSource<FileData> (id);
