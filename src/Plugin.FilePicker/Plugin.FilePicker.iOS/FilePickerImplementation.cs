@@ -59,18 +59,9 @@ namespace Plugin.FilePicker
                 e.Url.StopAccessingSecurityScopedResource();
 
                 // iCloud drive can return null for LocalizedName.
-                if (filename == null)
+                if (filename == null && pathname != null)
                 {
-                    // Retrieve actual filename by taking the last entry after / in FileURL.
-                    // e.g. /path/to/file.ext -> file.ext
-
-                    // filesplit is either:
-                    // 0 (pathname is null, or last / is at position 0)
-                    // -1 (no / in pathname)
-                    // positive int (last occurence of / in string)
-                    var filesplit = pathname?.LastIndexOf ('/') ?? 0;
-
-                    filename = pathname?.Substring (filesplit + 1);
+                    filename = Path.GetFileName(pathname);
                 }
 
                 OnFilePicked(new FilePickerEventArgs(dataBytes, filename, pathname));
