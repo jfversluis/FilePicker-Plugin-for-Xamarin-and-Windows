@@ -55,6 +55,31 @@ Call **CrossFilePicker.Current** from any platform or .NET Standard project to g
                 System.Console.WriteLine("Exception choosing file: " + ex.ToString());
             }
 
+### Data structures
+
+The returned `FileData` object contains multiple properties that can be accessed:
+
+    public class FileData
+    {
+        /// When accessed, reads all data from the picked file and returns it.
+        public byte[] DataArray { get; }
+
+        /// Filename of the picked file; doesn't contain any path.
+        public string FileName { get; }
+
+        /// Full file path of the picked file; note that on some platforms the
+        /// file path may not be a real, accessible path but may contain an
+        /// platform specific URI; may also be null.
+        public string FilePath { get; }
+
+        /// Returns a stream to the picked file; this is the most reliable way
+        /// to access the data of the picked file.
+        public Stream GetStream();
+    }
+
+Note that `DataArray` is filled on first access, so be sure to rewind the stream when
+you access it via GetStream() afterwards.
+
 ### **IMPORTANT**
 **Android:**
 The `WRITE_EXTERNAL_STORAGE` & `READ_EXTERNAL_STORAGE` permissions are required.
