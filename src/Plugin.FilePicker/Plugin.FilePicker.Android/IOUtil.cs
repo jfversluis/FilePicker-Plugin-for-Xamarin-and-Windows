@@ -41,10 +41,30 @@ namespace Plugin.FilePicker
                         return id.Substring(4);
                     }
 
-                    Android.Net.Uri contentUri = ContentUris.WithAppendedId (
-                            Android.Net.Uri.Parse ("content://downloads/public_downloads"), long.Parse (id));
+                    string[] contentUriPrefixesToTry = new string[]
+                    {
+                        "content://downloads/public_downloads",
+                        "content://downloads/my_downloads"
+                    };
 
-                    return getDataColumn (context, contentUri, null, null);
+                    foreach (string contentUriPrefix in contentUriPrefixesToTry)
+                    {
+                        Android.Net.Uri contentUri = ContentUris.WithAppendedId(
+                            Android.Net.Uri.Parse(contentUriPrefix), long.Parse(id));
+
+                        try
+                        {
+                            var path = getDataColumn(context, contentUri, null, null);
+                            if (path != null)
+                            {
+                                return path;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // ignore exception; path can't be retrieved using ContentResolver
+                        }
+                    }
                 }
                 // MediaProvider
                 else if (isMediaDocument (uri)) {
