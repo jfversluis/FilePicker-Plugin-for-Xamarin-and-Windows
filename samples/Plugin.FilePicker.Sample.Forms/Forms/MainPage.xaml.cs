@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -37,6 +39,12 @@ namespace Plugin.FilePicker.Sample.Forms
         {
             try
             {
+                if (Device.RuntimePlatform == Device.Android &&
+                    !await this.CheckPermissionsAsync())
+                {
+                    return;
+                }
+
                 var pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
 
                 if (pickedFile != null)
@@ -61,6 +69,43 @@ namespace Plugin.FilePicker.Sample.Forms
                 FileNameLabel.Text = ex.ToString();
                 FilePathLabel.Text = string.Empty;
                 FileImagePreview.IsVisible = false;
+            }
+        }
+
+        private async Task<bool> CheckPermissionsAsync()
+        {
+            try
+            {
+                var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Storage);
+                if (status != PermissionStatus.Granted)
+                {
+                    if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Storage))
+                    {
+                        await DisplayAlert("Xamarin.Forms Sample", "Storage permission is needed for file picking", "OK");
+                    }
+
+                    var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Storage);
+
+                    if (results.ContainsKey(Permission.Storage))
+                    {
+                        status = results[Permission.Storage];
+                    }
+                }
+
+                if (status == PermissionStatus.Granted)
+                {
+                    return true;
+                }
+                else if (status != PermissionStatus.Unknown)
+                {
+                    await DisplayAlert("Xamarin.Forms Sample", "Storage permission was denied.", "OK");
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }
