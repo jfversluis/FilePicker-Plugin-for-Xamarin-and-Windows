@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Sample.Forms", "Plugin.FilePicker.Sample.Forms\Forms\Plugin.FilePicker.Sample.Forms.csproj", "{BC539575-3B77-4A4A-8F3A-2203BB590674}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.FilePicker.Sample.Forms", "Plugin.FilePicker.Sample.Forms\Forms\Plugin.FilePicker.Sample.Forms.csproj", "{BC539575-3B77-4A4A-8F3A-2203BB590674}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Sample.Forms.iOS", "Plugin.FilePicker.Sample.Forms\iOS\Plugin.FilePicker.Sample.Forms.iOS.csproj", "{32F6F5E8-CD92-40E5-B088-2C5D258AB9DE}"
 EndProject
@@ -19,6 +19,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Sample.Forms.UWP", "Plugin.FilePicker.Sample.Forms\UWP\Plugin.FilePicker.Sample.Forms.UWP.csproj", "{0F751E6D-BF0E-4BEE-AD43-4DA1AABB5211}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.UWP", "..\src\Plugin.FilePicker\Plugin.FilePicker.UWP\Plugin.FilePicker.UWP.csproj", "{E34B516D-C0D8-450F-9DB0-BB6A5B04AEF1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugin Projects", "Plugin Projects", "{45FC3352-5F40-44CE-85C0-4A833A9761AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample Projects", "Sample Projects", "{5317C143-367E-4704-9DE5-6BAD007691AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,6 +261,17 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BC539575-3B77-4A4A-8F3A-2203BB590674} = {5317C143-367E-4704-9DE5-6BAD007691AE}
+		{32F6F5E8-CD92-40E5-B088-2C5D258AB9DE} = {5317C143-367E-4704-9DE5-6BAD007691AE}
+		{2A72EE4A-F43F-465D-BCAC-B953494B05CE} = {5317C143-367E-4704-9DE5-6BAD007691AE}
+		{A6FCEF44-D2BA-42C7-B3CB-13667BCD7B54} = {45FC3352-5F40-44CE-85C0-4A833A9761AA}
+		{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D} = {45FC3352-5F40-44CE-85C0-4A833A9761AA}
+		{56A56F17-7DE1-4CA1-9617-BF32E971AC84} = {45FC3352-5F40-44CE-85C0-4A833A9761AA}
+		{2882AEEB-D4CD-4EB9-8A6C-6653B33681F0} = {45FC3352-5F40-44CE-85C0-4A833A9761AA}
+		{0F751E6D-BF0E-4BEE-AD43-4DA1AABB5211} = {5317C143-367E-4704-9DE5-6BAD007691AE}
+		{E34B516D-C0D8-450F-9DB0-BB6A5B04AEF1} = {45FC3352-5F40-44CE-85C0-4A833A9761AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {82DDDDFC-CB44-4AF2-ACB4-9F4EFDC75198}
