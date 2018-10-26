@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Plugin.FilePicker.Abstractions;
 using Android.Provider;
 using System.Net;
+using System.Linq;
 
 namespace Plugin.FilePicker
 {
@@ -22,34 +23,15 @@ namespace Plugin.FilePicker
 
             context = Application.Context;
 
-            string[] allowedTypes = Intent.GetStringArrayExtra("allowedTypes") ?? null;
-
             var intent = new Intent (Intent.ActionGetContent);
 
-            if (allowedTypes != null)
-            {
-                var typeString = "";
-                for (var i = 0; i < allowedTypes.Length; i++)
-                {
-                    if (allowedTypes[i].Contains("/"))
-                    {
-                        typeString += allowedTypes[i];
+            intent.SetType("*/*");
 
-                        if (i != allowedTypes.Length - 1)
-                        {
-                            typeString += "|";
-                        }
-                    }
-                }
-                if (string.IsNullOrWhiteSpace(typeString))
-                {
-                    typeString = "*/*";
-                }
-                intent.SetType(typeString);
-            }
-            else
-            {
-                intent.SetType("*/*");
+            string[] allowedTypes = Intent.GetStringArrayExtra("allowedTypes")?.
+                Where(o => !string.IsNullOrEmpty(o) && o.Contains("/")).ToArray();
+
+            if (allowedTypes != null && allowedTypes.Any()) {
+                intent.PutExtra(Intent.ExtraMimeTypes, allowedTypes);
             }
 
             intent.AddCategory (Intent.CategoryOpenable);
@@ -87,9 +69,14 @@ namespace Plugin.FilePicker
 
                     OnFilePicked (new FilePickerEventArgs (file, fileName, filePath));
                 } catch (Exception readEx) {
+                    System.Diagnostics.Debug.Write(readEx);
                     // Notify user file picking failed.
-                    OnFilePickCancelled ();
-                    System.Diagnostics.Debug.Write (readEx);
+                    FilePickCancelled?.Invoke(
+                        this,
+                        new FilePickerCancelledEventArgs
+                        {
+                            Exception = readEx
+                        });
                 } finally {
                     Finish ();
                 }
@@ -122,7 +109,7 @@ namespace Plugin.FilePicker
         }
 
         internal static event EventHandler<FilePickerEventArgs> FilePicked;
-        internal static event EventHandler<EventArgs> FilePickCancelled;
+        internal static event EventHandler<FilePickerCancelledEventArgs> FilePickCancelled;
 
         private static void OnFilePickCancelled ()
         {

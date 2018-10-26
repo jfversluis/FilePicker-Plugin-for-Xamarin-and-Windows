@@ -37,6 +37,13 @@ namespace Plugin.FilePicker
         //private Task<FileData> TakeMediaAsync (string type, string action)
         private Task<FileData> TakeMediaAsync(string[] allowedTypes, string action)
         {
+            if (this._context.PackageManager.CheckPermission(
+                Android.Manifest.Permission.ReadExternalStorage,
+                this._context.PackageName) == Android.Content.PM.Permission.Denied)
+            {
+                throw new InvalidOperationException("Android permission READ_EXTERNAL_STORAGE is missing or was denied by user");
+            }
+
             var id = GetRequestId ();
 
             var ntcs = new TaskCompletionSource<FileData> (id);
@@ -53,11 +60,12 @@ namespace Plugin.FilePicker
                 this._context.StartActivity (pickerIntent);
 
                 EventHandler<FilePickerEventArgs> handler = null;
-                EventHandler<EventArgs> cancelledHandler = null;
+                EventHandler<FilePickerCancelledEventArgs> cancelledHandler = null;
 
                 handler = (s, e) => {
                     var tcs = Interlocked.Exchange (ref _completionSource, null);
 
+                    FilePickerActivity.FilePickCancelled -= cancelledHandler;
                     FilePickerActivity.FilePicked -= handler;
 
                     tcs?.SetResult (new FileData (e.FilePath, e.FileName,
@@ -74,14 +82,23 @@ namespace Plugin.FilePicker
                     var tcs = Interlocked.Exchange (ref _completionSource, null);
 
                     FilePickerActivity.FilePickCancelled -= cancelledHandler;
+                    FilePickerActivity.FilePicked -= handler;
 
-                    tcs?.SetResult (null);
+                    if (e?.Exception != null)
+                    {
+                        tcs?.SetException(e.Exception);
+                    }
+                    else
+                    {
+                        tcs?.SetResult (null);
+                    }
                 };
 
                 FilePickerActivity.FilePickCancelled += cancelledHandler;
                 FilePickerActivity.FilePicked += handler;
             } catch (Exception exAct) {
                 Debug.Write (exAct);
+                _completionSource.SetException(exAct);
             }
 
             return _completionSource.Task;
