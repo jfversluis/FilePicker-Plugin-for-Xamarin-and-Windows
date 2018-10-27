@@ -59,15 +59,10 @@ namespace Plugin.FilePicker
 
                     if (string.IsNullOrEmpty (filePath))
                         filePath = IOUtil.isMediaStore(_uri.Scheme) ? _uri.ToString() : _uri.Path;
-                    byte[] file;
-                    if (IOUtil.isMediaStore(_uri.Scheme))
-                        file = IOUtil.readFile(context, _uri);
-                    else
-                        file = IOUtil.readFile (filePath);
 
                     var fileName = GetFileName (context, _uri);
 
-                    OnFilePicked (new FilePickerEventArgs (file, fileName, filePath));
+                    OnFilePicked (new FilePickerEventArgs (null, fileName, filePath));
                 } catch (Exception readEx) {
                     System.Diagnostics.Debug.Write(readEx);
                     // Notify user file picking failed.

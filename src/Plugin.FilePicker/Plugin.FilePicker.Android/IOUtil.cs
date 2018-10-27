@@ -172,46 +172,6 @@ namespace Plugin.FilePicker
             return "com.android.providers.media.documents".Equals (uri.Authority);
         }
 
-        public static Byte[] readFile(Context context, Android.Net.Uri uri)
-        {
-            using (var inStream = context.ContentResolver.OpenInputStream(uri))
-                return FileData.ReadFully(inStream);
-        }
-
-        public static byte [] readFile (string file)
-        {
-            try {
-                return readFile (new File (file));
-            } catch (Exception ex) {
-                System.Diagnostics.Debug.Write (ex);
-                return new byte [0];
-            }
-        }
-
-        public static byte [] readFile (File file)
-        {
-            // Open file
-            var f = new RandomAccessFile (file, "r");
-
-            try {
-                // Get and check length
-                long longlength = f.Length ();
-                var length = (int)longlength;
-
-                if (length != longlength)
-                    throw new IOException ("Filesize exceeds allowed size");
-                // Read file and return data
-                byte [] data = new byte [length];
-                f.ReadFully (data);
-                return data;
-            } catch (Exception ex) {
-                System.Diagnostics.Debug.Write (ex);
-                return new byte [0];
-            } finally {
-                f.Close ();
-            }
-        }
-
         public static string GetMimeType (string url)
         {
             string type = null;
