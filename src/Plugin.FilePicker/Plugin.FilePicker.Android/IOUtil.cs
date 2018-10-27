@@ -126,7 +126,17 @@ namespace Plugin.FilePicker
                     int column_index = cursor.GetColumnIndex(column);
                     if (column_index == -1)
                         return null;
-                    return cursor.GetString (column_index);
+
+                    string path = cursor.GetString(column_index);
+
+                    // When the path has no root (i.e. is relative), better return null so that
+                    // the content uri is used and the file contents can be read
+                    if (path != null && !System.IO.Path.IsPathRooted(path))
+                    {
+                        return null;
+                    }
+
+                    return path;
                 }
             } finally {
                 if (cursor != null)
