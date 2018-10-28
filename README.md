@@ -55,6 +55,23 @@ Call **CrossFilePicker.Current** from any platform or .NET Standard project to g
                 System.Console.WriteLine("Exception choosing file: " + ex.ToString());
             }
 
+### Methods
+
+#### `async Task<FileData> PickFile(string[] allowedTypes = null)`
+
+Starts file picking and returns file data for picked file. File types can be
+specified in order to limit files that can be selected. Note that this method
+may throw exceptions that occured during file picking.
+
+Parameter `allowedTypes`:
+Specifies one or multiple allowed types. When null, all file types can be
+selected while picking.
+
+On Android you can specify one or more MIME types, e.g. "image/png"; also wild
+card characters can be used, e.g. "image/*".
+
+On iOS you can specify UTType constants, e.g. UTType.Image.
+
 ### Data structures
 
 The returned `FileData` object contains multiple properties that can be accessed:
