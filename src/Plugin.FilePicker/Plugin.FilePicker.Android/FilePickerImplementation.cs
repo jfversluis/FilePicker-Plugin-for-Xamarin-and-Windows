@@ -72,7 +72,10 @@ namespace Plugin.FilePicker
                         () =>
                         {
                             if (IOUtil.isMediaStore(e.FilePath))
-                                return new System.IO.MemoryStream(e.FileByte);
+                            {
+                                var contentUri = Android.Net.Uri.Parse(e.FilePath);
+                                return Application.Context.ContentResolver.OpenInputStream(contentUri);
+                            }
                             else
                                 return System.IO.File.OpenRead (e.FilePath);
                         }));

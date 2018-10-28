@@ -35,11 +35,11 @@ namespace Plugin.FilePicker
             {
                 // Nab the first file
                 var url = openPanel.Urls[0];
-                var fileName = openPanel.Filenames[0];
 
                 if (url != null)
                 {
                     var path = url.Path;
+                    var fileName = Path.GetFileName(path);
                     data = new FileData(path, fileName, () => File.OpenRead(path));
                 }
             }
@@ -98,9 +98,9 @@ namespace Plugin.FilePicker
         {
             try
             {
-                if (!NSWorkspace.SharedWorkspace.OpenFile(fileToOpen.FileName))
+                if (!NSWorkspace.SharedWorkspace.OpenFile(fileToOpen.FilePath))
                 {
-                    Debug.WriteLine($"Unable to open file at path: {fileToOpen}.");
+                    Debug.WriteLine($"Unable to open file at path: {fileToOpen.FilePath}.");
                 }
             }
             catch (FileNotFoundException ex)

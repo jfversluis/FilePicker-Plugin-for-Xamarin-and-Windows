@@ -4,19 +4,57 @@ using System.IO;
 namespace Plugin.FilePicker.Abstractions
 {
     /// <summary>
-    /// The object used as a wrapper for the file picked by the user
+    /// File data that specifies a file that was picked by the user.
     /// </summary>
     public class FileData : IDisposable
     {
+        /// <summary>
+        /// Backing store for the FileName property
+        /// </summary>
         private string _fileName;
+
+        /// <summary>
+        /// Backing store for the FilePath property
+        /// </summary>
         private string _filePath;
+
+        /// <summary>
+        /// Indicates if the object is already disposed
+        /// </summary>
         private bool _isDisposed;
+
+        /// <summary>
+        /// Action to dispose of underlying resources of the picked file.
+        /// </summary>
         private readonly Action<bool> _dispose;
+
+        /// <summary>
+        /// Function to get a stream to the picked file.
+        /// </summary>
         private readonly Func<Stream> _streamGetter;
 
+        /// <summary>
+        /// Creates a new and empty file data object
+        /// </summary>
         public FileData()
-        { }
+        {
+        }
 
+        /// <summary>
+        /// Creates a new file data object with property values
+        /// </summary>
+        /// <param name="filePath">
+        /// Full file path to the picked file.
+        /// </param>
+        /// <param name="fileName">
+        /// File name of the picked file.
+        /// </param>
+        /// <param name="streamGetter">
+        /// Function to get a stream to the picked file.
+        /// </param>
+        /// <param name="dispose">
+        /// Action to dispose of the underlying resources of the picked file.
+        /// </param>
         public FileData(string filePath, string fileName, Func<Stream> streamGetter, Action<bool> dispose = null)
         {
             _filePath = filePath;
@@ -40,6 +78,12 @@ namespace Plugin.FilePicker.Abstractions
             }
         }
 
+        /// <summary>
+        /// Returns the raw data bytes for the picked file.
+        /// Note that due to how this property is implemented, you may only
+        /// call this once.  You can always access the underlying stream by
+        /// directly calling GetStream().
+        /// </summary>
         public byte[] DataArray
         {
             get
@@ -52,7 +96,7 @@ namespace Plugin.FilePicker.Abstractions
         }
 
         /// <summary>
-        /// Filename of the picked file
+        /// Filename of the picked file, without path
         /// </summary>
         public string FileName
         {
@@ -74,7 +118,10 @@ namespace Plugin.FilePicker.Abstractions
         }
 
         /// <summary>
-        /// Full filepath of the picked file
+        /// Full filepath of the picked file.
+        /// Note that on specific platforms this can also contain an URI that
+        /// can't be opened with file related APIs. Use DataArray property or
+        /// GetStream() method in this cases.
         /// </summary>
         public string FilePath
         {
@@ -96,7 +143,9 @@ namespace Plugin.FilePicker.Abstractions
         }
 
         /// <summary>
-        /// Get stream if available
+        /// Gets stream to access the picked file.
+        /// Note that when DataArray property was already accessed, the stream
+        /// must be rewinded to the beginning.
         /// </summary>
         /// <returns>stream object</returns>
         public Stream GetStream()
@@ -107,24 +156,40 @@ namespace Plugin.FilePicker.Abstractions
             return _streamGetter();
         }
 
+        #region IDispose implementation
+        /// <summary>
+        /// Disposes of all resources in the object
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Disposes of managed resources
+        /// </summary>
+        /// <param name="disposing">
+        /// True when called from Dispose(), false when called from the destructor
+        /// </param>
         private void Dispose(bool disposing)
         {
             if (_isDisposed)
+            {
                 return;
+            }
 
             _isDisposed = true;
             _dispose?.Invoke(disposing);
         }
 
+        /// <summary>
+        /// Finalizer for this object
+        /// </summary>
         ~FileData()
         {
             Dispose(false);
         }
+        #endregion
     }
 }
