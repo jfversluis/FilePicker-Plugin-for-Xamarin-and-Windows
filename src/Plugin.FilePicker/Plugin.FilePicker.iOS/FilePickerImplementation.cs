@@ -48,10 +48,6 @@ namespace Plugin.FilePicker
             {
                 var securityEnabled = e.Url.StartAccessingSecurityScopedResource ();
                 var doc = new UIDocument (e.Url);
-                var data = NSData.FromUrl (e.Url);
-                var dataBytes = new byte [data.Length];
-
-                System.Runtime.InteropServices.Marshal.Copy (data.Bytes, dataBytes, 0, Convert.ToInt32 (data.Length));
 
                 string filename = doc.LocalizedName;
                 string pathname = doc.FileUrl?.Path;
@@ -64,7 +60,7 @@ namespace Plugin.FilePicker
                     filename = Path.GetFileName(pathname);
                 }
 
-                OnFilePicked(new FilePickerEventArgs(dataBytes, filename, pathname));
+                OnFilePicked(new FilePickerEventArgs(null, filename, pathname));
             }
             catch (Exception ex)
             {
