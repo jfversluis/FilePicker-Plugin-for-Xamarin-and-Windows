@@ -22,7 +22,7 @@
 [1.1] - Support Windows Phone 8, 8.1 e Windows Store.
 [1.0] - Pick files, save files and open the archive in Default App.
      </releaseNotes>
-    <tags>xamarin, file, picker, filepicker, filebrowser, netstandard, plugin, plugin for xamarin, android, xamarin.forms, ios</tags>
+    <tags>xamarin, file, picker, filepicker, filebrowser, netstandard, plugin, plugin for xamarin, android, xamarin.forms, ios, wpf</tags>
    </metadata>
    <files>
     <!--.NET Standard-->
@@ -39,5 +39,8 @@
 
      <!--UWP-->
      <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.UWP\bin\Release\Plugin.FilePicker.*" target="lib\UAP10" />
+
+     <!--WPF-->
+     <file src="..\src\Plugin.FilePicker\Plugin.FilePicker.WPF\bin\Release\Plugin.FilePicker.*" target="lib\net45" />
    </files>
 </package>

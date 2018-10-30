@@ -29,6 +29,7 @@ Add this as a source to your IDE to find the latest packages: [https://ci.appvey
 |Windows Store RT|Yes|8.1+|Up to package version 1.4.x|
 |Windows 10 UWP|Yes|10+||
 |Xamarin.Mac|Yes|* 10.12+||
+|WPF|Yes|N/A|Using .NET Framework 4.6.1|
 
 \* The Xamarin.Mac implementation has only been tested on MacOS 10.12.
 
@@ -71,6 +72,9 @@ On Android you can specify one or more MIME types, e.g. "image/png"; also wild
 card characters can be used, e.g. "image/*".
 
 On iOS you can specify UTType constants, e.g. UTType.Image.
+
+On WPF, specify strings like this: `"Data type (*.ext)|*.ext"`, which
+corresponds how the Windows file open dialog specifies file types.
 
 ### Data structures
 
