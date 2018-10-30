@@ -16,6 +16,7 @@ Check the following table on what to select for each startup project:
 |Plugin.FilePicker.Sample.Forms.Droid|Any CPU|
 |Plugin.FilePicker.Sample.Forms.iOS|iPhone or iPhoneSimulator|
 |Plugin.FilePicker.Sample.Forms.UWP|x86, x64 or ARM|
+|Plugin.FilePicker.Sample.Forms.WPF|Any CPU|
 
 Other combinations may or may not work.
 
