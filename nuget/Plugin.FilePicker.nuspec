@@ -11,11 +11,11 @@
        <!-- <iconUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows</iconUrl> -->
        <requireLicenseAcceptance>false</requireLicenseAcceptance>
        <description>
-         Simple cross-platform plug-in that allows you to pick files and work with them. Version 2.0 now supports .NET Standard and Visual Studio 2017.
+         Simple cross-platform plug-in that allows you to pick files and work with them. Version 2.0 now supports .NET Standard and Visual Studio 2017. Supported platforms are Xamarin.Android, Xamarin.iOS, Xamarin.Mac, Xamarin.Forms, UWP and Xamarin.Forms under WPF.
        </description>
        <summary>Simple cross-platform plug-in that allows you to pick files  and work with them. View full project page for README
        </summary>
-     <releaseNotes>[2.0] - Support for .NET Standard, removed Windows Phone 8 and Windows 8/8.1 support
+     <releaseNotes>[2.0] - Support for .NET Standard (platforms Xamarin.Android, Xamarin.iOS, Xamarin.Mac, Xamarin.Forms, UWP and Xamarin.Forms under WPF); removed Windows Phone 8 and Windows 8/8.1 support
 [1.4] - Support Xamarin.Mac
 [1.3] - FileData now has a GetStream() method to retrieve the binary data as a Stream
 [1.2] - Retrieve full file path from selected file
