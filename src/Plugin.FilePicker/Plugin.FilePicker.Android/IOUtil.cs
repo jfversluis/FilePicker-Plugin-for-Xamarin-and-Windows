@@ -126,7 +126,17 @@ namespace Plugin.FilePicker
                     int column_index = cursor.GetColumnIndex(column);
                     if (column_index == -1)
                         return null;
-                    return cursor.GetString (column_index);
+
+                    string path = cursor.GetString(column_index);
+
+                    // When the path has no root (i.e. is relative), better return null so that
+                    // the content uri is used and the file contents can be read
+                    if (path != null && !System.IO.Path.IsPathRooted(path))
+                    {
+                        return null;
+                    }
+
+                    return path;
                 }
             } finally {
                 if (cursor != null)
@@ -160,46 +170,6 @@ namespace Plugin.FilePicker
         public static bool isMediaDocument (Android.Net.Uri uri)
         {
             return "com.android.providers.media.documents".Equals (uri.Authority);
-        }
-
-        public static Byte[] readFile(Context context, Android.Net.Uri uri)
-        {
-            using (var inStream = context.ContentResolver.OpenInputStream(uri))
-                return FileData.ReadFully(inStream);
-        }
-
-        public static byte [] readFile (string file)
-        {
-            try {
-                return readFile (new File (file));
-            } catch (Exception ex) {
-                System.Diagnostics.Debug.Write (ex);
-                return new byte [0];
-            }
-        }
-
-        public static byte [] readFile (File file)
-        {
-            // Open file
-            var f = new RandomAccessFile (file, "r");
-
-            try {
-                // Get and check length
-                long longlength = f.Length ();
-                var length = (int)longlength;
-
-                if (length != longlength)
-                    throw new IOException ("Filesize exceeds allowed size");
-                // Read file and return data
-                byte [] data = new byte [length];
-                f.ReadFully (data);
-                return data;
-            } catch (Exception ex) {
-                System.Diagnostics.Debug.Write (ex);
-                return new byte [0];
-            } finally {
-                f.Close ();
-            }
         }
 
         public static string GetMimeType (string url)

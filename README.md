@@ -55,6 +55,23 @@ Call **CrossFilePicker.Current** from any platform or .NET Standard project to g
                 System.Console.WriteLine("Exception choosing file: " + ex.ToString());
             }
 
+### Methods
+
+#### `async Task<FileData> PickFile(string[] allowedTypes = null)`
+
+Starts file picking and returns file data for picked file. File types can be
+specified in order to limit files that can be selected. Note that this method
+may throw exceptions that occured during file picking.
+
+Parameter `allowedTypes`:
+Specifies one or multiple allowed types. When null, all file types can be
+selected while picking.
+
+On Android you can specify one or more MIME types, e.g. "image/png"; also wild
+card characters can be used, e.g. "image/*".
+
+On iOS you can specify UTType constants, e.g. UTType.Image.
+
 ### Data structures
 
 The returned `FileData` object contains multiple properties that can be accessed:
@@ -118,6 +135,17 @@ Starting from Android 6.0 (Marshmallow) permissions must be added to the Android
 before) but the permission must be requested and granted by the user at runtime as well. When
 the user denied the permission, don't call PickFile(). Check out the sample project in the github
 repository for an example how to check for permission.
+
+### iOS
+
+**Picked file path is invalid, file doesn't exist**
+
+On iOS the plugin uses UIDocumentPickerViewController and specifies the mode
+UIDocumentPickerMode.Import. After picking is done, iOS copies the picked file
+to the app's "Inbox" folder where it can be accessed. iOS also cleans up the
+temporary inbox folder regularly. After picking the file you have to either
+copy the file to another folder or access the data by getting the property
+DataBytes or opening a stream to the file by calling GetStream().
 
 ## Contributors
 * [jfversluis](https://github.com/jfversluis)
