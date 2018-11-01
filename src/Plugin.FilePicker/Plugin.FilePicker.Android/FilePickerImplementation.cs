@@ -166,7 +166,7 @@ namespace Plugin.FilePicker
             if (!myFile.Exists ())
                 await SaveFile (fileToOpen);
 
-            OpenFile (fileToOpen);
+            OpenFile (myFile);
         }
     }
 }
