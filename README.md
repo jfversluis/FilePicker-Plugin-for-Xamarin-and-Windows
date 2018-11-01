@@ -15,7 +15,7 @@ Add this as a source to your IDE to find the latest packages: [https://ci.appvey
 
 ## Setup
 
-* Install into your Xamarin.Android, Xamarin.iOS, Xamarin.Forms, Xamarin.Mac project and Client projects.
+* Install into your Xamarin.Android, Xamarin.iOS, Xamarin.Forms, Xamarin.Mac, Xamarin.WPF project and Client projects.
 
 **Platform Support**
 
@@ -29,6 +29,7 @@ Add this as a source to your IDE to find the latest packages: [https://ci.appvey
 |Windows Store RT|Yes|8.1+|Up to package version 1.4.x|
 |Windows 10 UWP|Yes|10+||
 |Xamarin.Mac|Yes|* 10.12+||
+|WPF|Yes|N/A|Using .NET Framework 4.5|
 
 \* The Xamarin.Mac implementation has only been tested on MacOS 10.12.
 
@@ -72,6 +73,11 @@ card characters can be used, e.g. "image/*".
 
 On iOS you can specify UTType constants, e.g. UTType.Image.
 
+On UWP, specify a list of extensions, like this: `".jpg", ".png"`.
+
+On WPF, specify strings like this: `"Data type (*.ext)|*.ext"`, which
+corresponds how the Windows file open dialog specifies file types.
+
 ### Data structures
 
 The returned `FileData` object contains multiple properties that can be accessed:
@@ -108,7 +114,7 @@ also code in the sample project:
 https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows/blob/develop/samples/Plugin.FilePicker.Sample.Forms/Forms/MainPage.xaml.cs
 
 **iOS:** 
-Need [Configure iCloud Driver for your app](https://developer.xamarin.com/guides/ios/platform_features/intro_to_cloudkit)
+You need to [Configure iCloud Driver for your app](https://developer.xamarin.com/guides/ios/platform_features/intro_to_cloudkit).
 
 ## Troubleshooting
 
@@ -132,9 +138,10 @@ resolved.
 **InvalidOperationException "Android permission READ_EXTERNAL_STORAGE is missing or was denied by user"**
 
 Starting from Android 6.0 (Marshmallow) permissions must be added to the AndroidManifest.xml (as
-before) but the permission must be requested and granted by the user at runtime as well. When
+before), but the permission must be requested and granted by the user at runtime as well. When
 the user denied the permission, don't call PickFile(). Check out the sample project in the github
-repository for an example how to check for permission.
+repository for an example how to check for permission. See more on Android permissions here:
+[Permissions In Xamarin.Android](https://docs.microsoft.com/en-us/xamarin/android/app-fundamentals/permissions).
 
 ### iOS
 
@@ -142,10 +149,10 @@ repository for an example how to check for permission.
 
 On iOS the plugin uses UIDocumentPickerViewController and specifies the mode
 UIDocumentPickerMode.Import. After picking is done, iOS copies the picked file
-to the app's "Inbox" folder where it can be accessed. iOS also cleans up the
+to the app's temporary "Inbox" folder where it can be accessed. iOS also cleans up the
 temporary inbox folder regularly. After picking the file you have to either
-copy the file to another folder or access the data by getting the property
-DataBytes or opening a stream to the file by calling GetStream().
+copy the file to another folder, access the data by getting the property
+DataArray or opening a stream to the file by calling GetStream().
 
 ## Contributors
 * [jfversluis](https://github.com/jfversluis)

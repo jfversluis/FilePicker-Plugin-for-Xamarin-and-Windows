@@ -32,6 +32,16 @@ namespace Plugin.FilePicker.Sample.Forms
                 fileTypes = new string[] { "public.image" }; // same as iOS constant UTType.Image
             }
 
+            if (Device.RuntimePlatform == Device.UWP)
+            {
+                fileTypes = new string[] { ".jpg", ".png" };
+            }
+
+            if (Device.RuntimePlatform == Device.WPF)
+            {
+                fileTypes = new string[] { "JPEG files (*.jpg)|*.jpg", "PNG files (*.png)|*.png" };
+            }
+
             await PickAndShowFile(fileTypes);
         }
 

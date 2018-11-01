@@ -154,19 +154,19 @@ namespace Plugin.FilePicker
 
         public void OpenFile (string fileToOpen)
         {
-            var myFile = new File (Android.OS.Environment.ExternalStorageState, fileToOpen);
+            var myFile = new File (Android.OS.Environment.ExternalStorageDirectory, fileToOpen);
 
             OpenFile (myFile);
         }
 
         public async void OpenFile (FileData fileToOpen)
         {
-            var myFile = new File (Android.OS.Environment.ExternalStorageState, fileToOpen.FileName);
+            var myFile = new File (Android.OS.Environment.ExternalStorageDirectory, fileToOpen.FileName);
 
             if (!myFile.Exists ())
                 await SaveFile (fileToOpen);
 
-            OpenFile (fileToOpen);
+            OpenFile (myFile);
         }
     }
 }
