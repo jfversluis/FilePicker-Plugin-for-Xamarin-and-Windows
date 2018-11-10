@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Plugin.FilePicker
+{
+    public static partial class FilePicker
+    {
+        public static Task<FileData> PickFile(string[] allowedTypes = null) => PlataformPickFile(allowedTypes);       
+
+        public static Task<bool> SaveFile(FileData fileToSave) => PlataformSaveFile(fileToSave);
+
+        public static void OpenFile(string fileToOpen) => PlataformOpenFile(fileToOpen);
+
+        public static void OpenFile(FileData fileToOpen) => PlataformOpenFile(fileToOpen);
+    }
+}
