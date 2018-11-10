@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Plugin.FilePicker
 {
-    public class FileData : IDisposable
+    public sealed class FileData : IDisposable
     {
         /// <summary>
         /// Backing store for the FileName property
