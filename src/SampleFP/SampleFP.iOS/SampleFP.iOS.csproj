@@ -152,6 +152,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\..\Plugin.FilePicker\Plugin.FilePicker\Plugin.FilePicker.csproj">
+      <Project>{a6fcef44-d2ba-42c7-b3cb-13667bcd7b54}</Project>
+      <Name>Plugin.FilePicker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SampleFP\SampleFP.csproj">
       <Project>{948B0952-035D-42C8-911D-1E66ADE4EF60}</Project>
       <Name>SampleFP</Name>
