@@ -6,7 +6,7 @@ namespace Plugin.FilePicker.Abstractions
     /// <summary>
     /// File data that specifies a file that was picked by the user.
     /// </summary>
-    public class FileData : IDisposable
+    public sealed class FileData : IDisposable
     {
         /// <summary>
         /// Backing store for the FileName property
