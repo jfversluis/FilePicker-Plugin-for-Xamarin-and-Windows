@@ -87,7 +87,7 @@ namespace Plugin.FilePicker
                 var pickerIntent = new Intent(this.context, typeof(FilePickerActivity));
                 pickerIntent.SetFlags(ActivityFlags.NewTask);
 
-                pickerIntent.PutExtra(nameof(allowedTypes), allowedTypes);
+                pickerIntent.PutExtra(FilePickerActivity.ExtraAllowedTypes, allowedTypes);
 
                 this.context.StartActivity(pickerIntent);
 

@@ -19,6 +19,11 @@ namespace Plugin.FilePicker
     public class FilePickerActivity : Activity
     {
         /// <summary>
+        /// Intent Extra constant to pass list of allowed types to FilePicker activity.
+        /// </summary>
+        public const string ExtraAllowedTypes = "EXTRA_ALLOWED_TYPES";
+
+        /// <summary>
         /// Android context to be used for opening file picker
         /// </summary>
         private Context context;
@@ -37,7 +42,7 @@ namespace Plugin.FilePicker
 
             intent.SetType("*/*");
 
-            string[] allowedTypes = Intent.GetStringArrayExtra("allowedTypes")?.
+            string[] allowedTypes = Intent.GetStringArrayExtra(ExtraAllowedTypes)?.
                 Where(o => !string.IsNullOrEmpty(o) && o.Contains("/")).ToArray();
 
             if (allowedTypes != null && allowedTypes.Any())
