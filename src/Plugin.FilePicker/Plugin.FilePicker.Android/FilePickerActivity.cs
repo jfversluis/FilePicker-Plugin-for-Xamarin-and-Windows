@@ -1,70 +1,99 @@
-using System;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using System.Threading.Tasks;
-using Plugin.FilePicker.Abstractions;
 using Android.Provider;
-using System.Net;
+using Android.Runtime;
+using Plugin.FilePicker.Abstractions;
+using System;
 using System.Linq;
+using System.Net;
 
 namespace Plugin.FilePicker
 {
-    [Activity (ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    [Preserve (AllMembers = true)]
+    /// <summary>
+    /// Activity that is shown in order to start Android file picking using ActionGetContent
+    /// intent.
+    /// </summary>
+    [Activity(ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+    [Preserve(AllMembers = true)]
     public class FilePickerActivity : Activity
     {
+        /// <summary>
+        /// Android context to be used for opening file picker
+        /// </summary>
         private Context context;
 
-        protected override void OnCreate (Bundle savedInstanceState)
+        /// <summary>
+        /// Called when activity is about to be created; immediately starts file picker intent.
+        /// </summary>
+        /// <param name="savedInstanceState">saved instance state; unused</param>
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate (savedInstanceState);
+            base.OnCreate(savedInstanceState);
 
-            context = Application.Context;
+            this.context = Application.Context;
 
-            var intent = new Intent (Intent.ActionGetContent);
+            var intent = new Intent(Intent.ActionGetContent);
 
             intent.SetType("*/*");
 
             string[] allowedTypes = Intent.GetStringArrayExtra("allowedTypes")?.
                 Where(o => !string.IsNullOrEmpty(o) && o.Contains("/")).ToArray();
 
-            if (allowedTypes != null && allowedTypes.Any()) {
+            if (allowedTypes != null && allowedTypes.Any())
+            {
                 intent.PutExtra(Intent.ExtraMimeTypes, allowedTypes);
             }
 
-            intent.AddCategory (Intent.CategoryOpenable);
-            try {
-                StartActivityForResult (Intent.CreateChooser (intent, "Select file"), 0);
-            } catch (Exception exAct) {
-                System.Diagnostics.Debug.Write (exAct);
+            intent.AddCategory(Intent.CategoryOpenable);
+            try
+            {
+                this.StartActivityForResult(Intent.CreateChooser(intent, "Select file"), 0);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.Write(ex);
             }
         }
 
-        protected override void OnActivityResult (int requestCode, [GeneratedEnum] Result resultCode, Intent data)
+        /// <summary>
+        /// Called when activity started with StartActivityForResult() returns.
+        /// </summary>
+        /// <param name="requestCode">request code used in StartActivityForResult()</param>
+        /// <param name="resultCode">result code</param>
+        /// <param name="data">intent data from file picking</param>
+        protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
-            base.OnActivityResult (requestCode, resultCode, data);
+            base.OnActivityResult(requestCode, resultCode, data);
 
-            if (resultCode == Result.Canceled) {
+            if (resultCode == Result.Canceled)
+            {
                 // Notify user file picking was cancelled.
-                OnFilePickCancelled ();
-                Finish ();
-            } else {
-                System.Diagnostics.Debug.Write (data.Data);
-                try {
-                    var _uri = data.Data;
+                OnFilePickCancelled();
+                this.Finish();
+            }
+            else
+            {
+                System.Diagnostics.Debug.Write(data.Data);
+                try
+                {
+                    var uri = data.Data;
 
-                    var filePath = IOUtil.getPath (context, _uri);
+                    var filePath = IOUtil.GetPath(this.context, uri);
 
-                    if (string.IsNullOrEmpty (filePath))
-                        filePath = IOUtil.isMediaStore(_uri.Scheme) ? _uri.ToString() : _uri.Path;
+                    if (string.IsNullOrEmpty(filePath))
+                    {
+                        filePath = IOUtil.IsMediaStore(uri.Scheme) ? uri.ToString() : uri.Path;
+                    }
 
-                    var fileName = GetFileName (context, _uri);
+                    var fileName = this.GetFileName(this.context, uri);
 
-                    OnFilePicked (new FilePickerEventArgs (null, fileName, filePath));
-                } catch (Exception readEx) {
+                    OnFilePicked(new FilePickerEventArgs(null, fileName, filePath));
+                }
+                catch (Exception readEx)
+                {
                     System.Diagnostics.Debug.Write(readEx);
+
                     // Notify user file picking failed.
                     FilePickCancelled?.Invoke(
                         this,
@@ -72,48 +101,78 @@ namespace Plugin.FilePicker
                         {
                             Exception = readEx
                         });
-                } finally {
-                    Finish ();
+                }
+                finally
+                {
+                    this.Finish();
                 }
             }
         }
 
-        string GetFileName (Context ctx, Android.Net.Uri uri)
+        /// <summary>
+        /// Retrieves file name part from given Uri
+        /// </summary>
+        /// <param name="context">Android context to access content resolver</param>
+        /// <param name="uri">Uri to get filename for</param>
+        /// <returns>file name part</returns>
+        private string GetFileName(Context context, Android.Net.Uri uri)
         {
+            string[] projection = { MediaStore.MediaColumns.DisplayName };
 
-            string [] projection = { MediaStore.MediaColumns.DisplayName };
+            var resolver = context.ContentResolver;
+            var name = string.Empty;
+            var metaCursor = resolver.Query(uri, projection, null, null, null);
 
-            var cr = ctx.ContentResolver;
-            var name = "";
-            var metaCursor = cr.Query (uri, projection, null, null, null);
-
-            if (metaCursor != null) {
-                try {
-                    if (metaCursor.MoveToFirst ()) {
-                        name = metaCursor.GetString (0);
+            if (metaCursor != null)
+            {
+                try
+                {
+                    if (metaCursor.MoveToFirst())
+                    {
+                        name = metaCursor.GetString(0);
                     }
-                } finally {
-                    metaCursor.Close ();
+                }
+                finally
+                {
+                    metaCursor.Close();
                 }
             }
 
             if (!string.IsNullOrWhiteSpace(name))
+            {
                 return name;
+            }
             else
+            {
                 return System.IO.Path.GetFileName(WebUtility.UrlDecode(uri.ToString()));
+            }
         }
 
+        /// <summary>
+        /// Event that gets signaled when file has successfully been picked
+        /// </summary>
         internal static event EventHandler<FilePickerEventArgs> FilePicked;
+
+        /// <summary>
+        /// Event that gets signaled when file picking has been cancelled by the user
+        /// </summary>
         internal static event EventHandler<FilePickerCancelledEventArgs> FilePickCancelled;
 
-        private static void OnFilePickCancelled ()
+        /// <summary>
+        /// Signals event that file picking was cancelled
+        /// </summary>
+        private static void OnFilePickCancelled()
         {
-            FilePickCancelled?.Invoke (null, null);
+            FilePickCancelled?.Invoke(null, null);
         }
 
-        private static void OnFilePicked (FilePickerEventArgs e)
+        /// <summary>
+        /// Signals event that file picking has finished
+        /// </summary>
+        /// <param name="args">file picker event args</param>
+        private static void OnFilePicked(FilePickerEventArgs args)
         {
-            FilePicked?.Invoke(null, e);
+            FilePicked?.Invoke(null, args);
         }
     }
 }

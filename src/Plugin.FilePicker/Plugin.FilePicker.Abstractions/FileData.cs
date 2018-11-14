@@ -189,7 +189,7 @@ namespace Plugin.FilePicker.Abstractions
         /// </summary>
         ~FileData()
         {
-            Dispose(false);
+            this.Dispose(false);
         }
         #endregion
     }
