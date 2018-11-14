@@ -88,7 +88,7 @@ namespace Plugin.FilePicker
 
                     var fileName = this.GetFileName(this.context, uri);
 
-                    OnFilePicked(new FilePickerEventArgs(null, fileName, filePath));
+                    OnFilePicked(new FilePickerEventArgs(fileName, filePath));
                 }
                 catch (Exception readEx)
                 {

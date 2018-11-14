@@ -81,7 +81,7 @@ namespace Plugin.FilePicker
                     filename = Path.GetFileName(pathname);
                 }
 
-                this.OnFilePicked(new FilePickerEventArgs(null, filename, pathname));
+                this.OnFilePicked(new FilePickerEventArgs(filename, pathname));
             }
             catch (Exception ex)
             {
