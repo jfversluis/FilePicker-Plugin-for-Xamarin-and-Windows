@@ -9,6 +9,8 @@
     <RootNamespace>Plugin.FilePicker.Sample.Forms.Droid</RootNamespace>
     <AssemblyName>Plugin.FilePicker.Sample.Forms.Droid</AssemblyName>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <UseShortFileNames>True</UseShortFileNames>
+    <IntermediateOutputPath>C:\temp</IntermediateOutputPath>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
