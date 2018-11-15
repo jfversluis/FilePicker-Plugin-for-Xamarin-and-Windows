@@ -55,7 +55,7 @@ namespace Plugin.FilePicker.Sample.Forms
                     return;
                 }
 
-                var pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
+                var pickedFile = await FilePicker.PickFile(fileTypes);
 
                 if (pickedFile != null)
                 {
