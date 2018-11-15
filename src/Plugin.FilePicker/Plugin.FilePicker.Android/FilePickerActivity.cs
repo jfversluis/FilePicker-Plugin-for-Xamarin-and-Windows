@@ -29,7 +29,8 @@ namespace Plugin.FilePicker
         private Context context;
 
         /// <summary>
-        /// Called when activity is about to be created; immediately starts file picker intent.
+        /// Called when activity is about to be created; immediately starts file picker intent when permission is available,
+        /// otherwise requests permission on API level>=23 or throws an error if the Api level is below.
         /// </summary>
         /// <param name="savedInstanceState">saved instance state; unused</param>
         protected override void OnCreate(Bundle savedInstanceState)
@@ -38,6 +39,53 @@ namespace Plugin.FilePicker
 
             this.context = Application.Context;
 
+            if (this.context.PackageManager.CheckPermission(
+                Android.Manifest.Permission.ReadExternalStorage,
+                this.context.PackageName) == Android.Content.PM.Permission.Granted)
+            {
+                if ((int)Build.VERSION.SDK_INT >= 23)
+                {
+                    RequestPermissions(new String[] { Manifest.Permission.ReadExternalStorage }, REQUEST_STORAGE);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Android permission READ_EXTERNAL_STORAGE is missing");
+                }
+            }
+            else
+            {
+                StartPicker();
+            }
+        }
+
+        /// <summary>
+        /// Receives the answer from the dialog that asks for the READ_EXTERNAL_STORAGE permission and starts 
+        /// the FilePicker if it's granted or otherwise closes this activity.
+        /// </summary>
+        /// <param name="requestCode">saved instance state; contains the type of request that gets received</param>
+        /// <param name="permissions">permissions; unused</param>
+        /// <param name="grantResults">grantResults; contains the result of the dialog to request the permission</param>
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            if (requestCode == REQUEST_STORAGE)
+            {
+                if (grantResults[0] == Permission.Granted)
+                {
+                    StartPicker();
+                }
+                else
+                {
+                    OnFilePickCancelled();
+                    Finish();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sends an intent to start the FilePicker
+        /// </summary>
+        private void StartPicker()
+        {
             var intent = new Intent(Intent.ActionGetContent);
 
             intent.SetType("*/*");
