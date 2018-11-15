@@ -72,8 +72,6 @@ namespace Plugin.FilePicker
             }
         }
 
-
-
         static async Task<FileData> PlataformPickFile(string[] allowedTypes)
         {
             var media = await TakeMediaAsync(allowedTypes);

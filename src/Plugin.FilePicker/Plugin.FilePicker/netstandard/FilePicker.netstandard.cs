@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Plugin.FilePicker
 {
-    static partial class FilePicler
+    static partial class FilePicker
     {
         static Task<FileData> PlataformPickFile(string[] allowedTypes) => throw new NotImplementedException();
 

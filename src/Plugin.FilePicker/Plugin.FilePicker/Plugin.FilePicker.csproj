@@ -20,10 +20,6 @@
     <DocumentationFile>bin\Release\netstandard1.0\Plugin.FilePicker.xml</DocumentationFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DocumentationFile>bin\Release\netstandard1.0\Plugin.FilePicker.xml</DocumentationFile>
-  </PropertyGroup>
-
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.5" />
     <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
@@ -69,21 +65,5 @@
     <Compile Include="**\*.netstandard.cs" />
     <Compile Include="**\*.netstandard.*.cs" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="netstandard\FilePicler.netstandard.cs" />
-  </ItemGroup>
-
-
-
-
-  <!--<ItemGroup>
-    <Folder Include="Android\" />
-    <Folder Include="iOS\" />
-    <Folder Include="MAC\" />
-    <Folder Include="WPF\" />
-    <Folder Include="UWP\" />
-  </ItemGroup>-->
-
 
 </Project>
