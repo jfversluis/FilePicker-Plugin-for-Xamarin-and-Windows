@@ -5,7 +5,6 @@ using Windows.Storage;
 using Windows.Storage.AccessCache;
 using Windows.System;
 
-
 namespace Plugin.FilePicker
 {
     static partial class FilePicker
