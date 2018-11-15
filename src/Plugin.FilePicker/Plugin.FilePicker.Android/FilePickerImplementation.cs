@@ -66,13 +66,6 @@ namespace Plugin.FilePicker
         /// <returns>picked file data, or null when picking was cancelled</returns>
         private Task<FileData> PickFileAsync(string[] allowedTypes, string action)
         {
-            if (this.context.PackageManager.CheckPermission(
-                Android.Manifest.Permission.ReadExternalStorage,
-                this.context.PackageName) == Android.Content.PM.Permission.Denied)
-            {
-                throw new InvalidOperationException("Android permission READ_EXTERNAL_STORAGE is missing or was denied by user");
-            }
-
             var id = this.GetRequestId();
 
             var ntcs = new TaskCompletionSource<FileData>(id);
