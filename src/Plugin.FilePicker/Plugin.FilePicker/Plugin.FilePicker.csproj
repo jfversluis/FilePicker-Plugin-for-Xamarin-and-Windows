@@ -71,4 +71,15 @@
   </ItemGroup>
 
 
+
+
+  <!--<ItemGroup>
+    <Folder Include="Android\" />
+    <Folder Include="iOS\" />
+    <Folder Include="MAC\" />
+    <Folder Include="WPF\" />
+    <Folder Include="UWP\" />
+  </ItemGroup>-->
+
+
 </Project>
