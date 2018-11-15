@@ -70,6 +70,10 @@
     <Compile Include="**\*.netstandard.*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="netstandard\FilePicler.netstandard.cs" />
+  </ItemGroup>
+
 
 
 

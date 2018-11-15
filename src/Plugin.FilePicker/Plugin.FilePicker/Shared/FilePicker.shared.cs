@@ -2,7 +2,7 @@
 
 namespace Plugin.FilePicker
 {
-    public static class FilePicker
+    public static partial class FilePicker
     {
         public static Task<FileData> PickFile(string[] allowedTypes = null) => PlataformPickFile(allowedTypes);
 
