@@ -7,6 +7,8 @@ using Plugin.FilePicker.Abstractions;
 using System;
 using System.Linq;
 using System.Net;
+using Android;
+using Android.Content.PM;
 
 namespace Plugin.FilePicker
 {
@@ -22,6 +24,8 @@ namespace Plugin.FilePicker
         /// Intent Extra constant to pass list of allowed types to FilePicker activity.
         /// </summary>
         public const string ExtraAllowedTypes = "EXTRA_ALLOWED_TYPES";
+        private const int REQUEST_STORAGE = 1;
+
 
         /// <summary>
         /// Android context to be used for opening file picker
@@ -40,10 +44,10 @@ namespace Plugin.FilePicker
             this.context = Application.Context;
 
             if (this.context.PackageManager.CheckPermission(
-                Android.Manifest.Permission.ReadExternalStorage,
-                this.context.PackageName) == Android.Content.PM.Permission.Granted)
+                Manifest.Permission.ReadExternalStorage,
+                this.context.PackageName) == Permission.Granted)
             {
-                if ((int)Build.VERSION.SDK_INT >= 23)
+                if ((int)Build.VERSION.SdkInt >= 23)
                 {
                     RequestPermissions(new String[] { Manifest.Permission.ReadExternalStorage }, REQUEST_STORAGE);
                 }
@@ -53,7 +57,7 @@ namespace Plugin.FilePicker
                 }
             }
             else
-            {
+            { 
                 StartPicker();
             }
         }
@@ -62,7 +66,7 @@ namespace Plugin.FilePicker
         /// Receives the answer from the dialog that asks for the READ_EXTERNAL_STORAGE permission and starts 
         /// the FilePicker if it's granted or otherwise closes this activity.
         /// </summary>
-        /// <param name="requestCode">saved instance state; contains the type of request that gets received</param>
+        /// <param name="requestCode">requestCode; shows us that the dialog we requested is responsible for this answer</param>
         /// <param name="permissions">permissions; unused</param>
         /// <param name="grantResults">grantResults; contains the result of the dialog to request the permission</param>
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
