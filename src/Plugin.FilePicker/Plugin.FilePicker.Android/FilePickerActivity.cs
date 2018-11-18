@@ -28,7 +28,7 @@ namespace Plugin.FilePicker
         /// This variable gets passed when the request for the permission to access storage 
         /// gets send and then gets again read whne the request gets answered.
         /// </summary>
-        private const int REQUEST_STORAGE = 1;
+        private const int RequestStorage = 1;
 
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Plugin.FilePicker
             {
                 if ((int)Build.VERSION.SdkInt >= 23)
                 {
-                    RequestPermissions(new String[] { Manifest.Permission.ReadExternalStorage }, REQUEST_STORAGE);
+                    RequestPermissions(new String[] { Manifest.Permission.ReadExternalStorage }, RequestStorage);
                 }
                 else
                 {
@@ -75,7 +75,7 @@ namespace Plugin.FilePicker
         /// <param name="grantResults">grantResults; contains the result of the dialog to request the permission</param>
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
-            if (requestCode == REQUEST_STORAGE)
+            if (requestCode == RequestStorage)
             {
                 if (grantResults[0] == Permission.Granted)
                 {
