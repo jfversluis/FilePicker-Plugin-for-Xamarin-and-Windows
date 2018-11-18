@@ -24,6 +24,10 @@ namespace Plugin.FilePicker
         /// Intent Extra constant to pass list of allowed types to FilePicker activity.
         /// </summary>
         public const string ExtraAllowedTypes = "EXTRA_ALLOWED_TYPES";
+        /// <summary>
+        /// This variable gets passed when the request for the permission to access storage 
+        /// gets send and then gets again read whne the request gets answered.
+        /// </summary>
         private const int REQUEST_STORAGE = 1;
 
 
