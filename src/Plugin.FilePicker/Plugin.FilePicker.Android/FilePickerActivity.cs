@@ -47,18 +47,18 @@ namespace Plugin.FilePicker
                 Manifest.Permission.ReadExternalStorage,
                 this.context.PackageName) == Permission.Granted)
             {
+                StartPicker();
+            }
+            else
+            {
                 if ((int)Build.VERSION.SdkInt >= 23)
                 {
                     RequestPermissions(new String[] { Manifest.Permission.ReadExternalStorage }, REQUEST_STORAGE);
                 }
                 else
                 {
-                    throw new InvalidOperationException("Android permission READ_EXTERNAL_STORAGE is missing");
+                    throw new InvalidOperationException("Android permission READ_EXTERNAL_STORAGE is missing and API level lower then 23, so it can't be requested");
                 }
-            }
-            else
-            { 
-                StartPicker();
             }
         }
 
