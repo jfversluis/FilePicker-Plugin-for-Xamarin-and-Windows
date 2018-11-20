@@ -24,8 +24,9 @@ namespace Plugin.FilePicker
         /// Intent Extra constant to pass list of allowed types to FilePicker activity.
         /// </summary>
         public const string ExtraAllowedTypes = "EXTRA_ALLOWED_TYPES";
+
         /// <summary>
-        /// This variable gets passed when the request for the permission to access storage 
+        /// This variable gets passed when the request for the permission to access storage
         /// gets send and then gets again read whne the request gets answered.
         /// </summary>
         private const int RequestStorage = 1;
@@ -37,8 +38,9 @@ namespace Plugin.FilePicker
         private Context context;
 
         /// <summary>
-        /// Called when activity is about to be created; immediately starts file picker intent when permission is available,
-        /// otherwise requests permission on API level>=23 or throws an error if the Api level is below.
+        /// Called when activity is about to be created; immediately starts file picker intent
+        /// when permission is available, otherwise requests permission on API level >= 23 or
+        /// throws an error if the API level is below.
         /// </summary>
         /// <param name="savedInstanceState">saved instance state; unused</param>
         protected override void OnCreate(Bundle savedInstanceState)
@@ -51,24 +53,25 @@ namespace Plugin.FilePicker
                 Manifest.Permission.ReadExternalStorage,
                 this.context.PackageName) == Permission.Granted)
             {
-                StartPicker();
+                this.StartPicker();
             }
             else
             {
                 if ((int)Build.VERSION.SdkInt >= 23)
                 {
-                    RequestPermissions(new String[] { Manifest.Permission.ReadExternalStorage }, RequestStorage);
+                    this.RequestPermissions(new string[] { Manifest.Permission.ReadExternalStorage }, RequestStorage);
                 }
                 else
                 {
-                    throw new InvalidOperationException("Android permission READ_EXTERNAL_STORAGE is missing and API level lower then 23, so it can't be requested");
+                    throw new InvalidOperationException(
+                        "Android permission READ_EXTERNAL_STORAGE is missing and API level lower than 23, so it can't be requested");
                 }
             }
         }
 
         /// <summary>
-        /// Receives the answer from the dialog that asks for the READ_EXTERNAL_STORAGE permission and starts 
-        /// the FilePicker if it's granted or otherwise closes this activity.
+        /// Receives the answer from the dialog that asks for the READ_EXTERNAL_STORAGE permission
+        /// and starts the FilePicker if it's granted or otherwise closes this activity.
         /// </summary>
         /// <param name="requestCode">requestCode; shows us that the dialog we requested is responsible for this answer</param>
         /// <param name="permissions">permissions; unused</param>
@@ -77,14 +80,15 @@ namespace Plugin.FilePicker
         {
             if (requestCode == RequestStorage)
             {
-                if (grantResults[0] == Permission.Granted)
+                if (grantResults.Length > 0 &&
+                    grantResults[0] == Permission.Granted)
                 {
-                    StartPicker();
+                    this.StartPicker();
                 }
                 else
                 {
                     OnFilePickCancelled();
-                    Finish();
+                    this.Finish();
                 }
             }
         }
