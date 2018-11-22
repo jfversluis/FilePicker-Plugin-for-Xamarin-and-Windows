@@ -8,6 +8,10 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
+// Adds permission for READ_EXTERNAL_STORAGE to the AndroidManifest.xml of the app project without
+// the user of the plugin having to add it by himself/herself.
+[assembly: UsesPermission(Android.Manifest.Permission.ReadExternalStorage)]
+
 namespace Plugin.FilePicker
 {
     /// <summary>
