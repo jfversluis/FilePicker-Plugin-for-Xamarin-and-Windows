@@ -86,11 +86,13 @@ namespace Plugin.FilePicker
                     Debug.WriteLine($"Unable to open file at path: {fileToOpen}.");
                 }
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
+                // ignore exceptions
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                // ignore exceptions
             }
         }
 
@@ -103,15 +105,16 @@ namespace Plugin.FilePicker
                     Debug.WriteLine($"Unable to open file at path: {fileToOpen.FilePath}.");
                 }
             }
-            catch (FileNotFoundException ex)
+            catch (FileNotFoundException)
             {
                 // this could be some strange UI behavior.
                 // user would get prompted to save the file in order to open the file
                 await SaveFile(fileToOpen);
                 OpenFile(fileToOpen);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                // ignore exceptions
             }
         }
     }

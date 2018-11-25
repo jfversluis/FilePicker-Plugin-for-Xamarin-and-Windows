@@ -105,13 +105,13 @@ you access it via GetStream() afterwards.
 
 ### **IMPORTANT**
 **Android:**
-The `WRITE_EXTERNAL_STORAGE` & `READ_EXTERNAL_STORAGE` permissions are required.
+The `READ_EXTERNAL_STORAGE` permission is automatically added to your Android
+app project. Starting from Android 6.0 (Marshmallow) the user is asked for the
+permission when not granted yet. When the user denies the permission,
+`PickFile()` returns null.
 
-Starting from Android 6.0 (Marshmallow) you have to request the permission from the user. This can
-be done using `ActivityCompat.RequestPermission()` or you can use the
-[Xamarin.Plugin.Permission](https://github.com/jamesmontemagno/PermissionsPlugin) plugin. See
-also code in the sample project:
-https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows/blob/develop/samples/Plugin.FilePicker.Sample.Forms/Forms/MainPage.xaml.cs
+The `WRITE_EXTERNAL_STORAGE` is required if you call SaveFile() and must be
+added to your Android app project by yourself.
 
 **iOS:** 
 You need to [Configure iCloud Driver for your app](https://developer.xamarin.com/guides/ios/platform_features/intro_to_cloudkit).
@@ -134,14 +134,6 @@ This occurs when you are using the old-style NuGet references (not the PackageRe
 and you forgot to add the NuGet package to the Android package. When using PackageReference this
 is not necessary anymore because the bait-and-switch assemblies of FilePicker are correctly
 resolved.
-
-**InvalidOperationException "Android permission READ_EXTERNAL_STORAGE is missing or was denied by user"**
-
-Starting from Android 6.0 (Marshmallow) permissions must be added to the AndroidManifest.xml (as
-before), but the permission must be requested and granted by the user at runtime as well. When
-the user denied the permission, don't call PickFile(). Check out the sample project in the github
-repository for an example how to check for permission. See more on Android permissions here:
-[Permissions In Xamarin.Android](https://docs.microsoft.com/en-us/xamarin/android/app-fundamentals/permissions).
 
 ### iOS
 
