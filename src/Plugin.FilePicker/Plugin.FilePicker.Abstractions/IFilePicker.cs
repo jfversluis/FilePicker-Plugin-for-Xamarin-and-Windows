@@ -20,6 +20,9 @@ namespace Plugin.FilePicker.Abstractions
         /// On Android you can specify one or more MIME types, e.g.
         /// "image/png"; also wild card characters can be used, e.g. "image/*".
         /// On iOS you can specify UTType constants, e.g. UTType.Image.
+        /// On UWP, specify a list of extensions, like this: ".jpg", ".png".
+        /// On WPF, specify strings like this: "Data type (*.ext)|*.ext", which
+        /// corresponds how the Windows file open dialog specifies file types.
         /// </param>
         /// <returns>
         /// File data object, or null when user cancelled picking file
