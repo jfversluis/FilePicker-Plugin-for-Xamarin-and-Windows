@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -83,13 +83,9 @@
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\Plugin.FilePicker.Abstractions.csproj">
-      <Project>{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}</Project>
-      <Name>Plugin.FilePicker.Abstractions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Plugin.FilePicker\Plugin.FilePicker.Mac\Plugin.FilePicker.Mac.csproj">
-      <Project>{C1E6D43D-38EB-4673-A9AA-8B1116CE9C10}</Project>
-      <Name>Plugin.FilePicker.Mac</Name>
+    <ProjectReference Include="..\..\src\Plugin.FilePicker\Plugin.FilePicker.csproj">
+      <Project>{afa28e9b-19a5-4e80-83ce-dd4c551646a1}</Project>
+      <Name>Plugin.FilePicker</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
