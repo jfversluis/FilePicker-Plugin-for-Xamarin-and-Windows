@@ -69,8 +69,7 @@ namespace Plugin.FilePicker.Abstractions
         /// </summary>
         /// <param name="input">input stream</param>
         /// <returns>byte array</returns>
-        [Obsolete("ReadFully() is an implementation detail, please use DataArray or GetStream()")]
-        public static byte[] ReadFully(Stream input)
+        internal static byte[] ReadFully(Stream input)
         {
             using (var ms = new MemoryStream())
             {
