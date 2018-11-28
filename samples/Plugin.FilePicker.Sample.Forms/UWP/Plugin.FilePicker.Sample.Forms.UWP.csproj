@@ -147,9 +147,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.UWP\Plugin.FilePicker.UWP.csproj">
-      <Project>{e34b516d-c0d8-450f-9db0-bb6a5b04aef1}</Project>
-      <Name>Plugin.FilePicker.UWP</Name>
+    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.csproj">
+      <Project>{507fa967-a579-44fe-9ca3-7cee18b5257b}</Project>
+      <Name>Plugin.FilePicker</Name>
     </ProjectReference>
     <ProjectReference Include="..\Forms\Plugin.FilePicker.Sample.Forms.csproj">
       <Project>{bc539575-3b77-4a4a-8f3a-2203bb590674}</Project>

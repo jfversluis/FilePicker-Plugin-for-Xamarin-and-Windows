@@ -1,13 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Sample.MacOS", "Plugin.FilePicker.Sample.MacOS\Plugin.FilePicker.Sample.MacOS.csproj", "{92CFD27C-94BF-42CB-B60D-30CE3406A611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker", "..\src\Plugin.FilePicker\Plugin.FilePicker\Plugin.FilePicker.csproj", "{A6FCEF44-D2BA-42C7-B3CB-13667BCD7B54}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Abstractions", "..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\Plugin.FilePicker.Abstractions.csproj", "{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.Mac", "..\src\Plugin.FilePicker\Plugin.FilePicker.Mac\Plugin.FilePicker.Mac.csproj", "{C1E6D43D-38EB-4673-A9AA-8B1116CE9C10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.FilePicker", "..\src\Plugin.FilePicker\Plugin.FilePicker.csproj", "{AFA28E9B-19A5-4E80-83CE-DD4C551646A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,17 +16,15 @@ Global
 		{92CFD27C-94BF-42CB-B60D-30CE3406A611}.Debug|x86.Build.0 = Debug|x86
 		{92CFD27C-94BF-42CB-B60D-30CE3406A611}.Release|x86.ActiveCfg = Release|x86
 		{92CFD27C-94BF-42CB-B60D-30CE3406A611}.Release|x86.Build.0 = Release|x86
-		{A6FCEF44-D2BA-42C7-B3CB-13667BCD7B54}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A6FCEF44-D2BA-42C7-B3CB-13667BCD7B54}.Debug|x86.Build.0 = Debug|Any CPU
-		{A6FCEF44-D2BA-42C7-B3CB-13667BCD7B54}.Release|x86.ActiveCfg = Release|Any CPU
-		{A6FCEF44-D2BA-42C7-B3CB-13667BCD7B54}.Release|x86.Build.0 = Release|Any CPU
-		{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}.Debug|x86.Build.0 = Debug|Any CPU
-		{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}.Release|x86.ActiveCfg = Release|Any CPU
-		{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}.Release|x86.Build.0 = Release|Any CPU
-		{C1E6D43D-38EB-4673-A9AA-8B1116CE9C10}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C1E6D43D-38EB-4673-A9AA-8B1116CE9C10}.Debug|x86.Build.0 = Debug|Any CPU
-		{C1E6D43D-38EB-4673-A9AA-8B1116CE9C10}.Release|x86.ActiveCfg = Release|Any CPU
-		{C1E6D43D-38EB-4673-A9AA-8B1116CE9C10}.Release|x86.Build.0 = Release|Any CPU
+		{AFA28E9B-19A5-4E80-83CE-DD4C551646A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AFA28E9B-19A5-4E80-83CE-DD4C551646A1}.Debug|x86.Build.0 = Debug|Any CPU
+		{AFA28E9B-19A5-4E80-83CE-DD4C551646A1}.Release|x86.ActiveCfg = Release|Any CPU
+		{AFA28E9B-19A5-4E80-83CE-DD4C551646A1}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C7657A2-4EFE-4922-B459-384342B7E7F9}
 	EndGlobalSection
 EndGlobal
