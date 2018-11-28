@@ -5,13 +5,13 @@ Simple cross-platform plug-in that allows you to pick files and work with them.
 The original project can be found [here](https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows/), but seems abandoned, this one was forked and further developed.
 
 ## Build status
-### Stable [![Build status](https://ci.appveyor.com/api/projects/status/bbdou6ptk14tbak5?svg=true)](https://ci.appveyor.com/project/jfversluis/filepicker-plugin-for-xamarin-and-windows-5pvwc) [![NuGet version](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker.svg)](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker)
+### Stable [![Build status](https://jfversluis.visualstudio.com/FilePicker%20plugin/_apis/build/status/FilePicker%20Plugin)](https://jfversluis.visualstudio.com/FilePicker%20plugin/_build/latest?definitionId=36) [![NuGet version](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker.svg)](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker)
  
 NuGet: [https://www.nuget.org/packages/Xamarin.Plugin.FilePicker/](https://www.nuget.org/packages/Xamarin.Plugin.FilePicker/)
  
-### Development feed (possibly instable) [![Build status](https://ci.appveyor.com/api/projects/status/bbdou6ptk14tbak5/branch/develop?svg=true)](https://ci.appveyor.com/project/jfversluis/filepicker-plugin-for-xamarin-and-windows-5pvwc)
+### Development feed (possibly instable)
 
-Add this as a source to your IDE to find the latest packages: [https://ci.appveyor.com/nuget/filepicker-plugin-for-xamarin](https://ci.appveyor.com/nuget/filepicker-plugin-for-xamarin)
+Add this as a source to your IDE to find the latest packages: [https://www.myget.org/F/filepicker-plugin/api/v3/index.json](https://www.myget.org/F/filepicker-plugin/api/v3/index.json)
 
 ## Setup
 
