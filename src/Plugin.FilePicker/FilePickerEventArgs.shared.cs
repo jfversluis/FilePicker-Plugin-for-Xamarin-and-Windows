@@ -5,7 +5,7 @@ namespace Plugin.FilePicker.Abstractions
     /// <summary>
     /// Event arguments for the event when file picking was completed.
     /// </summary>
-    public class FilePickerEventArgs : EventArgs
+    internal class FilePickerEventArgs : EventArgs
     {
         /// <summary>
         /// File name part of picked file, without path

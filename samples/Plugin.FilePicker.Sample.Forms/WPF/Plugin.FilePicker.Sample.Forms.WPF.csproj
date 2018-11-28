@@ -103,9 +103,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.WPF\Plugin.FilePicker.WPF.csproj">
-      <Project>{73df68cb-676a-48c2-9f2c-87a713746c39}</Project>
-      <Name>Plugin.FilePicker.WPF</Name>
+    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.csproj">
+      <Project>{507fa967-a579-44fe-9ca3-7cee18b5257b}</Project>
+      <Name>Plugin.FilePicker</Name>
     </ProjectReference>
     <ProjectReference Include="..\Forms\Plugin.FilePicker.Sample.Forms.csproj">
       <Project>{bc539575-3b77-4a4a-8f3a-2203bb590674}</Project>

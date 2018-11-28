@@ -29,7 +29,7 @@ namespace Plugin.FilePicker
         /// <summary>
         /// Event which is invoked when a file was picked
         /// </summary>
-        public EventHandler<FilePickerEventArgs> Handler { get; set; }
+        internal EventHandler<FilePickerEventArgs> Handler { get; set; }
 
         /// <summary>
         /// Called when file has been picked successfully

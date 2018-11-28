@@ -8,16 +8,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.Abstractions\Plugin.FilePicker.Abstractions.csproj">
-      <Project>{6EDB0588-FFC5-4EF5-8A99-9E241D0F878D}</Project>
-      <Name>Plugin.FilePicker.Abstractions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker\Plugin.FilePicker.csproj">
-      <Project>{A6FCEF44-D2BA-42C7-B3CB-13667BCD7B54}</Project>
-      <Name>Plugin.FilePicker</Name>
-    </ProjectReference>
+    <PackageReference Include="Xamarin.Forms" Version="3.3.0.912540" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.3.0.912540" />
+    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.csproj" />
   </ItemGroup>
 </Project>
