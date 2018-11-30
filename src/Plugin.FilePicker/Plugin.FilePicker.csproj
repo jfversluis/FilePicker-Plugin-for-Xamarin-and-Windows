@@ -46,6 +46,15 @@
     <Authors>Gerald Versluis, rafaelrmou, vividos</Authors>
     <Copyright>Copyright 2017-2018 FilePicker team</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+    <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Include the PDB in the built .nupkg -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
@@ -84,5 +93,9 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net45')) ">
     <Compile Include="**\*.net45.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All"/>
   </ItemGroup>
 </Project>
