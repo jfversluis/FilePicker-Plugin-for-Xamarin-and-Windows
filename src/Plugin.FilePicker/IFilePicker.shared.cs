@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System;
+using System.Threading.Tasks;
 
 namespace Plugin.FilePicker.Abstractions
 {
@@ -39,6 +40,7 @@ namespace Plugin.FilePicker.Abstractions
         /// True when file was saved successfully, false when there was an
         /// error
         /// </returns>
+        [Obsolete("The SaveFile() method is obsolete; store the picked file with system functions from System.IO or read from stream directly")]
         Task<bool> SaveFile(FileData fileToSave);
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace Plugin.FilePicker.Abstractions
         /// <param name="fileToOpen">
         /// Full filename of the file to open
         /// </param>
+        [Obsolete("The OpenFile() method is obsolete; please use Xamarin.Essentials Launcher plugin. The FilePicker plugins just concentrates on picking files")]
         void OpenFile(string fileToOpen);
 
         /// <summary>
@@ -59,6 +62,7 @@ namespace Plugin.FilePicker.Abstractions
         /// <param name="fileToOpen">
         /// File data from a call to PickFile() that should be opened.
         /// </param>
+        [Obsolete("The OpenFile() method is obsolete; please use Xamarin.Essentials Launcher plugin. The FilePicker plugins just concentrates on picking files")]
         void OpenFile(FileData fileToOpen);
     }
 }
