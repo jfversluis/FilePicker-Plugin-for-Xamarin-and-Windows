@@ -3,8 +3,8 @@
   <PropertyGroup>
     <!--Work around so the conditions work below-->
     <TargetFrameworks></TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid90;Xamarin.Mac20;uap10.0.16299</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid90;Xamarin.Mac20</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid90;Xamarin.Mac20;net45;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid90;Xamarin.Mac20;net45</TargetFrameworks>
     <AssemblyName>Plugin.FilePicker</AssemblyName>
     <RootNamespace>Plugin.FilePicker</RootNamespace>
     <PackageId>Xamarin.Plugin.FilePicker</PackageId>
@@ -93,6 +93,7 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net45')) ">
     <Compile Include="**\*.net45.cs" />
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
 
   <ItemGroup>
