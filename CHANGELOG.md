@@ -1,8 +1,17 @@
 # Changelog
 
-## Version 2.1.xx
+## Version 2.1.18
 
-No code changes from the version 2.1.12-beta.
+Release version. No code changes since the version 2.1.17-beta.
+
+## Version 2.1.17-beta
+
+Android: Fixed NullReferenceException caused by the bugfix from version 2.1.16-beta.
+
+## Version 2.1.16-beta
+
+Android: Fixed error "Only one operation can be active at a time" when re-entering PickFile()
+call; now the first call returns null (#131).
 
 ## Version 2.1.12-beta
 
