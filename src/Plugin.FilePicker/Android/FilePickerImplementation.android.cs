@@ -72,12 +72,13 @@ namespace Plugin.FilePicker
         {
             var id = this.GetRequestId();
 
-            var ntcs = new TaskCompletionSource<FileData>(id);
-
-            if (Interlocked.CompareExchange(ref this.completionSource, ntcs, null) != null)
+            var previousTcs = Interlocked.Exchange(ref this.completionSource, null);
+            if (previousTcs != null)
             {
-                throw new InvalidOperationException("Only one operation can be active at a time");
+                previousTcs.TrySetResult(null);
             }
+
+            var ntcs = new TaskCompletionSource<FileData>(id);
 
             try
             {
