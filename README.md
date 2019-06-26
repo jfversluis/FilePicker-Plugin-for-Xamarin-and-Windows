@@ -64,6 +64,10 @@ Starts file picking and returns file data for picked file. File types can be
 specified in order to limit files that can be selected. Note that this method
 may throw exceptions that occured during file picking.
 
+Note that on Android it can happen that PickFile() can be called twice. In
+this case the first PickFile() call will return null as it is effectively
+cancelled.
+
 Parameter `allowedTypes`:
 Specifies one or multiple allowed types. When null, all file types can be
 selected while picking.
