@@ -72,13 +72,13 @@ namespace Plugin.FilePicker
         {
             var id = this.GetRequestId();
 
-            var previousTcs = Interlocked.Exchange(ref this.completionSource, null);
+            var ntcs = new TaskCompletionSource<FileData>(id);
+
+            var previousTcs = Interlocked.Exchange(ref this.completionSource, ntcs);
             if (previousTcs != null)
             {
                 previousTcs.TrySetResult(null);
             }
-
-            var ntcs = new TaskCompletionSource<FileData>(id);
 
             try
             {
