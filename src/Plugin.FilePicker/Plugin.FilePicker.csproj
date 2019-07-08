@@ -40,7 +40,7 @@
 
     <Title>FilePicker Plugin for Xamarin, Windows and Mac</Title>
     <Summary>Simple cross-platform plug-in that allows you to pick files and work with them. View full project page for README</Summary>
-    <Description>Simple cross-platform plug-in that allows you to pick files and work with them. Version 2.1 supports .NET Standard and Visual Studio 2017. Supported platforms are Xamarin.Android, Xamarin.iOS, Xamarin.Mac, Xamarin.Forms, UWP and WPF.</Description>
+    <Description>Simple cross-platform plug-in that allows you to pick files and work with them. Version 2.1 supports .NET Standard and Visual Studio 2017 and 2019. Supported platforms are Xamarin.Android, Xamarin.iOS, Xamarin.Mac, Xamarin.Forms, UWP and WPF.</Description>
 
     <Owners>Gerald Versluis</Owners>
     <Authors>Gerald Versluis, rafaelrmou, vividos</Authors>
