@@ -1,5 +1,5 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.61">
-
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   <PropertyGroup>
     <!--Work around so the conditions work below-->
     <TargetFrameworks></TargetFrameworks>
