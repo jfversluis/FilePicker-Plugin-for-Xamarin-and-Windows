@@ -139,9 +139,10 @@ namespace Plugin.FilePicker
             }
             else
             {
-                System.Diagnostics.Debug.Write(data.Data);
                 try
                 {
+	                System.Diagnostics.Debug.Write(data.Data);
+
                     var uri = data.Data;
 
                     var filePath = IOUtil.GetPath(this.context, uri);
