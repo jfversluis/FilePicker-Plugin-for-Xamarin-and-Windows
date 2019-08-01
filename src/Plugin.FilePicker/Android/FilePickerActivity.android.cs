@@ -141,7 +141,10 @@ namespace Plugin.FilePicker
             {
                 try
                 {
-	                System.Diagnostics.Debug.Write(data.Data);
+                    if(data == null)
+                        throw new Exception("File URI is not available");
+
+                    System.Diagnostics.Debug.Write(data.Data);
 
                     var uri = data.Data;
 
