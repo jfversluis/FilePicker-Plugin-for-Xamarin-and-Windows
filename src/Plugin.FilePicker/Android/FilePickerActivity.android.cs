@@ -141,8 +141,8 @@ namespace Plugin.FilePicker
             {
                 try
                 {
-                    if(data == null)
-                        throw new Exception("File URI is not available");
+                    if (data?.Data == null)
+                        throw new Exception("File picking returned no valid data");
 
                     System.Diagnostics.Debug.Write(data.Data);
 
