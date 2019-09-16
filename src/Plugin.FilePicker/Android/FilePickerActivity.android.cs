@@ -139,9 +139,13 @@ namespace Plugin.FilePicker
             }
             else
             {
-                System.Diagnostics.Debug.Write(data.Data);
                 try
                 {
+                    if (data?.Data == null)
+                        throw new Exception("File picking returned no valid data");
+
+                    System.Diagnostics.Debug.Write(data.Data);
+
                     var uri = data.Data;
 
                     var filePath = IOUtil.GetPath(this.context, uri);
