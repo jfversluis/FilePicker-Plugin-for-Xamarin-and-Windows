@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.1.34
+
+(Re-)added SourceLink support
+
 ## Version 2.1.18
 
 Release version. No code changes since the version 2.1.17-beta.
