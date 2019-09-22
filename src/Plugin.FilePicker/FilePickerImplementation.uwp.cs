@@ -1,6 +1,8 @@
 using Plugin.FilePicker.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.AccessCache;
@@ -13,6 +15,13 @@ namespace Plugin.FilePicker
     /// </summary>
     public class FilePickerImplementation : IFilePicker
     {
+        private Dictionary<string, string> tokenDictionary;
+
+        public FilePickerImplementation()
+        {
+            tokenDictionary = new Dictionary<string, string>();
+        }
+
         /// <summary>
         /// Implementation for picking a file on UWP platform.
         /// </summary>
@@ -60,9 +69,10 @@ namespace Plugin.FilePicker
             {
                 return null;
             }
-
-            StorageApplicationPermissions.FutureAccessList.Add(file);
-            return new FileData(file.Path, file.Name, () => file.OpenStreamForReadAsync().Result);
+            
+            var t = StorageApplicationPermissions.FutureAccessList.Add(file);
+            tokenDictionary.Add(file.Path, t);
+            return new FileData(file.Path, file.Name, () => GetStream(file.Path).Result);
         }
 
         /// <summary>
@@ -140,6 +150,25 @@ namespace Plugin.FilePicker
             {
                 // ignore exceptions
             }
+        }
+
+        /// <summary>
+        /// Implementation for getting a stream of a file on uwp.
+        /// </summary>
+        /// <param name="filePath">
+        /// Specifies the file from which the stream should be opened.
+        /// <returns>stream object</returns>
+        public async Task<Stream> GetStream(string filePath)
+        {
+            string token = tokenDictionary[filePath];
+
+            if (token != "")
+            {
+                var file = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(token);
+
+                return file.OpenStreamForReadAsync().Result;
+            }
+            return Stream.Null;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Plugin.FilePicker.Abstractions
@@ -29,6 +30,16 @@ namespace Plugin.FilePicker.Abstractions
         /// File data object, or null when user cancelled picking file
         /// </returns>
         Task<FileData> PickFile(string[] allowedTypes = null);
+
+        /// <summary>
+        /// Gets stream to access the file from the path.
+        /// Note that when DataArray property was already accessed, the stream
+        /// must be rewinded to the beginning.
+        /// </summary>
+        /// <param name="filePath">
+        /// Specifies the file from which the stream should be opened.
+        /// <returns>stream object</returns>
+        Task<Stream> GetStream(string filePath);
 
         /// <summary>
         /// Saves the file that was picked to external storage.

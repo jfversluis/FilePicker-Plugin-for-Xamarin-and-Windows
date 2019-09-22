@@ -5,8 +5,10 @@ using Java.IO;
 using Plugin.FilePicker.Abstractions;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using File = Java.IO.File;
 
 // Adds permission for READ_EXTERNAL_STORAGE to the AndroidManifest.xml of the app project without
 // the user of the plugin having to add it by himself/herself.
@@ -63,6 +65,28 @@ namespace Plugin.FilePicker
         }
 
         /// <summary>
+        /// Implementation for getting a stream of a file on Android.
+        /// </summary>
+        /// <param name="filePath">
+        /// Specifies the file from which the stream should be opened.
+        /// <returns>stream object</returns>
+        public Task<Stream> GetStream(string filePath)
+        {
+            return Task.Run(() =>
+            {
+                if (IOUtil.IsMediaStore(filePath))
+                {
+                    var contentUri = Android.Net.Uri.Parse(filePath);
+                    return Application.Context.ContentResolver.OpenInputStream(contentUri);
+                }
+                else
+                {
+                    return System.IO.File.OpenRead(filePath);
+                }
+            });
+        }
+
+        /// <summary>
         /// File picking implementation
         /// </summary>
         /// <param name="allowedTypes">list of allowed types; may be null</param>
@@ -102,18 +126,7 @@ namespace Plugin.FilePicker
                     tcs?.SetResult(new FileData(
                         e.FilePath,
                         e.FileName,
-                        () =>
-                        {
-                            if (IOUtil.IsMediaStore(e.FilePath))
-                            {
-                                var contentUri = Android.Net.Uri.Parse(e.FilePath);
-                                return Application.Context.ContentResolver.OpenInputStream(contentUri);
-                            }
-                            else
-                            {
-                                return System.IO.File.OpenRead(e.FilePath);
-                            }
-                        }));
+                        () => GetStream(e.FilePath).Result));
                 };
 
                 cancelledHandler = (s, e) =>

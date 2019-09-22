@@ -40,7 +40,7 @@ namespace Plugin.FilePicker
                 {
                     var path = url.Path;
                     var fileName = Path.GetFileName(path);
-                    data = new FileData(path, fileName, () => File.OpenRead(path));
+                    data = new FileData(path, fileName, () => GetStream(path).Result);
                 }
             }
 
@@ -116,6 +116,17 @@ namespace Plugin.FilePicker
             {
                 // ignore exceptions
             }
+        }
+
+        /// <summary>
+        /// Implementation for getting a stream of a file on mac.
+        /// </summary>
+        /// <param name="filePath">
+        /// Specifies the file from which the stream should be opened.
+        /// <returns>stream object</returns>
+        public Task<Stream> GetStream(string filePath)
+        {
+            return Task.Run(() => (Stream)File.OpenRead(filePath));
         }
     }
 }

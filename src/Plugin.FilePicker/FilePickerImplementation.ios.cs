@@ -169,10 +169,7 @@ namespace Plugin.FilePicker
                 tcs?.SetResult(new FileData(
                     args.FilePath,
                     args.FileName,
-                    () =>
-                    {
-                        return new FileStream(args.FilePath, FileMode.Open, FileAccess.Read);
-                    }));
+                    () => GetStream(args.FilePath).Result));
             };
 
             return this.completionSource.Task;
@@ -294,6 +291,17 @@ namespace Plugin.FilePicker
                 await this.SaveFile(fileToOpen);
                 this.OpenFile(fileToOpen);
             }
+        }
+
+        /// <summary>
+        /// Implementation for getting a stream of a file on iOS.
+        /// </summary>
+        /// <param name="filePath">
+        /// Specifies the file from which the stream should be opened.
+        /// <returns>stream object</returns>
+        public Task<Stream> GetStream(string filePath)
+        {
+            return Task.Run(() => (Stream)new FileStream(filePath, FileMode.Open, FileAccess.Read));
         }
     }
 }

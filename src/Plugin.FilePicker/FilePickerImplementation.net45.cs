@@ -41,7 +41,7 @@ namespace Plugin.FilePicker
 
             var fileName = Path.GetFileName(picker.FileName);
 
-            var data = new FileData(picker.FileName, fileName, () => File.OpenRead(picker.FileName), (x) => { });
+            var data = new FileData(picker.FileName, fileName, () => GetStream(picker.FileName).Result, (x) => { });
 
             return Task.FromResult(data);
         }
@@ -109,6 +109,17 @@ namespace Plugin.FilePicker
             {
                 // ignore exception
             }
+        }
+
+        /// <summary>
+        /// Implementation for getting a stream of a file on net45.
+        /// </summary>
+        /// <param name="filePath">
+        /// Specifies the file from which the stream should be opened.
+        /// <returns>stream object</returns>
+        public Task<Stream> GetStream(string filePath)
+        {
+            return Task.Run(() => (Stream) File.OpenRead(filePath));
         }
     }
 }
