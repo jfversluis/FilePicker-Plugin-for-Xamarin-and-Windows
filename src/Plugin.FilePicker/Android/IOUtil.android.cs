@@ -53,6 +53,9 @@ namespace Plugin.FilePicker
                         return id.Substring(4);
                     }
 
+                    if (!long.TryParse(id, out long parseId))
+                        return null;
+
                     string[] contentUriPrefixesToTry = new string[]
                     {
                         "content://downloads/public_downloads",
@@ -62,7 +65,7 @@ namespace Plugin.FilePicker
                     foreach (string contentUriPrefix in contentUriPrefixesToTry)
                     {
                         Android.Net.Uri contentUri = ContentUris.WithAppendedId(
-                            Android.Net.Uri.Parse(contentUriPrefix), long.Parse(id));
+                            Android.Net.Uri.Parse(contentUriPrefix), parseId);
 
                         try
                         {
