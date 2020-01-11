@@ -12,6 +12,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.XFileManager.csproj" />
-    <ProjectReference Include="..\..\Plugin.FilePicker.Sample.MacOS\Plugin.FilePicker.Sample.MacOS.csproj" />
   </ItemGroup>
 </Project>
