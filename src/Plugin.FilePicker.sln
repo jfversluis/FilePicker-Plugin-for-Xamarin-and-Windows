@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.FilePicker", "Plugin.FilePicker\Plugin.FilePicker.csproj", "{C5CF8940-ADFA-4C91-BA9C-C0E8D356B18F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.FilePicker", "Plugin.FilePicker\Plugin.XFileManager.csproj", "{C5CF8940-ADFA-4C91-BA9C-C0E8D356B18F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4429873F-76FF-4B96-B9BC-57CAC89812D0}"
 	ProjectSection(SolutionItems) = preProject

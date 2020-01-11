@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Plugin.FilePicker.Sample.Forms.WPF
+namespace Plugin.XFileManager.Sample.Forms.WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml

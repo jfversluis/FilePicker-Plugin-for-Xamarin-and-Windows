@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace Plugin.FilePicker.Sample.Forms.UWP
+namespace Plugin.XFileManager.Sample.Forms.UWP
 {
     public sealed partial class MainPage
     {
@@ -21,7 +21,7 @@ namespace Plugin.FilePicker.Sample.Forms.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new Plugin.FilePicker.Sample.Forms.App());
+            LoadApplication(new Plugin.XFileManager.Sample.Forms.App());
         }
     }
 }

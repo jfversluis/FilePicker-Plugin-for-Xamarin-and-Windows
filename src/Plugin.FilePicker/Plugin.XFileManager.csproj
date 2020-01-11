@@ -1,0 +1,194 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.0;netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;Xamarin.TVOS10;Xamarin.WatchOS10;MonoAndroid60;MonoAndroid70;MonoAndroid71;MonoAndroid80;MonoAndroid81;MonoAndroid90;MonoAndroid10.0;tizen40;</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
+    <AssemblyName>Plugin.FilePicker</AssemblyName>
+    <RootNamespace>Plugin.FilePicker</RootNamespace>
+    <PackageId>Xamarin.Plugin.FilePicker</PackageId>
+    <!-- PackageIcon>icon.png</PackageIcon -->
+    <Summary>Simple cross-platform plug-in that allows you to pick files/folders and work with them. View full project page for README</Summary>
+    <PackageTags>xamarin, windows, uwp, ios, android, watchos, tvos, tizen, toolkit, xamarin.forms, Xamarin.Essentials, kit, file, folder, picker, filepicker, folderpicker, filebrowser, folderbrowser, filemanager
+</PackageTags>
+    <Title>FileManager Plugin for Xamarin, Windows, Apple, Android, Tizen </Title>
+    <Description>Simple cross-platform plug-in that allows you to pick files/folders and work with them. Version 3.0 supports: .NET Standard and Visual Studio 2017 and 2019. Supported platforms are netstandard1.0, netstandard2.0, Xamarin.iOS10, Xamarin.TVOS10(WIP), Xamarin.WatchOS10(WIP), MonoAndroid60(WIP), MonoAndroid70(WIP), MonoAndroid71(WIP), MonoAndroid80, MonoAndroid81, MonoAndroid90, MonoAndroid10.0, tizen40(WIP).</Description>
+    <Product>Plugin.XFileManager (netstandard1.0)</Product>
+    <AssemblyVersion>3.2.0.0</AssemblyVersion>
+    <AssemblyFileVersion>3.2.0.0</AssemblyFileVersion>
+    <Version>3.2.0</Version>
+    <PackageVersion>$(Version)$(VersionSuffix)</PackageVersion>
+    
+    <!-- From orginal file picker-->
+    <PackOnBuild>true</PackOnBuild>
+
+    <Authors>Gerald Versluis, rafaelrmou, vividos, Sascha Elble</Authors>
+    <Owners>Community</Owners>
+    <NeutralLanguage>en</NeutralLanguage>
+
+    <!-- From orginal file picker-->
+    <LangVersion>default</LangVersion> 
+    
+    <Copyright>Copyright 2017-2020 XFileManager team</Copyright>
+    <RepositoryUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows</RepositoryUrl>
+    <PackageReleaseNotes>See: https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows/blob/master/CHANGELOG.md</PackageReleaseNotes>
+    <DefineConstants>$(DefineConstants);</DefineConstants>
+    <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+    <!-- From orginal file picker-->
+    <LangVersion>latest</LangVersion>    
+    
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows</PackageProjectUrl>
+    <DebugType>portable</DebugType>
+    <Configurations>Debug;Release</Configurations>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <!-- From orginal file picker (Appears to be no longer valid)-->
+  <!--GeneratePackageOnBuild>true</GeneratePackageOnBuild-->
+  
+  
+  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+    
+    <!-- From orginal file picker-->
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- From orginal file picker (below)-->
+  <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <!-- From orginal file picker (above)-->
+  
+  <PropertyGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
+    <!-- sourcelink: Declare that the Repository URL can be published to NuSpec -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- sourcelink: Embed source files that are not tracked by the source control manager to the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- sourcelink: Include PDB in the built .nupkg -->
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  
+  <ItemGroup Condition=" '$(Configuration)'=='Release' And '$(OS)' == 'Windows_NT' ">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="**\*.shared.cs" />
+    <Compile Include="**\*.shared.*.cs" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard1.')) ">
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <Compile Include="**\*.netstandard.cs" />
+    <Compile Include="**\*.netstandard.*.cs" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
+    
+    <Compile Include="**\*.uwp.cs" />
+    <Compile Include="**\*.uwp.*.cs" />
+    <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+    <Compile Include="**\*.android.cs" />
+    <Compile Include="**\*.android.*.cs" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+    <PackageReference Include="Xamarin.Android.Support.v4">
+      <Version>28.0.0.3</Version>
+    </PackageReference>
+    <!-- Don't think this is needed (borrowed from xamarin.essentials)
+    <AndroidResource Include="Resources\xml\*.xml" />
+    
+
+    <PackageReference Include="Xamarin.Android.Support.Compat" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.3" />
+    <PackageReference Condition=" '$(OS)' == 'Windows_NT' And $(TargetFrameworkVersion.TrimStart('vV')) &lt; 9.0 And $(TargetFrameworkVersion.TrimStart('vV')) &lt; 10.0" Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
+    <PackageReference Condition=" '$(OS)' != 'Windows_NT' " Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
+        -->
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <Compile Include="**\*.ios.cs" />
+    <Compile Include="**\*.ios.*.cs" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+    <!-- Don't think this is needed (borrowed from xamarin.essentials)
+    <Reference Include="OpenTK-1.0" />
+    -->
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac')) ">
+    <Compile Include="**\*.Mac.cs" />
+    <Compile Include="**\*.Mac.*.cs" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+    <!-- Don't think this is needed (borrowed from xamarin.essentials)
+    <Reference Include="OpenTK-1.0" />
+    -->
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.TVOS')) ">
+    <Compile Include="**\*.TVOS.cs" />
+    <Compile Include="**\*.TVOS.*.cs" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+    
+    <!-- Don't think this is needed (borrowed from xamarin.essentials)
+    <Reference Include="OpenTK-1.0" />
+    -->
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.WatchOS')) ">
+    <Compile Include="**\*.WatchOS.cs" />
+    <Compile Include="**\*.WatchOS.*.cs" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
+    
+  </ItemGroup>
+  
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('tizen')) ">
+    <PackageReference Include="Tizen.NET" Version="4.0.0" />
+    <Compile Include="**\*.tizen.cs" />
+    <Compile Include="**\*.tizen.*.cs" />
+    
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Mac\" />
+    <Folder Include="net45\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  
+  
+
+
+ 
+
+</Project>

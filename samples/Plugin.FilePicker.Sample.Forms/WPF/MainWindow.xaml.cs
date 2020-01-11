@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms.Platform.WPF;
 
-namespace Plugin.FilePicker.Sample.Forms.WPF
+namespace Plugin.XFileManager.Sample.Forms.WPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -12,7 +12,7 @@ namespace Plugin.FilePicker.Sample.Forms.WPF
             InitializeComponent();
 
             Xamarin.Forms.Forms.Init();
-            LoadApplication(new Plugin.FilePicker.Sample.Forms.App());
+            LoadApplication(new Plugin.XFileManager.Sample.Forms.App());
         }
     }
 }

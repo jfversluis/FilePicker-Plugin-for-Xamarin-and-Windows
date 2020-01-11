@@ -83,9 +83,9 @@
     <InterfaceDefinition Include="Main.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Plugin.FilePicker\Plugin.FilePicker.csproj">
-      <Project>{afa28e9b-19a5-4e80-83ce-dd4c551646a1}</Project>
-      <Name>Plugin.FilePicker</Name>
+    <ProjectReference Include="..\..\src\Plugin.FilePicker\Plugin.XFileManager.csproj">
+      <Project>{3ceb6099-ee93-4fe0-8ef1-107fa84e244e}</Project>
+      <Name>Plugin.XFileManager</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />

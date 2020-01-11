@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Plugin.FilePicker.Abstractions
+namespace Plugin.XFileManager.Abstractions
 {
     /// <summary>
     /// File data that specifies a file that was picked by the user.
@@ -12,6 +12,11 @@ namespace Plugin.FilePicker.Abstractions
         /// Backing store for the FileName property
         /// </summary>
         private string _fileName;
+
+        /// <summary>
+        /// Backing store for the FileName property
+        /// </summary>
+        private string _folderPath;
 
         /// <summary>
         /// Backing store for the FilePath property
@@ -43,24 +48,68 @@ namespace Plugin.FilePicker.Abstractions
         /// <summary>
         /// Creates a new file data object with property values
         /// </summary>
+
         /// <param name="filePath">
-        /// Full file path to the picked file.
+        /// Full file path to the picked file, includes file name.
         /// </param>
+
+        /// <param name="folderPath">
+        /// Full file path to the picked file, includes file name.
+        /// </param>
+
         /// <param name="fileName">
         /// File name of the picked file.
         /// </param>
+
         /// <param name="streamGetter">
         /// Function to get a stream to the picked file.
         /// </param>
+
         /// <param name="dispose">
         /// Action to dispose of the underlying resources of the picked file.
         /// </param>
-        public FileData(string filePath, string fileName, Func<Stream> streamGetter, Action<bool> dispose = null)
+ 
+        public FileData(string filePath, string folderPath, string fileName, Func<Stream> streamGetter, Action<bool> dispose = null)
         {
             _filePath = filePath;
             _fileName = fileName;
             _dispose = dispose;
             _streamGetter = streamGetter;
+            _folderPath = folderPath;
+        }
+
+
+        /// <summary>
+        /// Creates a new file data object with property values
+        /// </summary>
+
+        /// <param name="filePath">
+        /// Full file path to the picked file, includes file name.
+        /// </param>
+
+        /// <param name="folderPath">
+        /// Full file path to the picked file, includes file name.
+        /// </param>
+
+        /// <param name="fileName">
+        /// File name of the picked file.
+        /// </param>
+
+        /// <param name="memoryStream">
+        /// Input data stream
+        /// </param>
+
+        /// <param name="dispose">
+        /// Action to dispose of the underlying resources of the picked file.
+        /// </param>
+
+        public FileData(string filePath, string folderPath, string fileName, MemoryStream memoryStream, Action<bool> dispose = null)
+        {
+            _filePath = filePath;
+            _fileName = fileName;
+            _dispose = dispose;
+            _streamGetter = () => new MemoryStream(memoryStream.ToArray());
+            _folderPath = folderPath;
         }
 
         /// <summary>
@@ -139,6 +188,31 @@ namespace Plugin.FilePicker.Abstractions
                     throw new ObjectDisposedException(null);
 
                 _filePath = value;
+            }
+        }
+
+        /// <summary>
+        /// Full folderpath of the picked folder.
+        /// Note that on specific platforms this can also contain an URI that
+        /// can't be opened with folder related APIs. Use DataArray property or
+        /// GetStream() method in this cases.
+        /// </summary>
+        public string FolderPath
+        {
+            get
+            {
+                if (_isDisposed)
+                    throw new ObjectDisposedException(null);
+
+                return _folderPath;
+            }
+
+            set
+            {
+                if (_isDisposed)
+                    throw new ObjectDisposedException(null);
+
+                _folderPath = value;
             }
         }
 

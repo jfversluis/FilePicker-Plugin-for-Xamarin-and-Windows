@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace Plugin.FilePicker.Sample.Forms
+namespace Plugin.XFileManager.Sample.Forms
 {
     public partial class MainPage : ContentPage
     {
@@ -47,7 +47,7 @@ namespace Plugin.FilePicker.Sample.Forms
         {
             try
             {
-                var pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
+                var pickedFile = await XFileManager.Current.PickFile(fileTypes);
 
                 if (pickedFile != null)
                 {

@@ -1,15 +1,15 @@
-﻿using Plugin.FilePicker.Abstractions;
+﻿using Plugin.XFileManager.Abstractions;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Plugin.FilePicker
+namespace Plugin.XFileManager
 {
     /// <summary>
     /// Implementation for file picking on WPF platform
     /// </summary>
-    public class FilePickerImplementation : IFilePicker
+    public class FileManagerImplementation : IXFileManager
     {
         /// <summary>
         /// File picker implementation for WPF; uses the Win32 OpenFileDialog from
@@ -109,6 +109,31 @@ namespace Plugin.FilePicker
             {
                 // ignore exception
             }
+        }
+
+        public Task<string> PickFolder()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Stream> GetStreamFromPath(string filePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> SaveFileInFolder(FileData fileToSave)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenFileViaEssentials(string fileToOpen)
+        {
+            throw new NotImplementedException();
         }
     }
 }

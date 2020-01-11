@@ -1,6 +1,6 @@
 using Foundation;
 using MobileCoreServices;
-using Plugin.FilePicker.Abstractions;
+using Plugin.XFileManager.Abstractions;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -8,13 +8,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UIKit;
+using Xamarin.Essentials;
 
-namespace Plugin.FilePicker
+//[assembly: Xamarin.Forms.Dependency(typeof(Plugin.iOS.FileManagerImplementation))]
+namespace Plugin.XFileManager
 {
     /// <summary>
     /// Implementation for file picking on iOS
     /// </summary>
-    public class FilePickerImplementation : NSObject, IFilePicker
+    public class FileManagerImplementation : NSObject, IXFileManager
     {
         /// <summary>
         /// Request ID for current picking call
@@ -27,9 +29,19 @@ namespace Plugin.FilePicker
         private TaskCompletionSource<FileData> completionSource;
 
         /// <summary>
+        /// Task completion source for task when finished picking
+        /// </summary>
+        private TaskCompletionSource<string> tcs_string;
+
+        /// <summary>
         /// Event which is invoked when a file was picked
         /// </summary>
         internal EventHandler<FilePickerEventArgs> Handler { get; set; }
+
+        /// <summary>
+        /// Event which is invoked when a file was picked
+        /// </summary>
+        internal EventHandler<FolderPickerEventArgs> FolderHandler { get; set; }
 
         /// <summary>
         /// Called when file has been picked successfully
@@ -168,11 +180,9 @@ namespace Plugin.FilePicker
 
                 tcs?.SetResult(new FileData(
                     args.FilePath,
+                    args.FolderPath,
                     args.FileName,
-                    () =>
-                    {
-                        return new FileStream(args.FilePath, FileMode.Open, FileAccess.Read);
-                    }));
+                    () => GetStreamFromPath(args.FilePath).Result));
             };
 
             return this.completionSource.Task;
@@ -220,7 +230,7 @@ namespace Plugin.FilePicker
         /// </summary>
         /// <param name="fileToSave">picked file data for file to save</param>
         /// <returns>true when file was saved successfully, false when not</returns>
-        public Task<bool> SaveFile(FileData fileToSave)
+        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
         {
             try
             {
@@ -291,8 +301,87 @@ namespace Plugin.FilePicker
             }
             else
             {
-                await this.SaveFile(fileToOpen);
+                await this.SaveFileToLocalAppStorage(fileToOpen);
                 this.OpenFile(fileToOpen);
+            }
+        }
+
+        /// <summary>
+        /// Implementation for getting a stream of a file on iOS.
+        /// </summary>
+        /// <param name="filePath">
+        /// Specifies the file from which the stream should be opened.
+        /// <returns>stream object</returns>
+        public Task<Stream> GetStreamFromPath(string filePath)
+        {
+            return Task.Run(() => (Stream)new FileStream(filePath, FileMode.Open, FileAccess.Read));
+        }
+
+        public async void OpenFileViaEssentials(string fileToOpen)
+        {
+            await Launcher.OpenAsync(new OpenFileRequest
+            {
+                File = new ReadOnlyFile(fileToOpen)
+            });
+        }
+
+        public Task<string> PickFolder()
+        {
+            var id = this.GetRequestId();
+
+            var ntcs = new TaskCompletionSource<string>(id);
+
+            if (Interlocked.CompareExchange(ref this.tcs_string, ntcs, null) != null)
+            {
+                throw new InvalidOperationException("Only one operation can be active at a time");
+            }
+
+            var allowedUtis = new string[]
+            {
+                //UTType.Content,
+                //UTType.Item,
+                "public.folder"
+            };
+
+            // NOTE: Importing (UIDocumentPickerMode.Import) makes a local copy of the document,
+            // while opening (UIDocumentPickerMode.Open) opens the document directly. We do the
+            // second one here.
+            var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Open);
+
+            documentPicker.DidPickDocument += this.DocumentPicker_DidPickDocument;
+            documentPicker.WasCancelled += this.DocumentPicker_WasCancelled;
+            documentPicker.DidPickDocumentAtUrls += this.DocumentPicker_DidPickDocumentAtUrls;
+
+            UIViewController viewController = GetActiveViewController();
+            viewController.PresentViewController(documentPicker, true, null);
+
+            this.Handler = (sender, args) =>
+            {
+                var tcs = Interlocked.Exchange(ref this.tcs_string, null);
+                //re-using file picker, the path is here 
+                tcs?.SetResult(args.FilePath);
+            };
+
+            return this.tcs_string.Task;
+        }
+
+
+
+        public Task<bool> SaveFileInFolder(FileData fileToSave)
+        {
+            try
+            {
+                var documents = fileToSave.FolderPath;
+                var fileName = Path.Combine(documents, fileToSave.FileName);
+
+                File.WriteAllBytes(fileName, fileToSave.DataArray);
+
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return Task.FromResult(false);
             }
         }
     }

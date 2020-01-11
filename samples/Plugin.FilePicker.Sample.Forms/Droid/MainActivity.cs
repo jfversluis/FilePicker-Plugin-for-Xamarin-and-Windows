@@ -8,7 +8,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 
-namespace Plugin.FilePicker.Sample.Forms.Droid
+namespace Plugin.XFileManager.Sample.Forms.Droid
 {
     [Activity(Label = "Plugin.FilePicker.Sample.Forms.Droid", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity

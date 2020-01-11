@@ -103,9 +103,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.csproj">
-      <Project>{507fa967-a579-44fe-9ca3-7cee18b5257b}</Project>
-      <Name>Plugin.FilePicker</Name>
+    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.XFileManager.csproj">
+      <Project>{3CEB6099-EE93-4FE0-8EF1-107FA84E244E}</Project>
+      <Name>Plugin.XFileManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\Forms\Plugin.FilePicker.Sample.Forms.csproj">
       <Project>{bc539575-3b77-4a4a-8f3a-2203bb590674}</Project>

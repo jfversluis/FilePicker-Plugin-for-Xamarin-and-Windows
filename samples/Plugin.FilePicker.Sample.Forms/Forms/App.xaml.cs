@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace Plugin.FilePicker.Sample.Forms
+namespace Plugin.XFileManager.Sample.Forms
 {
     public partial class App : Application
     {

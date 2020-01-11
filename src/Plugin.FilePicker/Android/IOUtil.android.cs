@@ -5,7 +5,7 @@ using Android.Provider;
 using Android.Webkit;
 using System;
 
-namespace Plugin.FilePicker
+namespace Plugin.XFileManager
 {
     /// <summary>
     /// Android I/O utility functions
@@ -55,6 +55,7 @@ namespace Plugin.FilePicker
 
                     if (!long.TryParse(id, out long parseId))
                         return null;
+
 
                     string[] contentUriPrefixesToTry = new string[]
                     {

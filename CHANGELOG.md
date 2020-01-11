@@ -1,5 +1,23 @@
 # Changelog
 
+###OVERVIEW:
+[3.1] - Added initial package support for:Xamarin.TVOS10, Xamarin.WatchOS10, tizen40. However, others will have to build the code (make a pull request and I'll add them)
+[3.0] - Support for picking folders and opening files using Xamarin.Essentials(mostly), added support for MonoAndroid60, MonoAndroid70, MonoAndroid71, MonoAndroid10.0.
+[2.1] - Multi-Targeting Plugin project
+[2.0] - Support for .NET Standard (platforms Xamarin.Android, Xamarin.iOS, Xamarin.Mac, Xamarin.Forms, UWP and WPF); removed Windows Phone 8 and Windows 8/8.1 support
+[1.4] - Support Xamarin.Mac
+[1.3] - FileData now has a GetStream() method to retrieve the binary data as a Stream
+[1.2] - Retrieve full file path from selected file
+[1.1] - Support Windows Phone 8, 8.1 e Windows Store.
+[1.0] - Pick files, save files and open the archive in Default App.
+
+
+##DETAILED:
+
+## Version 3.1.00-beta
+Updated SourceLink support and multi-targeting to work with VS2019.
+Added the ability to pick folder, and reconfigured depreciated OpenFile to use Xamarin.Essentials for most platforms (custom code otherwise).
+
 ## Version 2.1.34
 
 (Re-)added SourceLink support

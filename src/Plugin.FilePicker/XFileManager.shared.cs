@@ -1,23 +1,23 @@
-﻿using Plugin.FilePicker.Abstractions;
+﻿using Plugin.XFileManager.Abstractions;
 using System;
 
-namespace Plugin.FilePicker
+namespace Plugin.XFileManager
 {
     /// <summary>
-    /// Cross-platform FilePicker implementation
+    /// Cross-platform XFileManager implementation
     /// </summary>
-    public static class CrossFilePicker
+    public static class XFileManager
     {
         /// <summary>
         /// Lazy-initialized file picker implementation
         /// </summary>
-        private static Lazy<IFilePicker> implementation =
-            new Lazy<IFilePicker>(CreateFilePicker, System.Threading.LazyThreadSafetyMode.PublicationOnly);
+        private static Lazy<IXFileManager> implementation =
+            new Lazy<IXFileManager>(CreateXFileManager, System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
         /// <summary>
         /// Current file picker plugin implementation to use
         /// </summary>
-        public static IFilePicker Current
+        public static IXFileManager Current
         {
             get
             {
@@ -35,13 +35,14 @@ namespace Plugin.FilePicker
         /// Creates file picker instance for the platform
         /// </summary>
         /// <returns>file picker instance</returns>
-        private static IFilePicker CreateFilePicker()
+        private static IXFileManager CreateXFileManager()
         {
-#if NETSTANDARD1_0 || NETSTANDARD2_0
+
+            #if NETSTANDARD1_0 || NETSTANDARD2_0 || Tizen || WATCHOS1_0 || TVOS1_0
             return null;
-#else
-            return new FilePickerImplementation();
-#endif
+            #else
+                return new FileManagerImplementation();
+            #endif
         }
 
         /// <summary>

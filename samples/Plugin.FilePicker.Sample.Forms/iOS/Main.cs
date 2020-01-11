@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
-namespace Plugin.FilePicker.Sample.Forms.iOS
+namespace Plugin.XFileManager.Sample.Forms.iOS
 {
     public class Application
     {

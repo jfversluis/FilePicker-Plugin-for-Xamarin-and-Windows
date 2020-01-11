@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using AppKit;
 using Foundation;
 using MobileCoreServices;
-using Plugin.FilePicker.Abstractions;
+using Plugin.XFileManager.Abstractions;
 
-namespace Plugin.FilePicker
+
+namespace Plugin.XFileManager
 {
-    public class FilePickerImplementation : NSObject, IFilePicker
+    public class FileManagerImplementation : NSObject, IXFileManager
     {
         public Task<FileData> PickFile(string[] allowedTypes)
         {
@@ -40,7 +41,8 @@ namespace Plugin.FilePicker
                 {
                     var path = url.Path;
                     var fileName = Path.GetFileName(path);
-                    data = new FileData(path, fileName, () => File.OpenRead(path));
+                    var folderPath = Path.GetDirectoryName(path);
+                    data = new FileData(path,folderPath,fileName, () => File.OpenRead(path));
                 }
             }
 
@@ -77,7 +79,27 @@ namespace Plugin.FilePicker
             }
         }
 
-        public void OpenFile(string fileToOpen)
+        public Task<string> PickFolder()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Stream> GetStreamFromPath(string filePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> SaveFileInFolder(FileData fileToSave)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenFileViaEssentials(string fileToOpen)
         {
             try
             {
@@ -89,28 +111,6 @@ namespace Plugin.FilePicker
             catch (FileNotFoundException)
             {
                 // ignore exceptions
-            }
-            catch (Exception)
-            {
-                // ignore exceptions
-            }
-        }
-
-        public async void OpenFile(FileData fileToOpen)
-        {
-            try
-            {
-                if (!NSWorkspace.SharedWorkspace.OpenFile(fileToOpen.FilePath))
-                {
-                    Debug.WriteLine($"Unable to open file at path: {fileToOpen.FilePath}.");
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                // this could be some strange UI behavior.
-                // user would get prompted to save the file in order to open the file
-                await SaveFile(fileToOpen);
-                OpenFile(fileToOpen);
             }
             catch (Exception)
             {
