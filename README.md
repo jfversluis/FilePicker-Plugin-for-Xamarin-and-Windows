@@ -5,9 +5,9 @@ Simple cross-platform plug-in that allows you to pick files and work with them.
 The original project can be found [here](https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows/), but seems abandoned, this one was forked and further developed.
 
 ## Build status
-### Stable [![Build status](https://jfversluis.visualstudio.com/FilePicker%20plugin/_apis/build/status/FilePicker%20Plugin)](https://jfversluis.visualstudio.com/FilePicker%20plugin/_build/latest?definitionId=36) [![NuGet version](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker.svg)](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker)
+### Stable [![Build status](https://jfversluis.visualstudio.com/FilePicker%20plugin/_apis/build/status/FilePicker%20Plugin)](https://jfversluis.visualstudio.com/FilePicker%20plugin/_build/latest?definitionId=36) [![NuGet version](https://badge.fury.io/nu/Xamarin.Plugin.XFilePicker.svg)](https://badge.fury.io/nu/Xamarin.Plugin.XFilePicker)
  
-NuGet: [https://www.nuget.org/packages/Xamarin.Plugin.FilePicker/](https://www.nuget.org/packages/Xamarin.Plugin.FilePicker/)
+NuGet: [https://www.nuget.org/packages/Xamarin.Plugin.XFilePicker/](https://www.nuget.org/packages/Xamarin.Plugin.XFilePicker/)
  
 ### Development feed (possibly instable)
 
@@ -21,7 +21,7 @@ Add this as a source to your IDE to find the latest packages: [https://www.myget
 
 |Platform               |Supported  |Version    |Remarks                                                            |
 |:---------------------:|:---------:|:---------:|:-----------------------------------------------------------------:|
-|Xamarin.Android        |Yes        |API 10+    |                                                                   |
+|Xamarin.Android        |Yes        |API 8+    |                                                                   |
 |Xamarin.iOS            |Yes        |iOS 6+     |                                                                   |
 |Xamarin.iOS Unified    |Yes        |iOS 6+     |                                                                   |
 |Xamarin.Mac            |Yes        |iOS 10.12+ |Has only been tested on MacOS 10.12                                |

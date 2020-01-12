@@ -2,7 +2,7 @@
 
 ###OVERVIEW:
 [3.1] - Added initial package support for:Xamarin.TVOS10, Xamarin.WatchOS10, tizen40. However, others will have to build the code (make a pull request and I'll add them)
-[3.0] - Support for picking folders and opening files using Xamarin.Essentials(mostly), added support for MonoAndroid60, MonoAndroid70, MonoAndroid71, MonoAndroid10.0.
+[3.0] - Support for picking folders and opening files using Xamarin.Essentials(mostly).
 [2.1] - Multi-Targeting Plugin project
 [2.0] - Support for .NET Standard (platforms Xamarin.Android, Xamarin.iOS, Xamarin.Mac, Xamarin.Forms, UWP and WPF); removed Windows Phone 8 and Windows 8/8.1 support
 [1.4] - Support Xamarin.Mac

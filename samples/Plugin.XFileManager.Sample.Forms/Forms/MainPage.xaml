@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Plugin.XFileManager.Sample.Forms.MainPage" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Plugin.XFileManager.Sample.Forms">
+
+	<ScrollView>
+
+		<StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+			<StackLayout HorizontalOptions="FillAndExpand">
+				<Label Text="     PICKED FILE :    " />
+				<Label Text="Folder Path :    " />
+				<Label Text="File Path :    " />
+				<Label Text="File Name :    " />
+				<Label Text="Stream size :    " />
+				<Label Text="" />
+
+				<Label Text="     IN MEMORY FILE :    " />
+				<Label Text="Folder Path :    " />
+				<Label Text="File Path :    " />
+				<Label Text="File Name :    " />
+				<Label Text="Stream size :    " />
+				<Label Text="" />
+
+				<Label Text="     SAVED FILE :    " />
+				<Label Text="Folder Path :    " />
+				<Label Text="File Path :    " />
+				<Label Text="File Name :    " />
+				<Label Text="Stream size :    " />
+				<Label Text="" />
+			</StackLayout>
+
+			<StackLayout HorizontalOptions="FillAndExpand">
+				<Label Text="" />
+				<Label x:Name="currPickedFolderPath" Text="{Binding currPickedFile.filePath}" />
+				<Label x:Name="currPickedFilePath" Text="{Binding currPickedFile.filePath}" />
+				<Label x:Name="currPickedFileName" Text="{Binding currPickedFile.filePath}" />
+				<Label x:Name="currPickedStreamSize" Text="{Binding currPickedFile.filePath}" />
+				<Label Text="" />
+
+				<Label Text="" />
+				<Label x:Name="currMemoryFileFolderPath" Text="{Binding currMemoryFile.filePath}" />
+				<Label x:Name="currMemoryFileFilePath" Text="{Binding currMemoryFile.filePath}" />
+				<Label x:Name="currMemoryFileFileName" Text="{Binding currMemoryFile.filePath}" />
+				<Label x:Name="currMemoryFileStreamSize" Text="{Binding currMemoryFile.filePath}" />
+				<Label Text="" />
+
+				<Label Text="" />
+				<Label x:Name="currFileSavedFolderPath" Text="{Binding currFileSaved.filePath}" />
+				<Label x:Name="currFileSavedFilePath" Text="{Binding currFileSaved.filePath}" />
+				<Label x:Name="currFileSavedFileName" Text="{Binding currFileSaved.filePath}" />
+				<Label x:Name="currFileSavedStreamSize" Text="{Binding currFileSaved.filePath}" />
+				<Label Text="" />
+
+
+
+			</StackLayout>
+
+			<StackLayout HorizontalOptions="FillAndExpand" WidthRequest="150">
+				<Button Clicked="btn_PickFolder" Text="Pick Folder" />
+				<Label x:Name="lbl_PickFolderPath" Text="XXXXXXXXXXXX" />
+
+				<Button Clicked="btn_PickFile" Text="Pick File" />
+				<Label x:Name="lbl_PickFilePathNOTUSED" Text="XXXXXXXXXXXX" />
+
+				<Button Clicked="btn_OpenPickedFile" Text="Pick and Open File" />
+				<Label x:Name="lbl_OpenPickedFile2" Text="XXXXXXXXXXXX" />
+
+				<Button Clicked="btn_PickImageAndSaveLocalAppFolder" Text="Load Image and Save to Local Storage" />
+				<Label x:Name="lbl_PickLoadImageNSaveLocal" Text="XXXXXXXXXXXX" />
+
+				<Button Clicked="btn_PickImageAndSaveToPickedFolder" Text="Load Image and Save picked folder" />
+				<Label x:Name="lbl_PickLoadImageNSavePicked" Text="XXXXXXXXXXXX" />
+
+
+				<Image x:Name="img_PickLoadImage" HeightRequest="200" WidthRequest="150" />
+				<Label x:Name="lbl_PickLoadImageSize" Text="Image Size:::" />
+			</StackLayout>
+		</StackLayout>
+
+	</ScrollView>
+</ContentPage>
