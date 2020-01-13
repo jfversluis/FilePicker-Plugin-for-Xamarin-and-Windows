@@ -120,13 +120,23 @@ namespace Plugin.XFileManager
 
                     FilePickActivity.FilePickCancelled -= cancelledHandler;
                     FilePickActivity.FilePicked -= handler;
-                    (bool success, FileData fileData) = GetFileDataFromPath(e.FilePath).Result;
-                    if (success)
-                    {
-                        tcs?.SetResult(fileData);
-                    }
-                    tcs?.SetResult(null);
 
+                    tcs?.SetResult(new FileData(
+                        e.FilePath,
+                        e.FolderPath,
+                        e.FileName,
+                        () =>
+                        {
+                            if (IOUtil.IsMediaStore(e.FilePath))
+                            {
+                                var contentUri = Android.Net.Uri.Parse(e.FilePath);
+                                return Application.Context.ContentResolver.OpenInputStream(contentUri);
+                            }
+                            else
+                            {
+                                return System.IO.File.OpenRead(e.FilePath);
+                            }
+                        }));
                 };
 
                 cancelledHandler = (s, e) =>

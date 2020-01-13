@@ -83,6 +83,8 @@ namespace Plugin.XFileManager
 
                 string filename = doc.LocalizedName;
                 string pathname = doc.FileUrl?.Path;
+                //I think this is right.....
+                string folderPath = doc.FileUrl?.BaseUrl.Path;
 
                 args.Url.StopAccessingSecurityScopedResource();
 
@@ -92,7 +94,12 @@ namespace Plugin.XFileManager
                     filename = Path.GetFileName(pathname);
                 }
 
-                this.OnFilePicked(new FilePickerEventArgs(filename, pathname));
+                if (folderPath == null && pathname != null)
+                {
+                    folderPath = Path.GetDirectoryName(pathname);
+                }
+
+                this.OnFilePicked(new FilePickerEventArgs(filename, pathname, folderPath));
             }
             catch (Exception ex)
             {

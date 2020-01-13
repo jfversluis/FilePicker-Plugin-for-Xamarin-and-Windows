@@ -124,10 +124,11 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="fileName">file name part of picked file</param>
         /// <param name="filePath">complete file path of picked file</param>
-        public FilePickerEventArgs(string fileName, string filePath)
+        public FilePickerEventArgs(string fileName, string filePath, string folderPath)
             : this(fileName)
         {
             this.FilePath = filePath;
+            this.FolderPath = folderPath;
         }
     }
 

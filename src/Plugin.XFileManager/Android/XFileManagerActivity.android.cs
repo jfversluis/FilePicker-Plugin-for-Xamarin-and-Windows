@@ -158,8 +158,9 @@ namespace Plugin.XFileManager
                     }
 
                     var fileName = this.GetFileName(this.context, uri);
+                    var folderPath = this.GetFolderPath(this.context, uri);
 
-                    OnFilePicked(new FilePickerEventArgs(fileName, filePath));
+                    OnFilePicked(new FilePickerEventArgs(fileName, filePath, folderPath));
                 }
                 catch (Exception readEx)
                 {
@@ -216,6 +217,45 @@ namespace Plugin.XFileManager
             else
             {
                 return System.IO.Path.GetFileName(WebUtility.UrlDecode(uri.ToString()));
+            }
+        }
+
+        /// <summary>
+        /// Retrieves file name part from given Uri
+        /// </summary>
+        /// <param name="context">Android context to access content resolver</param>
+        /// <param name="uri">Uri to get filename for</param>
+        /// <returns>file name part</returns>
+        private string GetFolderPath(Context context, Android.Net.Uri uri)
+        {
+            string[] projection = { MediaStore.MediaColumns.DisplayName };
+
+            var resolver = context.ContentResolver;
+            var name = string.Empty;
+            var metaCursor = resolver.Query(uri, projection, null, null, null);
+
+            if (metaCursor != null)
+            {
+                try
+                {
+                    if (metaCursor.MoveToFirst())
+                    {
+                        name = metaCursor.GetString(0);
+                    }
+                }
+                finally
+                {
+                    metaCursor.Close();
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                return name;
+            }
+            else
+            {
+                return System.IO.Path.GetDirectoryName(WebUtility.UrlDecode(uri.ToString()));
             }
         }
 
