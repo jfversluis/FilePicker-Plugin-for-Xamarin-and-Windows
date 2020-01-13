@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
-  <PropertyGroup>
-    <TargetFrameworks>net45;netstandard1.0;netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;Xamarin.TVOS10;Xamarin.WatchOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;</TargetFrameworks>
+  <PropertyGroup><!--If you love your sanity, LEAVE NETSTANDARD1.0 AS THE FIRST ITEM, OR THINGS LIKE UWP PROJECTS WONT BE ABLE TO REFERENCE THIS.-->
+    <TargetFrameworks>netstandard1.0;netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;Xamarin.TVOS10;Xamarin.WatchOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;net45;</TargetFrameworks>
     <!--<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
     -->
     <AssemblyName>Plugin.XFilePicker</AssemblyName>
