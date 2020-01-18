@@ -8,9 +8,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using File = Java.IO.File;
-using Xamarin.Essentials;
 using Android.Support.V4.Provider;
 using Android;
+using Xamarin.Essentials;
 
 // Adds permission for READ_EXTERNAL_STORAGE to the AndroidManifest.xml of the app project without
 // the user of the plugin having to add it by himself/herself.
@@ -123,7 +123,6 @@ namespace Plugin.XFileManager
 
                     tcs?.SetResult(new FileData(
                         e.FilePath,
-                        e.FolderPath,
                         e.FileName,
                         () =>
                         {
@@ -265,12 +264,24 @@ namespace Plugin.XFileManager
             this.OpenFile(myFile);
         }
 
-        public async void OpenFileViaEssentials(string fileToOpen)
+        public async Task<bool> OpenFileViaEssentials(string fileToOpen)
         {
-            await Launcher.OpenAsync(new OpenFileRequest
-            {
-                File = new ReadOnlyFile(fileToOpen)
-            });
+
+            //if (IOUtil.IsMediaStore(fileToOpen))
+            //{
+            //    var contentUri = Android.Net.Uri.Parse(fileToOpen);
+            //    await Launcher.OpenAsync(contentUri.ToString()).ConfigureAwait(true);
+            //    return true;
+            //}
+            //else
+            //{
+                OpenFileRequest openFileRequest = new OpenFileRequest { File = new ReadOnlyFile(fileToOpen) };
+                await Launcher.OpenAsync(openFileRequest).ConfigureAwait(true);
+                return true;
+            //}
+
+
+
         }
 
         /// <summary>
@@ -479,12 +490,12 @@ namespace Plugin.XFileManager
             if (IOUtil.IsMediaStore(filePath))
             {
                 var contentUri = Android.Net.Uri.Parse(filePath);
-                FileData fileData = new FileData(filePath, Path.GetDirectoryName(filePath), Path.GetFileName(filePath), () => Application.Context.ContentResolver.OpenInputStream(contentUri));
+                FileData fileData = new FileData(filePath, Path.GetFileName(filePath), () => Application.Context.ContentResolver.OpenInputStream(contentUri));
                 return (true, fileData);
             }
             else
             {
-                FileData fileData = new FileData(filePath, Path.GetDirectoryName(filePath), Path.GetFileName(filePath), () => System.IO.File.OpenRead(filePath));
+                FileData fileData = new FileData(filePath, Path.GetFileName(filePath), () => System.IO.File.OpenRead(filePath));
                 return (true, fileData);
             }
             

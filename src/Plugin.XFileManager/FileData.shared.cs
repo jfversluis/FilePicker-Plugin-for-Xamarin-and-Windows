@@ -53,10 +53,6 @@ namespace Plugin.XFileManager
         /// Full file path to the picked file, includes file name.
         /// </param>
 
-        /// <param name="folderPath">
-        /// Full file path to the picked file, includes file name.
-        /// </param>
-
         /// <param name="fileName">
         /// File name of the picked file.
         /// </param>
@@ -69,13 +65,12 @@ namespace Plugin.XFileManager
         /// Action to dispose of the underlying resources of the picked file.
         /// </param>
  
-        public FileData(string filePath, string folderPath, string fileName, Func<Stream> streamGetter, Action<bool> dispose = null)
+        public FileData(string filePath, string fileName, Func<Stream> streamGetter, Action<bool> dispose = null)
         {
             _filePath = filePath;
             _fileName = fileName;
             _dispose = dispose;
             _streamGetter = streamGetter;
-            _folderPath = folderPath;
         }
 
 

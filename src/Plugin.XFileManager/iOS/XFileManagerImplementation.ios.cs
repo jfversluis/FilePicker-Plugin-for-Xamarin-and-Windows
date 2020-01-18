@@ -83,8 +83,7 @@ namespace Plugin.XFileManager
 
                 string filename = doc.LocalizedName;
                 string pathname = doc.FileUrl?.Path;
-                //I think this is right.....
-                string folderPath = doc.FileUrl?.BaseUrl.Path;
+                
 
                 args.Url.StopAccessingSecurityScopedResource();
 
@@ -94,12 +93,8 @@ namespace Plugin.XFileManager
                     filename = Path.GetFileName(pathname);
                 }
 
-                if (folderPath == null && pathname != null)
-                {
-                    folderPath = Path.GetDirectoryName(pathname);
-                }
 
-                this.OnFilePicked(new FilePickerEventArgs(filename, pathname, folderPath));
+                this.OnFilePicked(new FilePickerEventArgs(filename, pathname));
             }
             catch (Exception ex)
             {
@@ -186,7 +181,6 @@ namespace Plugin.XFileManager
 
                 tcs?.SetResult(new FileData(
                     args.FilePath,
-                    args.FolderPath,
                     args.FileName,
                     () => GetStreamFromPath(args.FilePath).Result));
             };
@@ -323,12 +317,13 @@ namespace Plugin.XFileManager
             return Task.Run(() => (Stream)new FileStream(filePath, FileMode.Open, FileAccess.Read));
         }
 
-        public async void OpenFileViaEssentials(string fileToOpen)
+        public async Task<bool> OpenFileViaEssentials(string fileToOpen)
         {
             await Launcher.OpenAsync(new OpenFileRequest
             {
                 File = new ReadOnlyFile(fileToOpen)
-            });
+            }).ConfigureAwait(true);
+            return true;
         }
 
         public Task<string> PickFolder()
@@ -409,7 +404,7 @@ namespace Plugin.XFileManager
                 NSFileHandle nSFileHandle = NSFileHandle.OpenRead(filePath);
                 var fileData = nSFileHandle.AvailableData();
 
-                return Task.FromResult((true, new FileData(filePath, Path.GetDirectoryName(filePath), Path.GetFileName(filePath), () => fileData.AsStream())));
+                return Task.FromResult((true, new FileData(filePath, Path.GetFileName(filePath), () => fileData.AsStream())));
 
             }
             else

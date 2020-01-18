@@ -17,7 +17,7 @@ namespace Plugin.XFileManager.Sample.Forms
 
 			if (Device.RuntimePlatform == Device.Android)
 			{
-				imageTypes = new string[] { "image/png", "image/jpeg" };
+				imageTypes = new string[] { "image/*" };
 			}
 
 			if (Device.RuntimePlatform == Device.iOS)
@@ -27,12 +27,12 @@ namespace Plugin.XFileManager.Sample.Forms
 
 			if (Device.RuntimePlatform == Device.UWP)
 			{
-				imageTypes = new string[] { ".jpg", ".png" };
+				imageTypes = new string[] { ".jpg", ".png", ".tiff"};
 			}
 
 			if (Device.RuntimePlatform == Device.WPF)
 			{
-				imageTypes = new string[] { "JPEG files (*.jpg)|*.jpg", "PNG files (*.png)|*.png" };
+				imageTypes = new string[] { "JPEG files (*.jpg)|*.jpg", "PNG files (*.png)|*.png", "TIFF files (*.tiff)|*.tiff" };
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace Plugin.XFileManager.Sample.Forms
 
 				var localFolder = FileManager.GetLocalAppFolder();
 
-				var currMemoryFile = new FileData(localFolder+ pickedFile.FileName, localFolder, pickedFile.FileName, () => pickedFile.GetStream());
+				var currMemoryFile = new FileData(localFolder+ pickedFile.FileName, pickedFile.FileName, () => pickedFile.GetStream());
 				updateMemoryFile(currMemoryFile);
 				bool successSaveFile = await FileManager.SaveFileToLocalAppStorage(currMemoryFile).ConfigureAwait(true);
 
@@ -136,7 +136,7 @@ namespace Plugin.XFileManager.Sample.Forms
 					//Create a new FileData and input the filepath, folder path, and filename and stream. This will get sent to the save function
 
 
-					var currMemoryFile = new FileData(pickedFolder + pickedFile.FileName, pickedFolder, pickedFile.FileName, () => pickedFile.GetStream());
+					var currMemoryFile = new FileData(pickedFolder + pickedFile.FileName, pickedFile.FileName, () => pickedFile.GetStream());
 					updateMemoryFile(currMemoryFile);
 					bool successSaveFile = await FileManager.SaveFileToLocalAppStorage(currMemoryFile).ConfigureAwait(true);
 
@@ -166,7 +166,7 @@ namespace Plugin.XFileManager.Sample.Forms
 			currPickedFilePath.Text = currPickedFile.FilePath;
 			currPickedFileName.Text = currPickedFile.FileName;
 
-			currPickedStreamSize.Text = currPickedFile.GetStream().Length.ToString();
+			currPickedStreamSize.Text = currPickedFile.DataArray.Length.ToString();
 		}
 
 		private async void updateMemoryFile(FileData currMemoryFile)
@@ -174,7 +174,7 @@ namespace Plugin.XFileManager.Sample.Forms
 			currMemoryFileFolderPath.Text = currMemoryFile.FolderPath;
 			currMemoryFileFilePath.Text = currMemoryFile.FilePath;
 			currMemoryFileFileName.Text = currMemoryFile.FileName;
-			currMemoryFileStreamSize.Text = currMemoryFile.GetStream().Length.ToString();
+			currMemoryFileStreamSize.Text = currMemoryFile.DataArray.Length.ToString();
 		}
 
 

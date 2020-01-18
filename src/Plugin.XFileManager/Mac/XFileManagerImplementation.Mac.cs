@@ -41,7 +41,7 @@ namespace Plugin.XFileManager
                     var path = url.Path;
                     var fileName = Path.GetFileName(path);
                     var folderPath = Path.GetDirectoryName(path);
-                    data = new FileData(path,folderPath,fileName, () => File.OpenRead(path));
+                    data = new FileData(path,fileName, () => File.OpenRead(path));
                 }
             }
 
@@ -108,22 +108,30 @@ namespace Plugin.XFileManager
 
         }
 
-        public void OpenFileViaEssentials(string fileToOpen)
+        public async Task<bool> OpenFileViaEssentials(string fileToOpen)
         {
             try
             {
-                if (!NSWorkspace.SharedWorkspace.OpenFile(fileToOpen))
+                var didOpen = NSWorkspace.SharedWorkspace.OpenFile(fileToOpen);
+                if (!didOpen)
                 {
                     Debug.WriteLine($"Unable to open file at path: {fileToOpen}.");
+                    return false;
+                }
+                else
+                {
+                    return true;
                 }
             }
             catch (FileNotFoundException)
             {
                 // ignore exceptions
+                return false;
             }
             catch (Exception)
             {
                 // ignore exceptions
+                return false;
             }
         }
 
@@ -161,7 +169,7 @@ namespace Plugin.XFileManager
                 NSFileHandle nSFileHandle =  NSFileHandle.OpenRead(filePath);
                 var fileData = nSFileHandle.AvailableData();
 
-                return Task.FromResult((true, new FileData(filePath, Path.GetDirectoryName(filePath), Path.GetFileName(filePath), () => fileData.AsStream())));
+                return Task.FromResult((true, new FileData(filePath, Path.GetFileName(filePath), () => fileData.AsStream())));
 
             }
             else

@@ -59,14 +59,14 @@ namespace Plugin.XFileManager
                 return (false, null);
             }
         }
-        public async static Task<(bool, Stream)> GetStreamFromPath(string filePath)
+        public async static Task<(bool, MemoryStream)> GetStreamFromPath(string filePath)
         {
             try
             {
                 (bool success, FileData file) = await XFileManager.Current.GetFileDataFromPath(filePath).ConfigureAwait(true);
                 if (success)
                 {
-                    return (true, file.GetStream());
+                    return (true, new MemoryStream(file.DataArray));
                 }
                 else
                 {
@@ -110,7 +110,7 @@ namespace Plugin.XFileManager
         {
             try
             {
-                XFileManager.Current.OpenFileViaEssentials(filePath);
+                await XFileManager.Current.OpenFileViaEssentials(filePath);
 
                 //if (currPickedFile == null)
                 //    return (false, null); // user canceled file picking
@@ -219,7 +219,7 @@ namespace Plugin.XFileManager
 
         Task<bool> SaveFileInFolder(FileData fileToSave);
 
-        void OpenFileViaEssentials(string fileToOpen);
+        Task<bool> OpenFileViaEssentials(string fileToOpen);
         //windows verified
 
         string GetLocalAppFolder();

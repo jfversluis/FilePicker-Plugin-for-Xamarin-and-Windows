@@ -1,8 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
   <PropertyGroup><!--If you love your sanity, LEAVE NETSTANDARD1.0 AS THE FIRST ITEM, OR THINGS LIKE UWP PROJECTS WONT BE ABLE TO REFERENCE THIS.-->
-    <TargetFrameworks>netstandard1.0;netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;Xamarin.TVOS10;Xamarin.WatchOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;net45;</TargetFrameworks>
-    <!--<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
-    -->
+    <TargetFrameworks>net45;netstandard1.0;netstandard2.0;Xamarin.iOS10;Xamarin.Mac20;Xamarin.TVOS10;Xamarin.WatchOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;tizen40;</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
     <AssemblyName>Plugin.XFilePicker</AssemblyName>
     <RootNamespace>Plugin.XFilePicker</RootNamespace>
     <PackageId>Xamarin.Plugin.XFilePicker</PackageId>
@@ -100,7 +99,7 @@
     <Compile Include="**\*.net45.*.cs" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
-  <!--
+  
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
     
@@ -110,7 +109,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  -->
+  
   
   <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
     <Compile Include="**\*.android.cs" />
@@ -170,17 +169,17 @@
     
   </ItemGroup>
   
-  <!--
+
   <ItemGroup Condition=" $(TargetFramework.StartsWith('tizen')) ">
     <PackageReference Include="Tizen.NET" Version="4.0.0" />
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
   </ItemGroup>
-      -->
+
   
   <ItemGroup>
-    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
   </ItemGroup>
   
   <ItemGroup>

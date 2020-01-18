@@ -97,13 +97,6 @@ namespace Plugin.XFileManager
         public string FilePath { get; set; }
 
         /// <summary>
-        /// Complete folder path of picked folder; on some OS this may contain an Uri
-        /// </summary>
-        public string FolderPath { get; set; }
-
-
-
-        /// <summary>
         /// Creates a new and empty file picker event args object
         /// </summary>
         public FilePickerEventArgs()
@@ -124,11 +117,10 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="fileName">file name part of picked file</param>
         /// <param name="filePath">complete file path of picked file</param>
-        public FilePickerEventArgs(string fileName, string filePath, string folderPath)
+        public FilePickerEventArgs(string fileName, string filePath)
             : this(fileName)
         {
             this.FilePath = filePath;
-            this.FolderPath = folderPath;
         }
     }
 

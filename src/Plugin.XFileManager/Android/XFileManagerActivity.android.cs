@@ -160,7 +160,7 @@ namespace Plugin.XFileManager
                     var fileName = this.GetFileName(this.context, uri);
                     var folderPath = this.GetFolderPath(this.context, uri);
 
-                    OnFilePicked(new FilePickerEventArgs(fileName, filePath, folderPath));
+                    OnFilePicked(new FilePickerEventArgs(fileName, filePath));
                 }
                 catch (Exception readEx)
                 {

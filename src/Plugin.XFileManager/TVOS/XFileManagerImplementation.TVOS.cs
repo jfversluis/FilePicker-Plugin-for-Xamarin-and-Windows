@@ -20,7 +20,7 @@ namespace Plugin.XFileManager
             throw new NotImplementedException();
         }
 
-        public void OpenFileViaEssentials(string fileToOpen)
+        public Task<bool> OpenFileViaEssentials(string fileToOpen)
         {
             throw new NotImplementedException();
         }

@@ -114,8 +114,7 @@ namespace Plugin.XFileManager
 
             UpdateFutureAccessList(file);
 
-            return new FileData(file.Path, file.Path.Substring(0,
-                file.Path.Length - file.Name.Length),
+            return new FileData(file.Path,
                 file.Name,
                 () => file.OpenStreamForReadAsync().Result);
         }
@@ -255,23 +254,24 @@ namespace Plugin.XFileManager
             {
                 var file = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(token);
 
-                return (true, new FileData(file.Path, Path.GetDirectoryName(file.Path), file.Name, () => file.OpenStreamForReadAsync().Result));
+                return (true, new FileData(file.Path, file.Name, () => file.OpenStreamForReadAsync().Result));
                 //return file.OpenStreamForReadAsync().Result;
             }
             return (false, null);
         }
 
-        public async void OpenFileViaEssentials(string fileToOpen)
+        public string GetLocalAppFolder()
+        {
+            return ApplicationData.Current.LocalFolder.Path + "\\";
+        }
+
+        public async Task<bool> OpenFileViaEssentials(string fileToOpen)
         {
             await Xamarin.Essentials.Launcher.OpenAsync(new OpenFileRequest
             {
                 File = new ReadOnlyFile(fileToOpen)
             });
-        }
-
-        public string GetLocalAppFolder()
-        {
-            return ApplicationData.Current.LocalFolder.Path + "\\";
+            return true;
         }
     }
 }

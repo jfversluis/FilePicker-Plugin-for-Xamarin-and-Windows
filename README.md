@@ -1,3 +1,5 @@
+#NOTE: Some stream are "network" streams, you CANNOT call "FileData".GetStream().Length. You have to use .DataArray to read everything into memory first!
+
 # FilePicker Plugin for Xamarin.Forms
 
 Simple cross-platform plug-in that allows you to pick files and work with them.

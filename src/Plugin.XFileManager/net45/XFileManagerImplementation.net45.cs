@@ -32,7 +32,7 @@ namespace Plugin.XFileManager
             var fileName = Path.GetFileName(picker.FileName);
             var fullPath = picker.FileName;
 
-            var data = new FileData(fullPath, folderPath, fileName, () => File.OpenRead(picker.FileName), (x) => { });
+            var data = new FileData(fullPath, fileName, () => File.OpenRead(picker.FileName), (x) => { });
 
             return Task.FromResult(data);
         }
@@ -67,7 +67,7 @@ namespace Plugin.XFileManager
 
 
 
-            if (result == null || result == DialogResult.Cancel)
+            if (result == DialogResult.Cancel)
             {
                 return Task.FromResult<string>(null);
             }
@@ -116,9 +116,10 @@ namespace Plugin.XFileManager
             }
         }
 
-        public void OpenFileViaEssentials(string fileToOpen)
+        public async Task<bool> OpenFileViaEssentials(string fileToOpen)
         {
             OpenFile(fileToOpen);
+            return true;
         }
 
         public string GetLocalAppFolder()
@@ -133,7 +134,7 @@ namespace Plugin.XFileManager
             {
                 if (File.Exists(filePath))
                 {
-                    return (true, new FileData(filePath, Path.GetDirectoryName(filePath), Path.GetFileName(filePath), ()=> File.OpenRead(filePath)));
+                    return (true, new FileData(filePath, Path.GetFileName(filePath), ()=> File.OpenRead(filePath)));
                 }
                 else
                 {

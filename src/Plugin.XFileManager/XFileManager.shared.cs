@@ -41,7 +41,7 @@ namespace Plugin.XFileManager
         private static IXFileManager CreateXFileManager()
         {
 
-        #if NETSTANDARD1_0 || NETSTANDARD2_0 || PORTABLE
+        #if NETSTANDARD1_0 || NETSTANDARD2_0// || PORTABLE
             return null;
             #else
                 return new FileManagerImplementation();
