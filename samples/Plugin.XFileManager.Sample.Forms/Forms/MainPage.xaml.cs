@@ -15,33 +15,17 @@ namespace Plugin.XFileManager.Sample.Forms
 			BindingContext = this;
 
 
-			if (Device.RuntimePlatform == Device.Android)
-			{
-				imageTypes = new string[] { "image/*" };
-			}
 
-			if (Device.RuntimePlatform == Device.iOS)
-			{
-				imageTypes = new string[] { "public.image" }; // same as iOS constant UTType.Image
-			}
+				imageTypes = new string[] { ".jpg" ,".png",".tiff" };
 
-			if (Device.RuntimePlatform == Device.UWP)
-			{
-				imageTypes = new string[] { ".jpg", ".png", ".tiff"};
-			}
-
-			if (Device.RuntimePlatform == Device.WPF)
-			{
-				imageTypes = new string[] { "JPEG files (*.jpg)|*.jpg", "PNG files (*.png)|*.png", "TIFF files (*.tiff)|*.tiff" };
-			}
 		}
 
 		private async void btn_PickFolder(object sender, EventArgs e)
 		{
-			(bool success, string pickedFolder) = await FileManager.PickFolder().ConfigureAwait(true);
+			(var success, var pickedFolder) = await FileManager.PickFolder().ConfigureAwait(true);
 			if (success)
 			{
-				lbl_PickFolderPath.Text = pickedFolder;
+				lbl_PickFolderPath.Text = pickedFolder.FolderPath;
 			}
 
 		}
@@ -115,12 +99,12 @@ namespace Plugin.XFileManager.Sample.Forms
 		private async void btn_PickImageAndSaveToPickedFolder(object sender, EventArgs e)
 		{
 			
-			(bool success2, FileData pickedFile) = await FileManager.PickFile(imageTypes).ConfigureAwait(true);
+			(var success2, var pickedFile) = await FileManager.PickFile(imageTypes).ConfigureAwait(true);
 			if (success2)
 			{
 
 
-				(bool success, string pickedFolder) = await FileManager.PickFolder().ConfigureAwait(true);
+				(var success, var pickedFolder) = await FileManager.PickFolder().ConfigureAwait(true);
 
 				if (success)
 				{
@@ -162,7 +146,6 @@ namespace Plugin.XFileManager.Sample.Forms
 
 		private async void updatePickedFile(FileData currPickedFile)
 		{
-			currPickedFolderPath.Text = currPickedFile.FolderPath;
 			currPickedFilePath.Text = currPickedFile.FilePath;
 			currPickedFileName.Text = currPickedFile.FileName;
 
@@ -171,7 +154,6 @@ namespace Plugin.XFileManager.Sample.Forms
 
 		private async void updateMemoryFile(FileData currMemoryFile)
 		{
-			currMemoryFileFolderPath.Text = currMemoryFile.FolderPath;
 			currMemoryFileFilePath.Text = currMemoryFile.FilePath;
 			currMemoryFileFileName.Text = currMemoryFile.FileName;
 			currMemoryFileStreamSize.Text = currMemoryFile.DataArray.Length.ToString();

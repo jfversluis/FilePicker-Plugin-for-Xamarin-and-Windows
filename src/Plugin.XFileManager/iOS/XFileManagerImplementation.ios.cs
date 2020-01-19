@@ -1,6 +1,7 @@
 using Foundation;
 using MobileCoreServices;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace Plugin.XFileManager
         /// <summary>
         /// Task completion source for task when finished picking
         /// </summary>
-        private TaskCompletionSource<string> tcs_string;
+        private TaskCompletionSource<FolderData> tcs_folderData;
 
         /// <summary>
         /// Event which is invoked when a file was picked
@@ -138,7 +139,7 @@ namespace Plugin.XFileManager
         /// <summary>
         /// File picking implementation
         /// </summary>
-        /// <param name="allowedTypes">list of allowed types; may be null</param>
+        /// <param name="allowedTypes">list of allowed fileextention types; may be null</param>
         /// <returns>picked file data, or null when picking was cancelled</returns>
         private Task<FileData> PickMediaAsync(string[] allowedTypes)
         {
@@ -160,7 +161,32 @@ namespace Plugin.XFileManager
 
             if (allowedTypes != null)
             {
-                allowedUtis = allowedTypes;
+                List<string> typeslist = new List<string>();
+                foreach (var extension in allowedTypes)
+                {
+                    if (!string.IsNullOrEmpty(extension))
+                    {
+                        var fixed_Extension = extension?.TrimStart('.');
+
+
+                        // get the UTI for an extension
+                        //var uti = UTType.CreatePreferredIdentifier(UTType.TagClassFilenameExtension, fixed_Extension, null);
+                        // "public.jpeg"
+
+                        // get the UTI for a MIME type
+                        //var uti2 = UTType.CreatePreferredIdentifier(UTType.TagClassMIMEType, fixed_Extension, null);
+                        // "com.adobe.pdf"
+
+                        // get the MIME type for a UTI
+                        //var mime = UTType.GetPreferredTag(uti, UTType.TagClassFilenameExtension);
+
+                        var UTid = UTType.CreatePreferredIdentifier(UTType.TagClassFilenameExtension, fixed_Extension, null);
+                        typeslist.Add(UTid);
+
+                    }
+
+                }
+                allowedUtis = typeslist.ToArray();
             }
 
             // NOTE: Importing (UIDocumentPickerMode.Import) makes a local copy of the document,
@@ -326,13 +352,13 @@ namespace Plugin.XFileManager
             return true;
         }
 
-        public Task<string> PickFolder()
+        public Task<FolderData> PickFolder()
         {
             var id = this.GetRequestId();
 
-            var ntcs = new TaskCompletionSource<string>(id);
+            var ntcs = new TaskCompletionSource<FolderData>(id);
 
-            if (Interlocked.CompareExchange(ref this.tcs_string, ntcs, null) != null)
+            if (Interlocked.CompareExchange(ref this.tcs_folderData, ntcs, null) != null)
             {
                 throw new InvalidOperationException("Only one operation can be active at a time");
             }
@@ -358,21 +384,26 @@ namespace Plugin.XFileManager
 
             this.Handler = (sender, args) =>
             {
-                var tcs = Interlocked.Exchange(ref this.tcs_string, null);
+                var tcs = Interlocked.Exchange(ref this.tcs_folderData, null);
                 //re-using file picker, the path is here 
-                tcs?.SetResult(args.FilePath);
+                var folder = new FolderData()
+                {
+                    FolderPath = args.FilePath,
+                    FolderName = args.FileName
+                };
+                tcs?.SetResult(folder);
             };
 
-            return this.tcs_string.Task;
+            return this.tcs_folderData.Task;
         }
 
 
 
-        public Task<bool> SaveFileInFolder(FileData fileToSave)
+        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
         {
             try
             {
-                var documents = fileToSave.FolderPath;
+                var documents = folder.FolderPath;
                 var fileName = Path.Combine(documents, fileToSave.FileName);
 
                 File.WriteAllBytes(fileName, fileToSave.DataArray);
@@ -386,13 +417,18 @@ namespace Plugin.XFileManager
             }
         }
 
-        public string GetLocalAppFolder()
+        public FolderData GetLocalAppFolder()
         {
             var libraryPath = GetPath(NSSearchPathDirectory.LibraryDirectory);
             var localPath = libraryPath;
 
-            return localPath;
-            }
+            var folder = new FolderData()
+            {
+                FolderPath = localPath,
+                FolderName = Path.GetDirectoryName(localPath)
+            };
+            return folder;
+        }
             
     
 

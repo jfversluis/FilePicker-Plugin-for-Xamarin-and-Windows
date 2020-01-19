@@ -34,33 +34,38 @@ namespace Plugin.XFileManager
         /// <returns>
         /// Folder data object, or null when user cancelled picking folder
         /// </returns>
-        public async Task<string> PickFolder()
+        public async Task<FolderData> PickFolder()
         {
             var folderPicker = new Windows.Storage.Pickers.FolderPicker();
             folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
             folderPicker.FileTypeFilter.Add("*");
 
-            Windows.Storage.StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            Windows.Storage.StorageFolder storageFolder = await folderPicker.PickSingleFolderAsync();
 
-            if (folder == null)
+            if (storageFolder == null)
             {
                 return null;
             }
-            var folderPath = folder.Path + "\\";
+            var folder = new FolderData()
+            {
+                FolderPath = storageFolder.Path + Path.DirectorySeparatorChar,
+                FolderName = Path.GetDirectoryName(storageFolder.Path)
+            };
+
             // Application now has read/write access to all contents in the picked folder
             // (including other sub-folder contents)
             //        StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-            var t = StorageApplicationPermissions.FutureAccessList.Add(folder);
-            if (tokenDictionary.ContainsKey(folderPath))
+            var t = StorageApplicationPermissions.FutureAccessList.Add(storageFolder);
+            if (tokenDictionary.ContainsKey(folder.FolderPath))
             {
-                tokenDictionary[folderPath] = t;
+                tokenDictionary[folder.FolderPath] = t;
             }
             else
             {
-                tokenDictionary.Add(folderPath, t);
+                tokenDictionary.Add(folder.FolderPath, t);
             }
 
-            return folderPath;
+            return folder;
 
         }
 
@@ -162,9 +167,9 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="fileToSave">picked file data for file to save</param>
         /// <returns>true when file was saved successfully, false when not</returns>
-        public async Task<bool> SaveFileInFolder(FileData fileToSave)
+        public async Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
         {
-            var inFolder = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFolderAsync(tokenDictionary[fileToSave.FolderPath]);
+            var inFolder = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFolderAsync(tokenDictionary[folder.FolderPath]);
 
 
             var outFile = await inFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
@@ -260,9 +265,14 @@ namespace Plugin.XFileManager
             return (false, null);
         }
 
-        public string GetLocalAppFolder()
+        public FolderData GetLocalAppFolder()
         {
-            return ApplicationData.Current.LocalFolder.Path + "\\";
+            var folder = new FolderData()
+            {
+                FolderPath = ApplicationData.Current.LocalFolder.Path + Path.DirectorySeparatorChar,
+                FolderName = Path.GetDirectoryName(ApplicationData.Current.LocalFolder.Path)
+            };
+            return folder;
         }
 
         public async Task<bool> OpenFileViaEssentials(string fileToOpen)

@@ -48,7 +48,7 @@ namespace Plugin.XFileManager
             return Task.FromResult(data);
         }
 
-        public Task<bool> SaveFile(FileData fileToSave, string folderPath)
+        public Task<bool> SaveFile(FileData fileToSave, FolderData folderPath)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Plugin.XFileManager
                 savePanel.Title = $"Save {fileToSave.FileName}";
                 savePanel.CanCreateDirectories = true;
 
-                var result = savePanel.RunModal(documents, fileToSave.FileName);
+                var result = savePanel.RunModal(documents.FolderPath, fileToSave.FileName);
 
                 if (result == 1)
                 {
@@ -78,7 +78,7 @@ namespace Plugin.XFileManager
             }
         }
 
-        public Task<string> PickFolder()
+        public Task<FolderData> PickFolder()
         {
             // for consistency with other platforms, only allow selecting of a single file.
             // would be nice if we passed a "file options" to override picking multiple files & directories
@@ -97,13 +97,17 @@ namespace Plugin.XFileManager
 
                 if (url != null)
                 {
-                    var path = url.Path;
-                    var folderPath = Path.GetDirectoryName(path);
-                    return Task.FromResult(folderPath);
+                    var folder = new FolderData()
+                    {
+                        FolderPath = url.Path,
+                        FolderName = Path.GetDirectoryName(url.Path)
+                    };
+
+                    return Task.FromResult(folder);
                 }
-                return Task.FromResult("");
+                return null;
             }
-            return Task.FromResult("");
+            return null;
 
 
         }
@@ -135,7 +139,7 @@ namespace Plugin.XFileManager
             }
         }
 
-        public string GetLocalAppFolder()
+        public FolderData GetLocalAppFolder()
         {
             var libraryPath = GetPath(NSSearchPathDirectory.LibraryDirectory);
             var localPath = libraryPath;
@@ -152,7 +156,12 @@ namespace Plugin.XFileManager
             }
             }
 
-            return localPath;
+            var folder = new FolderData()
+            {
+                FolderPath = localPath,
+                FolderName = Path.GetDirectoryName(localPath)
+            };
+            return folder;
         }
 
         private string GetPath(NSSearchPathDirectory directory)
@@ -184,9 +193,9 @@ namespace Plugin.XFileManager
             return SaveFile(fileToSave, GetLocalAppFolder());
         }
 
-        public Task<bool> SaveFileInFolder(FileData fileToSave)
+        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
         {
-            return SaveFile(fileToSave, fileToSave.FolderPath);
+            return SaveFile(fileToSave, folder);
         }
     }
 }

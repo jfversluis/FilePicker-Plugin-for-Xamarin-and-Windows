@@ -57,7 +57,7 @@ namespace Plugin.XFileManager
             OpenFile(fileToOpen.FilePath);
         }
 
-        public Task<string> PickFolder()
+        public Task<FolderData> PickFolder()
        {
 
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
@@ -69,13 +69,16 @@ namespace Plugin.XFileManager
 
             if (result == DialogResult.Cancel)
             {
-                return Task.FromResult<string>(null);
+                return Task.FromResult<FolderData>(null);
             }
 
+            var folder = new FolderData()
+            {
+                FolderPath = folderBrowserDialog.SelectedPath,
+                FolderName = Path.GetDirectoryName(folderBrowserDialog.SelectedPath)
+            };
 
-            var folderPath = folderBrowserDialog.SelectedPath;
-
-            return Task.FromResult(folderPath);
+            return Task.FromResult(folder);
         }
 
         public async Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
@@ -97,7 +100,7 @@ namespace Plugin.XFileManager
             }
         }
 
-        public async Task<bool> SaveFileInFolder(FileData fileToSave)
+        public async Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
         {
             try
             {
@@ -122,9 +125,14 @@ namespace Plugin.XFileManager
             return true;
         }
 
-        public string GetLocalAppFolder()
+        public FolderData GetLocalAppFolder()
         {
-            return System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+            var folder = new FolderData()
+            {
+                FolderName = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+                FolderPath = Path.GetDirectoryName(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData))
+            };
+            return folder;
 
         }
 

@@ -11,6 +11,8 @@ using File = Java.IO.File;
 using Android.Support.V4.Provider;
 using Android;
 using Xamarin.Essentials;
+using Android.Webkit;
+using System.Collections.Generic;
 
 // Adds permission for READ_EXTERNAL_STORAGE to the AndroidManifest.xml of the app project without
 // the user of the plugin having to add it by himself/herself.
@@ -48,7 +50,7 @@ namespace Plugin.XFileManager
         /// <summary>
         /// Task completion source for task when finished picking folder
         /// </summary>
-        private TaskCompletionSource<string> tcs_string;
+        private TaskCompletionSource<FolderData> tcs_folderData;
 
         private TaskCompletionSource<bool> tcs_bool_as_int;
 
@@ -107,6 +109,29 @@ namespace Plugin.XFileManager
                 var pickerIntent = new Intent(this.context, typeof(FilePickActivity));
                 pickerIntent.SetFlags(ActivityFlags.NewTask);
 
+                if (allowedTypes != null)
+                {
+                    List<string> typeslist = new List<string>();
+                    foreach (var fileType in allowedTypes)
+                    {
+                        var fixed_Extension = fileType?.TrimStart('.');
+                        if (!string.IsNullOrEmpty(fixed_Extension))
+                        {//possible issue with duplicates? jpg and jpeg are both image/jpeg types....
+                            var foundMimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(fixed_Extension);
+                            if (!string.IsNullOrEmpty(foundMimeType))
+                            {
+                                typeslist.Add(foundMimeType);
+                            }
+
+                        }
+                    }
+                    if (typeslist.Count > 0)
+                    {
+                        allowedTypes = typeslist.ToArray();
+                    }
+                }
+
+
                 pickerIntent.PutExtra(FilePickActivity.ExtraAllowedTypes, allowedTypes);
 
                 this.context.StartActivity(pickerIntent);
@@ -126,7 +151,7 @@ namespace Plugin.XFileManager
                         e.FileName,
                         () =>
                         {
-                            if (IOUtil.IsMediaStore(e.FilePath))
+                            if (!IOUtil.IsMediaStore(e.FilePath))
                             {
                                 var contentUri = Android.Net.Uri.Parse(e.FilePath);
                                 return Application.Context.ContentResolver.OpenInputStream(contentUri);
@@ -296,7 +321,7 @@ namespace Plugin.XFileManager
         /// <returns>
         /// Folder data object, or null when user cancelled picking folder
         /// </returns>
-        public async Task<string> PickFolder()
+        public async Task<FolderData> PickFolder()
         {
             var folderName = await this.PickFolderAsync(Intent.ActionOpenDocumentTree);
 
@@ -304,12 +329,12 @@ namespace Plugin.XFileManager
         }
 
 
-        public Task<string> PickFolderAsync(string action)
+        public Task<FolderData> PickFolderAsync(string action)
         {
             {
                 var id = this.GetRequestId();
 
-                var next = new TaskCompletionSource<string>(id);
+                var next = new TaskCompletionSource<FolderData>(id);
 
                 // Interlocked.CompareExchange(ref object location1, object value, object comparand)
                 // Compare location1 with comparand.
@@ -320,9 +345,9 @@ namespace Plugin.XFileManager
                 // and original tcs is returned.
                 // We then compare original tcs with null, if not null it means that a task was 
                 // already started.
-                if (Interlocked.CompareExchange(ref tcs_string, next, null) != null)
+                if (Interlocked.CompareExchange(ref tcs_folderData, next, null) != null)
                 {
-                    return Task.FromResult<string>(null);
+                    return Task.FromResult<FolderData>(null);
                 }
                 try 
                 {
@@ -344,12 +369,17 @@ namespace Plugin.XFileManager
                         // Sets an object to a specified value and returns a reference to the original object.
                         // ---
                         // In this context, sets tcs to null and returns it.
-                        var task = Interlocked.Exchange(ref tcs_string, null);
+                        var task = Interlocked.Exchange(ref tcs_folderData, null);
 
                         FolderPickActivity.FolderPickCancelled -= cancelledHandler;
                         FolderPickActivity.FolderPicked -= handler;
 
-                        task?.SetResult(e.FolderPath);
+                        var folder = new FolderData()
+                        {
+                            FolderPath = e.FolderPath,
+                            FolderName = e.FolderName
+                        };
+                        task?.SetResult(folder);
                         //if (e.FolderPath != null)
                         //{
                         //    task.SetResult(e.FolderPath);
@@ -388,11 +418,11 @@ namespace Plugin.XFileManager
                     this.completionSource.SetException(ex);
                 }
 
-                return tcs_string.Task;
+                return tcs_folderData.Task;
             }
         }
 
-        public Task<bool> SaveFileInFolder(FileData fileToSave)
+        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
         {
             var uniqueId = Guid.NewGuid();
             var next = new TaskCompletionSource<bool>(uniqueId);
@@ -437,7 +467,7 @@ namespace Plugin.XFileManager
                 {
                     try
                     {
-                        var test = Android.Net.Uri.Parse(fileToSave.FolderPath);// + "/test.pdf");
+                        var test = Android.Net.Uri.Parse(folder.FolderPath);// + "/test.pdf");
 
 
 
@@ -480,9 +510,14 @@ namespace Plugin.XFileManager
             return tcs_bool_as_int.Task;
         }
 
-        public string GetLocalAppFolder()
+        public FolderData GetLocalAppFolder()
         {
-            return Android.App.Application.Context.FilesDir.AbsolutePath;
+            var folder = new FolderData()
+            {
+                FolderPath = Android.App.Application.Context.FilesDir.AbsolutePath,
+                FolderName = Path.GetDirectoryName(Android.App.Application.Context.FilesDir.AbsolutePath)
+            };
+            return folder;
         }
 
         public async Task<(bool, FileData)> GetFileDataFromPath(string filePath)

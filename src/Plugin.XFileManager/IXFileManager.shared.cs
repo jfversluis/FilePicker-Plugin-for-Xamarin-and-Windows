@@ -1,3 +1,4 @@
+
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,7 +8,7 @@ namespace Plugin.XFileManager
 {
     public static class FileManager
     {
-        public async static Task<(bool, string)> PickFolder()
+        public async static Task<(bool, FolderData)> PickFolder()
         {
             try
             {
@@ -92,11 +93,11 @@ namespace Plugin.XFileManager
                 return false;
             }
         }
-        public async static Task<bool> SaveFileInFolder(FileData newFile)
+        public async static Task<bool> SaveFileInFolder(FileData newFile, FolderData folder)
         {
             try
             {
-                var currPickedFile = await XFileManager.Current.SaveFileInFolder(newFile).ConfigureAwait(true);
+                var currPickedFile = await XFileManager.Current.SaveFileInFolder(newFile, folder).ConfigureAwait(true);
 
                 return currPickedFile;
             }
@@ -122,7 +123,7 @@ namespace Plugin.XFileManager
                 return false;
             }
         }
-        public static string GetLocalAppFolder()
+        public static FolderData GetLocalAppFolder()
         {
             try
             {
@@ -131,7 +132,7 @@ namespace Plugin.XFileManager
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                return "";
+                return null;
             }
 
         }
@@ -166,7 +167,7 @@ namespace Plugin.XFileManager
         /// <returns>
         /// Folder data object, or null when user cancelled picking folder
         /// </returns>
-        Task<string> PickFolder();
+        Task<FolderData> PickFolder();
         //windows verified
 
 
@@ -217,12 +218,12 @@ namespace Plugin.XFileManager
         Task<bool> SaveFileToLocalAppStorage(FileData fileToSave);
         //windows verified
 
-        Task<bool> SaveFileInFolder(FileData fileToSave);
+        Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder);
 
         Task<bool> OpenFileViaEssentials(string fileToOpen);
         //windows verified
 
-        string GetLocalAppFolder();
+        FolderData GetLocalAppFolder();
 
     }
 }

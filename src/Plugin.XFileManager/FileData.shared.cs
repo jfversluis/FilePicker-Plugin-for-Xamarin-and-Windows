@@ -14,11 +14,6 @@ namespace Plugin.XFileManager
         private string _fileName;
 
         /// <summary>
-        /// Backing store for the FileName property
-        /// </summary>
-        private string _folderPath;
-
-        /// <summary>
         /// Backing store for the FilePath property
         /// </summary>
         private string _filePath;
@@ -82,10 +77,6 @@ namespace Plugin.XFileManager
         /// Full file path to the picked file, includes file name.
         /// </param>
 
-        /// <param name="folderPath">
-        /// Full file path to the picked file, includes file name.
-        /// </param>
-
         /// <param name="fileName">
         /// File name of the picked file.
         /// </param>
@@ -98,13 +89,12 @@ namespace Plugin.XFileManager
         /// Action to dispose of the underlying resources of the picked file.
         /// </param>
 
-        public FileData(string filePath, string folderPath, string fileName, MemoryStream memoryStream, Action<bool> dispose = null)
+        public FileData(string filePath, string fileName, MemoryStream memoryStream, Action<bool> dispose = null)
         {
             _filePath = filePath;
             _fileName = fileName;
             _dispose = dispose;
             _streamGetter = () => new MemoryStream(memoryStream.ToArray());
-            _folderPath = folderPath;
         }
 
         /// <summary>
@@ -187,31 +177,6 @@ namespace Plugin.XFileManager
         }
 
         /// <summary>
-        /// Full folderpath of the picked folder.
-        /// Note that on specific platforms this can also contain an URI that
-        /// can't be opened with folder related APIs. Use DataArray property or
-        /// GetStream() method in this cases.
-        /// </summary>
-        public string FolderPath
-        {
-            get
-            {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(null);
-
-                return _folderPath;
-            }
-
-            set
-            {
-                if (_isDisposed)
-                    throw new ObjectDisposedException(null);
-
-                _folderPath = value;
-            }
-        }
-
-        /// <summary>
         /// Gets stream to access the picked file.
         /// Note that when DataArray property was already accessed, the stream
         /// must be rewinded to the beginning.
@@ -260,5 +225,81 @@ namespace Plugin.XFileManager
             this.Dispose(false);
         }
         #endregion
+    }
+
+    /// <summary>
+    /// Folder data that specifies a folder that was picked by the user.
+    /// </summary>
+    public sealed class FolderData
+    {
+        /// <summary>
+        /// Backing store for the FolderName property
+        /// </summary>
+        private string _folderName;
+
+        /// <summary>
+        /// Backing store for the FolderPath property
+        /// </summary>
+        private string _folderPath;
+
+        /// <summary>
+        /// Creates a new and empty folder data object
+        /// </summary>
+        public FolderData()
+        {
+        }
+
+        /// <summary>
+        /// Creates a new folder data object with property values
+        /// </summary>
+
+        /// <param name="folderPath">
+        /// Full folder path to the picked folder, includes folder name.
+        /// </param>
+
+        /// <param name="folderName">
+        /// Folder name of the picked folder.
+        /// </param>
+
+        public FolderData(string folderPath, string folderName)
+        {
+            _folderPath = folderPath;
+            _folderName = folderName;
+        }
+
+        /// <summary>
+        /// Foldername of the picked folder, without path
+        /// </summary>
+        public string FolderName
+        {
+            get
+            {
+                return _folderName;
+            }
+
+            set
+            {
+                _folderName = value;
+            }
+        }
+
+        /// <summary>
+        /// Full folderpath of the picked folder.
+        /// Note that on specific platforms this can also contain an URI that
+        /// can't be opened with folder related APIs. Use DataArray property or
+        /// GetStream() method in this cases.
+        /// </summary>
+        public string FolderPath
+        {
+            get
+            {
+                return _folderPath;
+            }
+
+            set
+            {
+                _folderPath = value;
+            }
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Plugin.XFileManager
             throw new NotImplementedException();
         }
 
-        public string GetLocalAppFolder()
+        public FolderData GetLocalAppFolder()
         {
             throw new NotImplementedException();
         }
@@ -30,12 +30,12 @@ namespace Plugin.XFileManager
             throw new NotImplementedException();
         }
 
-        public Task<string> PickFolder()
+        public Task<FolderData> PickFolder()
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> SaveFileInFolder(FileData fileToSave)
+        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
         {
             throw new NotImplementedException();
         }
