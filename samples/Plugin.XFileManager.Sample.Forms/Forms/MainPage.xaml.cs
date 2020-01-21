@@ -75,7 +75,7 @@ namespace Plugin.XFileManager.Sample.Forms
 
 				var currMemoryFile = new FileData(localFolder+ pickedFile.FileName, pickedFile.FileName, () => pickedFile.GetStream());
 				updateMemoryFile(currMemoryFile);
-				bool successSaveFile = await FileManager.SaveFileToLocalAppStorage(currMemoryFile).ConfigureAwait(true);
+				bool successSaveFile = await FileManager.SaveFileToLocalAppStorage(currMemoryFile, true).ConfigureAwait(true);
 
 				if (successSaveFile)
 				{
@@ -122,7 +122,7 @@ namespace Plugin.XFileManager.Sample.Forms
 
 					var currMemoryFile = new FileData(pickedFolder + pickedFile.FileName, pickedFile.FileName, () => pickedFile.GetStream());
 					updateMemoryFile(currMemoryFile);
-					bool successSaveFile = await FileManager.SaveFileToLocalAppStorage(currMemoryFile).ConfigureAwait(true);
+					bool successSaveFile = await FileManager.SaveFileToLocalAppStorage(currMemoryFile, true).ConfigureAwait(true);
 
 					if (successSaveFile)
 					{

@@ -81,12 +81,32 @@ namespace Plugin.XFileManager
             return Task.FromResult(folder);
         }
 
-        public async Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
+        public async Task<bool> SaveFileToLocalAppStorage(FileData fileToSave, bool shouldOverWrite)
         {
             try
             {
+
+
                 var localFolder = GetLocalAppFolder();
-                using (FileStream sourceStream = new FileStream(localFolder + fileToSave.FileName, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+                if(File.Exists(localFolder.FolderPath + fileToSave.FileName))
+                {
+                    if (shouldOverWrite)
+                    {
+                        File.Delete(localFolder.FolderPath + fileToSave.FileName);
+
+                    }
+                    else
+                    {
+                        //supposed to create uniuqe name in this case
+                        var purefilename = Path.GetFileNameWithoutExtension(fileToSave.FileName);
+                        var fileextention = Path.GetExtension(fileToSave.FileName);
+                        fileToSave.FileName = purefilename + "_" + Path.GetRandomFileName() + fileextention;
+
+                    }
+
+                }
+
+                using (FileStream sourceStream = new FileStream(localFolder.FolderPath + fileToSave.FileName, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
                 {
                     await sourceStream.WriteAsync(fileToSave.DataArray, 0, fileToSave.DataArray.Length);
                 }
@@ -100,12 +120,29 @@ namespace Plugin.XFileManager
             }
         }
 
-        public async Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
+        public async Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder, bool shouldOverWrite)
         {
             try
             {
+                if (File.Exists(folder.FolderPath + fileToSave.FileName))
+                {
+                    if (shouldOverWrite)
+                    {
+                        File.Delete(folder.FolderPath + fileToSave.FileName);
+
+                    }
+                    else
+                    {
+                        //supposed to create uniuqe name in this case
+                        var purefilename = Path.GetFileNameWithoutExtension(fileToSave.FileName);
+                        var fileextention = Path.GetExtension(fileToSave.FileName);
+                        fileToSave.FileName = purefilename + "_" + Path.GetRandomFileName() + fileextention;
+                    }
+
+                }
+
                 using (FileStream sourceStream =
-                    new FileStream(fileToSave.FilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+                    new FileStream(folder.FolderPath+fileToSave.FileName, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
                 {
                     await sourceStream.WriteAsync(fileToSave.DataArray, 0, fileToSave.DataArray.Length);
                 }

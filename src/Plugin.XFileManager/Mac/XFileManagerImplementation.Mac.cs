@@ -48,10 +48,11 @@ namespace Plugin.XFileManager
             return Task.FromResult(data);
         }
 
-        public Task<bool> SaveFile(FileData fileToSave, FolderData folderPath)
+        public Task<bool> SaveFile(FileData fileToSave, FolderData folderPath, bool shouldOverWrite)
         {
             try
             {
+                //Need to handle file collision
                 var documents = folderPath;
 
                 var savePanel = new NSSavePanel();
@@ -188,14 +189,14 @@ namespace Plugin.XFileManager
 
         }
 
-        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
+        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave, bool shouldOverWrite)
         {
-            return SaveFile(fileToSave, GetLocalAppFolder());
+            return SaveFile(fileToSave, GetLocalAppFolder(), shouldOverWrite);
         }
 
-        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
+        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder, bool shouldOverWrite)
         {
-            return SaveFile(fileToSave, folder);
+            return SaveFile(fileToSave, folder, shouldOverWrite);
         }
     }
 }

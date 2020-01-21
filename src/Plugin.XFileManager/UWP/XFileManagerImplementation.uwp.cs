@@ -26,11 +26,9 @@ namespace Plugin.XFileManager
         /// <summary>
         /// Implementation for picking a folder on UWP platform.
         /// </summary>
-        /// <param name="allowedTypes">
         /// Specifies one or multiple allowed types. When null, all folder types
         /// can be selected while picking.
         /// On UWP, specify a list of extensions, like this: ".jpg", ".png".
-        /// </param>
         /// <returns>
         /// Folder data object, or null when user cancelled picking folder
         /// </returns>
@@ -142,13 +140,24 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="fileToSave">picked file data for file to save</param>
         /// <returns>true when file was saved successfully, false when not</returns>
-        public async Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
+        public async Task<bool> SaveFileToLocalAppStorage(FileData fileToSave, bool shouldOverWrite)
         {
             try
             {
-                var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
+                StorageFile file;
+                if (shouldOverWrite)
+                {
+                    file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
                     fileToSave.FileName,
                     CreationCollisionOption.ReplaceExisting);
+                }
+                else
+                {
+                    file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
+                    fileToSave.FileName,
+                    CreationCollisionOption.GenerateUniqueName);
+                }
+
 
                 await FileIO.WriteBytesAsync(file, fileToSave.DataArray);
 
@@ -167,12 +176,20 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="fileToSave">picked file data for file to save</param>
         /// <returns>true when file was saved successfully, false when not</returns>
-        public async Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
+        public async Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder, bool shouldOverWrite)
         {
             var inFolder = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFolderAsync(tokenDictionary[folder.FolderPath]);
 
+            StorageFile outFile;
+            if (shouldOverWrite)
+            {
+                outFile = await inFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
+            }
+            else
+            {
+                outFile = await inFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.GenerateUniqueName);
+            }
 
-            var outFile = await inFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
             var outFileStream = await outFile.OpenStreamForWriteAsync();
 
             var tempsteam = fileToSave.GetStream();
@@ -234,7 +251,7 @@ namespace Plugin.XFileManager
             }
             catch (FileNotFoundException)
             {
-                await this.SaveFileToLocalAppStorage(fileToOpen);
+                await this.SaveFileToLocalAppStorage(fileToOpen,true);
                 this.OpenFile(fileToOpen);
             }
             catch (Exception)
@@ -250,6 +267,7 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="filePath">
         /// Specifies the file from which the stream should be opened.
+        /// </param>
         /// <returns>stream object</returns>
         public async Task<(bool,FileData)> GetFileDataFromPath(string filePath)
         {

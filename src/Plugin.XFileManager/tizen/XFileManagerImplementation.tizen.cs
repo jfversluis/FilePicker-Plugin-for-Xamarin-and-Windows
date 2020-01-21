@@ -35,12 +35,12 @@ namespace Plugin.XFileManager
             throw new NotImplementedException();
         }
 
-        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
+        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder, bool shouldOverWrite)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
+        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave, bool shouldOverWrite)
         {
             throw new NotImplementedException();
         }

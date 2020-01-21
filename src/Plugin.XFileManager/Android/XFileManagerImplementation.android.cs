@@ -151,7 +151,7 @@ namespace Plugin.XFileManager
                         e.FileName,
                         () =>
                         {
-                            if (!IOUtil.IsMediaStore(e.FilePath))
+                            if (IOUtil.IsMediaStore(e.FilePath))
                             {
                                 var contentUri = Android.Net.Uri.Parse(e.FilePath);
                                 return Application.Context.ContentResolver.OpenInputStream(contentUri);
@@ -218,7 +218,7 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="fileToSave">picked file data for file to save</param>
         /// <returns>true when file was saved successfully, false when not</returns>
-        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
+        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave, bool shouldOverWrite)
         {
             try
             {
@@ -226,8 +226,22 @@ namespace Plugin.XFileManager
 
                 if (myFile.Exists())
                 {
-                    myFile.Delete();
+
+                    if (shouldOverWrite)
+                    {
+                        myFile.Delete();
+                    }
+                    else
+                    {
+                        //supposed to create uniuqe name in this case
+                        var purefilename = Path.GetFileNameWithoutExtension(fileToSave.FileName);
+                        var fileextention = Path.GetExtension(fileToSave.FileName);
+                        fileToSave.FileName = purefilename + "_" +  Path.GetRandomFileName() + fileextention;
+                        myFile = new File(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), fileToSave.FileName);
+                    }
+
                 }
+
 
                 var fos = new FileOutputStream(myFile.Path);
 
@@ -283,7 +297,7 @@ namespace Plugin.XFileManager
 
             if (!myFile.Exists())
             {
-                await this.SaveFileToLocalAppStorage(fileToOpen);
+                await this.SaveFileToLocalAppStorage(fileToOpen, true);
             }
 
             this.OpenFile(myFile);
@@ -312,12 +326,10 @@ namespace Plugin.XFileManager
         /// <summary>
         /// Implementation for picking a folder on Android.
         /// </summary>
-        /// <param name="allowedTypes">
         /// Specifies one or multiple allowed types. When null, all folder types
         /// can be selected while picking.
         /// On Android you can specify one or more MIME types, e.g.
         /// "image/png"; also wild card characters can be used, e.g. "image/*".
-        /// </param>
         /// <returns>
         /// Folder data object, or null when user cancelled picking folder
         /// </returns>
@@ -422,7 +434,7 @@ namespace Plugin.XFileManager
             }
         }
 
-        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
+        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder, bool shouldOverWrite)
         {
             var uniqueId = Guid.NewGuid();
             var next = new TaskCompletionSource<bool>(uniqueId);
@@ -474,12 +486,31 @@ namespace Plugin.XFileManager
                         var documentFile = DocumentFile.FromTreeUri(newContext, test);
 
                         DocumentFile newFile = documentFile.FindFile(fileToSave.FileName);
-                        if (newFile == null) 
+
+
+
+
+
+
+                        if (newFile != null)
                         {
-                            newFile = documentFile.CreateFile("*/*", fileToSave.FileName);
+
+                        if (shouldOverWrite)
+                            {
+                                newFile.Delete();
+                            }
+                            else
+                            {
+                                //supposed to create uniuqe name in this case
+                                var purefilename = Path.GetFileNameWithoutExtension(fileToSave.FileName);
+                                var fileextention = Path.GetExtension(fileToSave.FileName);
+                                fileToSave.FileName = purefilename + "_" + Path.GetRandomFileName() + fileextention;
+
+                            }
+
                         }
 
-
+                        documentFile.CreateFile("*/*", fileToSave.FileName);
                         //var documentFile = DocumentFile.FromTreeUri(activity, test);
 
 

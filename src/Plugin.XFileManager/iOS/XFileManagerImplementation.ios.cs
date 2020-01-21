@@ -256,13 +256,28 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="fileToSave">picked file data for file to save</param>
         /// <returns>true when file was saved successfully, false when not</returns>
-        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave)
+        public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave, bool shouldOverWrite)
         {
             try
             {
                 var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 var fileName = Path.Combine(documents, fileToSave.FileName);
 
+                if (File.Exists(fileName))
+                {
+                    if (shouldOverWrite)
+                    {
+                        File.Delete(fileName);
+                    }
+                    else
+                    {   
+                        //supposed to create uniuqe name in this case
+                        var purefilename = Path.GetFileNameWithoutExtension(fileToSave.FileName);
+                        var fileextention = Path.GetExtension(fileToSave.FileName);
+                        fileToSave.FileName = purefilename + "_" + Path.GetRandomFileName() + fileextention;
+                        fileName = Path.Combine(documents, fileToSave.FileName);
+                    }
+                }
                 File.WriteAllBytes(fileName, fileToSave.DataArray);
 
                 return Task.FromResult(true);
@@ -327,7 +342,7 @@ namespace Plugin.XFileManager
             }
             else
             {
-                await this.SaveFileToLocalAppStorage(fileToOpen);
+                await this.SaveFileToLocalAppStorage(fileToOpen,true);
                 this.OpenFile(fileToOpen);
             }
         }
@@ -337,6 +352,7 @@ namespace Plugin.XFileManager
         /// </summary>
         /// <param name="filePath">
         /// Specifies the file from which the stream should be opened.
+        /// </param>
         /// <returns>stream object</returns>
         public Task<Stream> GetStreamFromPath(string filePath)
         {
@@ -399,12 +415,29 @@ namespace Plugin.XFileManager
 
 
 
-        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder)
+        public Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder, bool shouldOverWrite)
         {
             try
             {
                 var documents = folder.FolderPath;
                 var fileName = Path.Combine(documents, fileToSave.FileName);
+
+
+                if (File.Exists(fileName))
+                {
+                    if (shouldOverWrite)
+                    {
+                        File.Delete(fileName);
+                    }
+                    else
+                    {
+                        //supposed to create uniuqe name in this case
+                        var purefilename = Path.GetFileNameWithoutExtension(fileToSave.FileName);
+                        var fileextention = Path.GetExtension(fileToSave.FileName);
+                        fileToSave.FileName = purefilename + "_" + Path.GetRandomFileName() + fileextention;
+                        fileName = Path.Combine(documents, fileToSave.FileName);
+                    }
+                }
 
                 File.WriteAllBytes(fileName, fileToSave.DataArray);
 

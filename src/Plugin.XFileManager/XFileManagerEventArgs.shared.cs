@@ -3,49 +3,6 @@
 namespace Plugin.XFileManager
 {
     /// <summary>
-    /// Event arguments for the event when file picking was completed.
-    /// </summary>
-    //internal class XFileManagerEventArgs : EventArgs
-    //{
-    //    /// <summary>
-    //    /// File name part of picked file, without path
-    //    /// </summary>
-    //    public string FileName { get; set; }
-
-    //    /// <summary>
-    //    /// Complete file path of picked file; on some OS this may contain an Uri
-    //    /// </summary>
-    //    public string FilePath { get; set; }
-
-    //    /// <summary>
-    //    /// Creates a new and empty file picker event args object
-    //    /// </summary>
-    //    public XFileManagerEventArgs()
-    //    {
-    //    }
-
-    //    /// <summary>
-    //    /// Creates new file picker event args
-    //    /// </summary>
-    //    /// <param name="fileName">file name part of picked file</param>
-    //    public XFileManagerEventArgs(string fileName)
-    //    {
-    //        this.FileName = fileName;
-    //    }
-
-    //    /// <summary>
-    //    /// Creates new file picker event args
-    //    /// </summary>
-    //    /// <param name="fileName">file name part of picked file</param>
-    //    /// <param name="filePath">complete file path of picked file</param>
-    //    public XFileManagerEventArgs(string fileName, string filePath)
-    //        : this(fileName)
-    //    {
-    //        this.FilePath = filePath;
-    //    }
-    //}
-
-    /// <summary>
     /// Event arguments for the event when file picking was cancelled, either
     /// by the user or when an exception occured
     /// </summary>

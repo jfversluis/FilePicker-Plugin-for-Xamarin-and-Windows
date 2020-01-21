@@ -80,11 +80,11 @@ namespace Plugin.XFileManager
                 return (false, null);
             }
         }
-        public async static Task<bool> SaveFileToLocalAppStorage(FileData newFile)
+        public async static Task<bool> SaveFileToLocalAppStorage(FileData newFile, bool shouldOverWrite)
         {
             try
             {
-                var currPickedFile = await XFileManager.Current.SaveFileToLocalAppStorage(newFile).ConfigureAwait(true);
+                var currPickedFile = await XFileManager.Current.SaveFileToLocalAppStorage(newFile, shouldOverWrite).ConfigureAwait(true);
                 return currPickedFile;
             }
             catch (Exception ex)
@@ -93,11 +93,11 @@ namespace Plugin.XFileManager
                 return false;
             }
         }
-        public async static Task<bool> SaveFileInFolder(FileData newFile, FolderData folder)
+        public async static Task<bool> SaveFileInFolder(FileData newFile, FolderData folder, bool shouldOverWrite)
         {
             try
             {
-                var currPickedFile = await XFileManager.Current.SaveFileInFolder(newFile, folder).ConfigureAwait(true);
+                var currPickedFile = await XFileManager.Current.SaveFileInFolder(newFile, folder, shouldOverWrite).ConfigureAwait(true);
 
                 return currPickedFile;
             }
@@ -154,7 +154,6 @@ namespace Plugin.XFileManager
         /// selected. Note that this method may throw exceptions that occured
         /// during folder picking.
         /// </summary>
-        /// <param name="allowedTypes">
         /// Specifies one or multiple allowed types. When null, all folder types
         /// can be selected while picking.
         /// On Android you can specify one or more MIME types, e.g.
@@ -163,7 +162,6 @@ namespace Plugin.XFileManager
         /// On UWP, specify a list of extensions, like this: ".jpg", ".png".
         /// On WPF, specify strings like this: "Data type (*.ext)|*.ext", which
         /// corresponds how the Windows folder open dialog specifies folder types.
-        /// </param>
         /// <returns>
         /// Folder data object, or null when user cancelled picking folder
         /// </returns>
@@ -201,6 +199,7 @@ namespace Plugin.XFileManager
         /// <param name="filePath">
         /// Specifies the file from which the stream should be opened.
         /// <returns>stream object</returns>
+        /// </param>
         Task<(bool, FileData)> GetFileDataFromPath(string filePath);
         //windows verified
 
@@ -215,10 +214,10 @@ namespace Plugin.XFileManager
         /// error
         /// </returns>
         //[Obsolete("The SaveFile() method is obsolete; store the picked file with system functions from System.IO or read from stream directly")]
-        Task<bool> SaveFileToLocalAppStorage(FileData fileToSave);
+        Task<bool> SaveFileToLocalAppStorage(FileData fileToSave, bool shouldOverWrite);
         //windows verified
 
-        Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder);
+        Task<bool> SaveFileInFolder(FileData fileToSave, FolderData folder, bool shouldOverWrite);
 
         Task<bool> OpenFileViaEssentials(string fileToOpen);
         //windows verified
