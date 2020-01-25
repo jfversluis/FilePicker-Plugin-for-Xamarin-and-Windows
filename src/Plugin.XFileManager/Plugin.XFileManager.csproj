@@ -98,10 +98,11 @@
     <Compile Include="**\*.net45.cs" />
     <Compile Include="**\*.net45.*.cs" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" />
     
     <Compile Include="**\*.uwp.cs" />
     <Compile Include="**\*.uwp.*.cs" />
@@ -119,15 +120,6 @@
     <PackageReference Include="Xamarin.Android.Support.v4">
       <Version>28.0.0.3</Version>
     </PackageReference>
-    <!-- Don't think this is needed (borrowed from xamarin.essentials)
-    <AndroidResource Include="Resources\xml\*.xml" />
-    
-
-    <PackageReference Include="Xamarin.Android.Support.Compat" Version="28.0.0.3" />
-    <PackageReference Include="Xamarin.Android.Support.CustomTabs" Version="28.0.0.3" />
-    <PackageReference Condition=" '$(OS)' == 'Windows_NT' And $(TargetFrameworkVersion.TrimStart('vV')) &lt; 9.0 And $(TargetFrameworkVersion.TrimStart('vV')) &lt; 10.0" Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
-    <PackageReference Condition=" '$(OS)' != 'Windows_NT' " Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.3" />
-        -->
   </ItemGroup>
   
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
@@ -171,15 +163,16 @@
   
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('tizen')) ">
-    <PackageReference Include="Tizen.NET" Version="4.0.0" />
+    <PackageReference Include="Tizen.NET" Version="6.0.0.14995" />
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
   </ItemGroup>
 
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" />
+
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
   </ItemGroup>
   
@@ -190,9 +183,6 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
 
    
 

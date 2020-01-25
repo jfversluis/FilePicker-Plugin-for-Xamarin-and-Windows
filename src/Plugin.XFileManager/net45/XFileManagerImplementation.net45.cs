@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace Plugin.XFileManager
 {
-    /// <summary>
-    /// Implementation for file picking on WPF platform
-    /// </summary>
+    // <summary>
+    // Implementation for file picking on WPF platform
+    // </summary>
     public class FileManagerImplementation : IXFileManager
     {
         public Task<FileData> PickFile(string[] allowedTypes = null)

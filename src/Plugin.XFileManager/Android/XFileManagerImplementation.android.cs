@@ -217,6 +217,7 @@ namespace Plugin.XFileManager
         /// Android implementation of saving a picked file to the external storage directory.
         /// </summary>
         /// <param name="fileToSave">picked file data for file to save</param>
+        /// <param name="shouldOverWrite">Setting to determine if file should be overwritten, or modify filename</param>
         /// <returns>true when file was saved successfully, false when not</returns>
         public Task<bool> SaveFileToLocalAppStorage(FileData fileToSave, bool shouldOverWrite)
         {
