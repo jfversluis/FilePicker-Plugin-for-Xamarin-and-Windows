@@ -88,8 +88,6 @@ namespace Plugin.XFileManager
             openPanel.CanChooseDirectories = true;
             openPanel.AllowsMultipleSelection = false;
 
-            FileData data = null;
-
             var result = openPanel.RunModal();
             if (result == 1)
             {

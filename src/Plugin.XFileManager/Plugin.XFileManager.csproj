@@ -102,7 +102,7 @@
   </ItemGroup>
   
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" />
+    <!--<PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.9" />-->
     
     <Compile Include="**\*.uwp.cs" />
     <Compile Include="**\*.uwp.*.cs" />
@@ -163,7 +163,7 @@
   
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('tizen')) ">
-    <PackageReference Include="Tizen.NET" Version="6.0.0.14995" />
+    <!--<PackageReference Include="Tizen.NET" Version="6.0.0.14995" />-->
     <Compile Include="**\*.tizen.cs" />
     <Compile Include="**\*.tizen.*.cs" />
   </ItemGroup>
