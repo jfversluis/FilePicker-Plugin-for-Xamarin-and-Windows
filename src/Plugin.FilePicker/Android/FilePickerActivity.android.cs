@@ -26,6 +26,11 @@ namespace Plugin.FilePicker
         public const string ExtraAllowedTypes = "EXTRA_ALLOWED_TYPES";
 
         /// <summary>
+        /// Intent Extra constant to pass intent action. Defaults to Intent.ActionGetContent
+        /// </summary>
+        public const string ExtraIntentAction = "EXTRA_INTENT_ACTION";
+
+        /// <summary>
         /// This variable gets passed when the request for the permission to access storage
         /// gets send and then gets again read whne the request gets answered.
         /// </summary>
@@ -98,7 +103,8 @@ namespace Plugin.FilePicker
         /// </summary>
         private void StartPicker()
         {
-            var intent = new Intent(Intent.ActionGetContent);
+            var intentAction = Intent.GetStringExtra(ExtraIntentAction) ?? Intent.ActionGetContent;
+            var intent = new Intent(intentAction);
 
             intent.SetType("*/*");
 

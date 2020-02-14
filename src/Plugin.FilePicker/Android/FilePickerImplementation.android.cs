@@ -36,6 +36,11 @@ namespace Plugin.FilePicker
         private TaskCompletionSource<FileData> completionSource;
 
         /// <summary>
+        /// Overridable intent action used when launching the media picker
+        /// </summary>
+        protected string IntentAction => Intent.ActionGetContent;
+
+        /// <summary>
         /// Creates a new file picker implementation
         /// </summary>
         public FilePickerImplementation()
@@ -57,7 +62,7 @@ namespace Plugin.FilePicker
         /// </returns>
         public async Task<FileData> PickFile(string[] allowedTypes)
         {
-            var fileData = await this.PickFileAsync(allowedTypes, Intent.ActionGetContent);
+            var fileData = await this.PickFileAsync(allowedTypes, IntentAction);
 
             return fileData;
         }
@@ -86,6 +91,7 @@ namespace Plugin.FilePicker
                 pickerIntent.SetFlags(ActivityFlags.NewTask);
 
                 pickerIntent.PutExtra(FilePickerActivity.ExtraAllowedTypes, allowedTypes);
+                pickerIntent.PutExtra(FilePickerActivity.ExtraIntentAction, action);
 
                 this.context.StartActivity(pickerIntent);
 
