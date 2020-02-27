@@ -1,10 +1,7 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.61">
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
   <PropertyGroup>
-    <!--Work around so the conditions work below-->
-    <TargetFrameworks></TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.Mac20;net45;uap10.0.16299</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;Xamarin.Mac20;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard2.0;Xamarin.iOS10;MonoAndroid80;MonoAndroid81;MonoAndroid90;MonoAndroid10.0;Xamarin.Mac20;net45</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299</TargetFrameworks>
     <AssemblyName>Plugin.FilePicker</AssemblyName>
     <RootNamespace>Plugin.FilePicker</RootNamespace>
     <PackageId>Xamarin.Plugin.FilePicker</PackageId>
@@ -35,7 +32,7 @@
 [1.1] - Support Windows Phone 8, 8.1 e Windows Store.
 [1.0] - Pick files, save files and open the archive in Default App.
     </PackageReleaseNotes>
-    <!--<PackageIconUrl>ICON URL</PackageIconUrl>-->
+
     <PackageTags>xamarin, file, picker, filepicker, filebrowser, netstandard, plugin, plugin for xamarin, android, xamarin.forms, ios, wpf</PackageTags>
 
     <Title>FilePicker Plugin for Xamarin, Windows and Mac</Title>
@@ -44,7 +41,7 @@
 
     <Owners>Gerald Versluis</Owners>
     <Authors>Gerald Versluis, rafaelrmou, vividos</Authors>
-    <Copyright>Copyright 2017-2019 FilePicker team</Copyright>
+    <Copyright>Copyright 2017-2020 FilePicker team</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
@@ -57,7 +54,7 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <IncludeSymbols>true</IncludeSymbols>
   </PropertyGroup>
-   
+
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
@@ -67,19 +64,19 @@
     <DebugSymbols>true</DebugSymbols>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-   
-   
 
   <ItemGroup>
     <Compile Include="**\*.shared.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+    <Compile Include="**\*.netstandard.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
