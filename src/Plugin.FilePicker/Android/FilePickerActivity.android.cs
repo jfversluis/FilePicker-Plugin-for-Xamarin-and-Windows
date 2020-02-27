@@ -115,6 +115,10 @@ namespace Plugin.FilePicker
             {
                 intent.AddCategory(Intent.CategoryOpenable);
             }
+            else
+            {
+                intent.AddFlags(ActivityFlags.GrantPersistableUriPermission);
+            }
 
             try
             {
@@ -152,6 +156,13 @@ namespace Plugin.FilePicker
                     System.Diagnostics.Debug.Write(data.Data);
 
                     var uri = data.Data;
+
+                    if (Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
+                    {
+                        context.ContentResolver.TakePersistableUriPermission(
+                            uri,
+                            ActivityFlags.GrantReadUriPermission);
+                    }
 
                     var filePath = IOUtil.GetPath(this.context, uri);
 
