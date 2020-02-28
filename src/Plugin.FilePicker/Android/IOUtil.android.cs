@@ -230,5 +230,17 @@ namespace Plugin.FilePicker
 
             return type;
         }
+
+        /// <summary>
+        /// Returns a file extension for given content Uri
+        /// </summary>
+        /// <param name="context">context to use</param>
+        /// <param name="uri">content Uri to check</param>
+        /// <returns>file extension, without leading dot, or empty string</returns>
+        public static string GetExtensionFromUri(Context context, Android.Net.Uri uri)
+        {
+            string mimeType = context.ContentResolver.GetType(uri);
+            return mimeType != null ? MimeTypeMap.Singleton.GetExtensionFromMimeType(mimeType) : string.Empty;
+        }
     }
 }

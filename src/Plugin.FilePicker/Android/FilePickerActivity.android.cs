@@ -5,6 +5,7 @@ using Android.Provider;
 using Android.Runtime;
 using Plugin.FilePicker.Abstractions;
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using Android;
@@ -225,11 +226,18 @@ namespace Plugin.FilePicker
 
             if (!string.IsNullOrWhiteSpace(name))
             {
+                if (!Path.HasExtension(name))
+                    name = name.TrimEnd('.') + '.' + IOUtil.GetExtensionFromUri(context, uri);
+
                 return name;
             }
             else
             {
-                return System.IO.Path.GetFileName(WebUtility.UrlDecode(uri.ToString()));
+                var extension = IOUtil.GetExtensionFromUri(context, uri);
+                if (!string.IsNullOrEmpty(extension))
+                    return "filename." + extension;
+                else
+                    return Path.GetFileName(WebUtility.UrlDecode(uri.ToString()));
             }
         }
 
