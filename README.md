@@ -19,17 +19,17 @@ Add this as a source to your IDE to find the latest packages: [https://www.myget
 
 **Platform Support**
 
-|Platform|Supported|Version|Remarks|
-| ------------------- | :-----------: | :------------------: | :------------------: |
-|Xamarin.iOS|Yes|iOS 6+||
-|Xamarin.iOS Unified|Yes|iOS 6+||
-|Xamarin.Android|Yes|API 10+||
-|Windows Phone Silverlight|No|||
-|Windows Phone RT|Yes|8.1+|Up to package version 1.4.x|
-|Windows Store RT|Yes|8.1+|Up to package version 1.4.x|
-|Windows 10 UWP|Yes|10+||
-|Xamarin.Mac|Yes|* 10.12+||
-|WPF|Yes|N/A|Using .NET Framework 4.5|
+| Platform              |Supported| Version |Remarks|
+| ------------------------ | :-: | :------: | :------------------: |
+|Xamarin.iOS Classic       | Yes | iOS 6+   ||
+|Xamarin.iOS Unified       | Yes | iOS 6+   ||
+|Xamarin.Android           | Yes | API 10+  ||
+|Windows Phone Silverlight | No  |          ||
+|Windows Phone RT          | Yes | 8.1+     |Up to package version 1.4.x|
+|Windows Store RT          | Yes | 8.1+     |Up to package version 1.4.x|
+|Windows 10 UWP            | Yes | 10+      ||
+|Xamarin.Mac               | Yes | * 10.12+ ||
+|WPF                       | Yes | N/A      |Using .NET Framework 4.5|
 
 \* The Xamarin.Mac implementation has only been tested on MacOS 10.12.
 
@@ -39,22 +39,22 @@ Call **CrossFilePicker.Current** from any platform or .NET Standard project to g
 
 ### Example
 
-            try
-            {
-                FileData fileData = await CrossFilePicker.Current.PickFile();
-                if (fileData == null)
-                    return; // user canceled file picking
+    try
+    {
+        FileData fileData = await CrossFilePicker.Current.PickFile();
+        if (fileData == null)
+            return; // user canceled file picking
 
-                string fileName = fileData.FileName;
-                string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
+        string fileName = fileData.FileName;
+        string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
 
-                System.Console.WriteLine("File name chosen: " + fileName);
-                System.Console.WriteLine("File data: " + contents);
-            }
-            catch (Exception ex)
-            {
-                System.Console.WriteLine("Exception choosing file: " + ex.ToString());
-            }
+        System.Console.WriteLine("File name chosen: " + fileName);
+        System.Console.WriteLine("File data: " + contents);
+    }
+    catch (Exception ex)
+    {
+        System.Console.WriteLine("Exception choosing file: " + ex.ToString());
+    }
 
 ### Methods
 
