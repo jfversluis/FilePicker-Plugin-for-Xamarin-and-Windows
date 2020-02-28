@@ -109,6 +109,17 @@ you access it via GetStream() afterwards.
 
 ### **IMPORTANT**
 **Android:**
+The FilePath property may contain a content URI that starts with `content://`.
+The plugin tries hard to find out an actual filename, but when it can't, the
+file can only be accessed using `GetStream()` or `DataArray`. On Android
+`ContentProvider` classes are used to share data between apps. The resource
+that is accessed may not even be a file, streamed over the internet or loaded
+from a database.
+
+The plugin also tries to get a persistable content URI that can be stored for
+later access. Be prepared that this may fail, though. Content could have been
+moved to a different location or could be deleted.
+
 The `READ_EXTERNAL_STORAGE` permission is automatically added to your Android
 app project. Starting from Android 6.0 (Marshmallow) the user is asked for the
 permission when not granted yet. When the user denies the permission,

@@ -98,7 +98,8 @@ namespace Plugin.FilePicker
         /// </summary>
         private void StartPicker()
         {
-            var intent = new Intent(Intent.ActionGetContent);
+            var intent = new Intent(
+                Build.VERSION.SdkInt < BuildVersionCodes.Kitkat ? Intent.ActionGetContent : Intent.ActionOpenDocument);
 
             intent.SetType("*/*");
 
@@ -110,7 +111,15 @@ namespace Plugin.FilePicker
                 intent.PutExtra(Intent.ExtraMimeTypes, allowedTypes);
             }
 
-            intent.AddCategory(Intent.CategoryOpenable);
+            if (Build.VERSION.SdkInt < BuildVersionCodes.Kitkat)
+            {
+                intent.AddCategory(Intent.CategoryOpenable);
+            }
+            else
+            {
+                intent.AddFlags(ActivityFlags.GrantPersistableUriPermission);
+            }
+
             try
             {
                 this.StartActivityForResult(Intent.CreateChooser(intent, "Select file"), 0);
@@ -147,6 +156,13 @@ namespace Plugin.FilePicker
                     System.Diagnostics.Debug.Write(data.Data);
 
                     var uri = data.Data;
+
+                    if (Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
+                    {
+                        context.ContentResolver.TakePersistableUriPermission(
+                            uri,
+                            ActivityFlags.GrantReadUriPermission);
+                    }
 
                     var filePath = IOUtil.GetPath(this.context, uri);
 
