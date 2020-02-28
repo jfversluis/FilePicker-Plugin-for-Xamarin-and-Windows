@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 2.1.xx
+
+Android: When a `content://` URI is returned for a picked file, the plugin now
+tries to keep permissions to the picked content (#172, #158).
+
 ## Version 2.1.34
 
 (Re-)added SourceLink support
