@@ -21,7 +21,7 @@
 
     <LangVersion>latest</LangVersion>
 
-    <PackageLicenseUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows</PackageProjectUrl>
     <RepositoryUrl>https://github.com/jfversluis/FilePicker-Plugin-for-Xamarin-and-Windows</RepositoryUrl>
     <PackageReleaseNotes>[2.1] - Multi-Targeting Plugin project
@@ -80,7 +80,6 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
     <Compile Include="**\*.uwp.cs" />
   </ItemGroup>
 
