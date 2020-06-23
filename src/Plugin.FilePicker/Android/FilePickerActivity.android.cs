@@ -50,6 +50,9 @@ namespace Plugin.FilePicker
 
             this.context = Application.Context;
 
+            if (savedInstanceState != null)
+                return;
+                
             if (this.context.PackageManager.CheckPermission(
                 Manifest.Permission.ReadExternalStorage,
                 this.context.PackageName) == Permission.Granted)
