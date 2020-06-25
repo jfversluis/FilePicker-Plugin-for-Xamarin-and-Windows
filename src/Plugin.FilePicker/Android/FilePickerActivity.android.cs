@@ -50,6 +50,11 @@ namespace Plugin.FilePicker
 
             this.context = Application.Context;
 
+            /*If OnCreate is called with savedInstanceState, it's an attempt to restore the activity after it was killed by the system,
+            but the picker has already been presented before and we don't want to present it again. Reproducible with DKA.*/
+            if (savedInstanceState != null)
+                return;
+                
             if (this.context.PackageManager.CheckPermission(
                 Manifest.Permission.ReadExternalStorage,
                 this.context.PackageName) == Permission.Granted)
