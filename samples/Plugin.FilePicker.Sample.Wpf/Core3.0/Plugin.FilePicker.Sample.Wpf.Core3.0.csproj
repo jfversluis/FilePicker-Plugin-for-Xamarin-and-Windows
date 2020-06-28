@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Plugin.FilePicker.Sample.Wpf</RootNamespace>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\App.xaml.cs" Link="App.xaml.cs" />
+    <Compile Include="..\MainWindow.xaml.cs" Link="MainWindow.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainWindow.3.0.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="..\App.xaml" Link="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="..\MainWindow.xaml" Link="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Plugin.FilePicker\Plugin.FilePicker.csproj" />
+  </ItemGroup>
+</Project>
