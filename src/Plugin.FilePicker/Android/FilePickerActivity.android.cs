@@ -170,7 +170,9 @@ namespace Plugin.FilePicker
                             ActivityFlags.GrantReadUriPermission);
                     }
 
-                    var filePath = IOUtil.GetPath(this.context, uri);
+                    var filePath = Build.VERSION.SdkInt >= BuildVersionCodes.Q
+                        ? uri.ToString()
+                        : IOUtil.GetPath(this.context, uri);
 
                     if (string.IsNullOrEmpty(filePath))
                     {
