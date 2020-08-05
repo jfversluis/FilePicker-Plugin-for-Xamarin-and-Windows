@@ -170,7 +170,13 @@ namespace Plugin.FilePicker
                             ActivityFlags.GrantReadUriPermission);
                     }
 
-                    var filePath = IOUtil.GetPath(this.context, uri);
+                    // The scoped storage feature was introduced on Android Q and it prevents direct file access on external storage. 
+                    // Thus, using the IOUtil.GetPath should be avoided because a System.UnauthorizedAccessException
+                    // will be thrown when calling File.OpenRead() on the local path.
+                    // For more information, see: https://developer.android.com/training/data-storage/#scoped-storage
+                    var filePath = (int)Build.VERSION.SdkInt >= 29
+                        ? uri.ToString()
+                        : IOUtil.GetPath(this.context, uri);
 
                     if (string.IsNullOrEmpty(filePath))
                     {
