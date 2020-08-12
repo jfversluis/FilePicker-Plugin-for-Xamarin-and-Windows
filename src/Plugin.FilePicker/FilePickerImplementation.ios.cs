@@ -27,34 +27,19 @@ namespace Plugin.FilePicker
         private TaskCompletionSource<FileData> completionSource;
 
         /// <summary>
-        /// Event which is invoked when a file was picked
-        /// </summary>
-        internal EventHandler<FilePickerEventArgs> Handler { get; set; }
-
-        /// <summary>
-        /// Called when file has been picked successfully
-        /// </summary>
-        /// <param name="args">file picker event args</param>
-        private void OnFilePicked(FilePickerEventArgs args)
-        {
-            this.Handler?.Invoke(null, args);
-        }
-
-        /// <summary>
         /// Callback method called by document picker when file has been picked; this is called
         /// starting from iOS 11.
+        ///
+        /// Note that this class supports only the picking of 1 file
         /// </summary>
         /// <param name="sender">sender object (document picker)</param>
         /// <param name="args">event args</param>
         private void DocumentPicker_DidPickDocumentAtUrls(object sender, UIDocumentPickedAtUrlsEventArgs args)
         {
-            var control = (UIDocumentPickerViewController)sender;
-            foreach (var url in args.Urls)
-            {
-                this.DocumentPicker_DidPickDocument(control, new UIDocumentPickedEventArgs(url));
-            }
-
-            control.Dispose();
+            if (args.Urls.Length == 0)
+                DocumentPicker_WasCancelled(sender, EventArgs.Empty);
+            else
+                DocumentPicker_DidPickDocument(sender, new UIDocumentPickedEventArgs(args.Urls[0]));
         }
 
         /// <summary>
@@ -69,10 +54,8 @@ namespace Plugin.FilePicker
             {
                 var securityEnabled = args.Url.StartAccessingSecurityScopedResource();
                 var doc = new UIDocument(args.Url);
-
-                string filename = doc.LocalizedName;
-                string pathname = doc.FileUrl?.Path;
-
+                var filename = doc.LocalizedName;
+                var pathname = doc.FileUrl?.Path;
                 args.Url.StopAccessingSecurityScopedResource();
 
                 // iCloud drive can return null for LocalizedName.
@@ -81,13 +64,19 @@ namespace Plugin.FilePicker
                     filename = Path.GetFileName(pathname);
                 }
 
-                this.OnFilePicked(new FilePickerEventArgs(filename, pathname));
+                var tcs = Interlocked.Exchange(ref completionSource, null);
+                tcs?.TrySetResult(new FileData(pathname, filename, () => new FileStream(pathname, FileMode.Open, FileAccess.Read)));
             }
             catch (Exception ex)
             {
                 // pass exception to task so that it doesn't get lost in the UI main loop
-                var tcs = Interlocked.Exchange(ref this.completionSource, null);
-                tcs.SetException(ex);
+                var tcs = Interlocked.Exchange(ref completionSource, null);
+                tcs?.TrySetException(ex);
+            }
+            finally
+            {
+                var control = (UIDocumentPickerViewController)sender;
+                control.Dispose();
             }
         }
 
@@ -100,7 +89,9 @@ namespace Plugin.FilePicker
         public void DocumentPicker_WasCancelled(object sender, EventArgs args)
         {
             var tcs = Interlocked.Exchange(ref this.completionSource, null);
-            tcs.SetResult(null);
+            tcs?.TrySetResult(null);
+            var control = (UIDocumentPickerViewController)sender;
+            control.Dispose();
         }
 
         /// <summary>
@@ -129,53 +120,31 @@ namespace Plugin.FilePicker
         /// <returns>picked file data, or null when picking was cancelled</returns>
         private Task<FileData> PickMediaAsync(string[] allowedTypes)
         {
-            var id = this.GetRequestId();
+            var id = GetRequestId();
+            var tcs = new TaskCompletionSource<FileData>(id);
 
-            var ntcs = new TaskCompletionSource<FileData>(id);
-
-            if (Interlocked.CompareExchange(ref this.completionSource, ntcs, null) != null)
+            if (Interlocked.CompareExchange(ref completionSource, tcs, null) != null)
             {
                 throw new InvalidOperationException("Only one operation can be active at a time");
             }
 
-            var allowedUtis = new string[]
+            allowedTypes ??= new[]
             {
                 UTType.Content,
                 UTType.Item,
                 "public.data"
             };
 
-            if (allowedTypes != null)
-            {
-                allowedUtis = allowedTypes;
-            }
-
             // NOTE: Importing (UIDocumentPickerMode.Import) makes a local copy of the document,
-            // while opening (UIDocumentPickerMode.Open) opens the document directly. We do the
-            // first, so the user has to read the file immediately.
-            var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Import);
+            // while opening (UIDocumentPickerMode.Open) opens the document directly.
+            // We do the first, so the user has to read the file immediately.
+            var documentPicker = new UIDocumentPickerViewController(allowedTypes, UIDocumentPickerMode.Import);
+            documentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
+            documentPicker.WasCancelled += DocumentPicker_WasCancelled;
+            documentPicker.DidPickDocumentAtUrls += DocumentPicker_DidPickDocumentAtUrls;
 
-            documentPicker.DidPickDocument += this.DocumentPicker_DidPickDocument;
-            documentPicker.WasCancelled += this.DocumentPicker_WasCancelled;
-            documentPicker.DidPickDocumentAtUrls += this.DocumentPicker_DidPickDocumentAtUrls;
-
-            UIViewController viewController = GetActiveViewController();
-            viewController.PresentViewController(documentPicker, true, null);
-
-            this.Handler = (sender, args) =>
-            {
-                var tcs = Interlocked.Exchange(ref this.completionSource, null);
-
-                tcs?.SetResult(new FileData(
-                    args.FilePath,
-                    args.FileName,
-                    () =>
-                    {
-                        return new FileStream(args.FilePath, FileMode.Open, FileAccess.Read);
-                    }));
-            };
-
-            return this.completionSource.Task;
+            GetActiveViewController().PresentViewController(documentPicker, true, null);
+            return tcs.Task;
         }
 
         /// <summary>
