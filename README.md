@@ -4,6 +4,12 @@ Simple cross-platform plug-in that allows you to pick files and work with them.
 
 The original project can be found [here](https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows/), but seems abandoned, this one was forked and further developed.
 
+### The future: [Xamarin.Essentials](https://docs.microsoft.com/de-de/xamarin/essentials/)
+
+Since version 1.6.0 the [Xamarin.Essentials](https://github.com/xamarin/Essentials)
+project also supports file picking! See the [Migration Guide](#migration-guide)
+on how to migrate from this plugin to the official Xamarin.Essentials API!
+
 ## Build status
 ### Stable [![Build status](https://jfversluis.visualstudio.com/FilePicker%20plugin/_apis/build/status/FilePicker%20Plugin)](https://jfversluis.visualstudio.com/FilePicker%20plugin/_build/latest?definitionId=36) [![NuGet version](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker.svg)](https://badge.fury.io/nu/Xamarin.Plugin.FilePicker)
  
@@ -130,6 +136,80 @@ added to your Android app project by yourself.
 
 **iOS:** 
 You need to [Configure iCloud Driver for your app](https://developer.xamarin.com/guides/ios/platform_features/intro_to_cloudkit).
+
+## Migration guide
+
+Migrating the usage of this FilePicker plugin to `Xamarin.Essentials.FilePicker`
+isn't straight-forward. It's similar, though, since the Essentials code
+originated from this plugin. Here's a little guide on how to do it.
+
+1. If you don't have the Xamarin.Essentials NuGet package installed yet, install
+   it into the Android, iOS and UWP projects. Also install it into your Forms
+   project, if you're calling the FilePicker from there. Be sure to also
+   properly [initialize Essentials](https://docs.microsoft.com/de-de/xamarin/essentials/get-started).
+   You can remove the Xamarin.Plugin.FilePicker NuGet package now or afterwards.
+
+2. Rename the namespaces, types and method calls. Replace
+
+       using Plugin.FilePicker;
+       using Plugin.FilePicker.Abstractions;
+
+   with
+
+       using Xamarin.Essentials;
+
+   Replace `await CrossFilePicker.Current.PickFile()` with
+   `await FilePicker.PickAsync()`. Replace `FileData` with `FileResult` (or
+   use the `var` keyword).
+
+3. Use `Xamarin.Essentials.PickOptions` if you specified file types for picking.
+   Replace code like this:
+
+       string[] fileTypes = null;
+       if (Device.RuntimePlatform == Device.Android)
+           fileTypes = new string[] { "image/png", "image/jpeg" };
+
+       if (Device.RuntimePlatform == Device.iOS)
+           fileTypes = new string[] { "public.image" };
+
+       if (Device.RuntimePlatform == Device.UWP)
+           fileTypes = new string[] { ".jpg", ".png" };
+
+    with:
+
+       var options = new PickOptions
+       {
+           FileTypes = new FilePickerFileType(
+               new Dictionary<DevicePlatform, IEnumerable<string>>
+               {
+                   { DevicePlatform.Android, new string[] { "image/png", "image/jpeg"} },
+                   { DevicePlatform.iOS, new string[] { "public.image" } },
+                   { DevicePlatform.UWP, new string[] { ".jpg", ".png" } },
+               }),
+           PickerTitle = "Select a file to import"
+       };
+
+    If you can't specify a list of MIME types or file extensions, use `null`
+    as the value of the dictionary entry, or else file picking on that platform
+    won't be available:
+
+       { DevicePlatform.Android, null },
+
+    Note also that the `PickerTitle` is a new property, but the title is only
+    shown on Android.
+
+4. Replace usage of `FileData` with `Xamarin.Essentials.FileResult`. The new
+   FileResult structure has some properties and methods named differently. The
+   biggest change is that you should not (and in some cases on Android can't)
+   rely on `FileResult.FullPath` to be a file system filename. Always use
+   `FileResult.OpenStreamAsync()` to get a stream to the picked file. From
+   there you can either read from the stream directly (e.g. using a
+   `StreamReader`), or copy the file into your app folder. This can be done
+   using `Stream.CopyToAsync()` and has the advantage that you do the copying
+   in a background task, and you can specify a `CancellationToken` that can
+   be used to cancel the operation. You could even show a progress dialog to
+   the user that allows cancelling the transfer.
+
 
 ## Troubleshooting
 
