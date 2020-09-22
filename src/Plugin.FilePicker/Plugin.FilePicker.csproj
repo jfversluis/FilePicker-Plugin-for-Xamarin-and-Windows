@@ -108,4 +108,20 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="FilePickerImplementation.uwp.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="FilePickerImplementation.ios.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="FilePickerImplementation.mac.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="FilePickerImplementation.net45.cs" />
+  </ItemGroup>
+
 </Project>

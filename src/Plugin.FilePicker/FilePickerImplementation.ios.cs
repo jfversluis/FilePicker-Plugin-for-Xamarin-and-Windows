@@ -122,6 +122,11 @@ namespace Plugin.FilePicker
             return fileData;
         }
 
+        public Task<FileData> CreateOrOverwriteFile(string[] allowedTypes = null)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// File picking implementation
         /// </summary>
@@ -213,87 +218,6 @@ namespace Plugin.FilePicker
             }
 
             return id;
-        }
-
-        /// <summary>
-        /// iOS implementation of saving a picked file to the iOS "my documents" directory.
-        /// </summary>
-        /// <param name="fileToSave">picked file data for file to save</param>
-        /// <returns>true when file was saved successfully, false when not</returns>
-        public Task<bool> SaveFile(FileData fileToSave)
-        {
-            try
-            {
-                var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                var fileName = Path.Combine(documents, fileToSave.FileName);
-
-                File.WriteAllBytes(fileName, fileToSave.DataArray);
-
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                return Task.FromResult(false);
-            }
-        }
-
-        /// <summary>
-        /// iOS implementation of opening a file by using a UIDocumentInteractionController.
-        /// </summary>
-        /// <param name="fileUrl">file Url to open in viewer</param>
-        public void OpenFile(NSUrl fileUrl)
-        {
-            var docController = UIDocumentInteractionController.FromUrl(fileUrl);
-
-            var window = UIApplication.SharedApplication.KeyWindow;
-            var subViews = window.Subviews;
-            var lastView = subViews.Last();
-            var frame = lastView.Frame;
-
-            docController.PresentOpenInMenu(frame, lastView, true);
-        }
-
-        /// <summary>
-        /// iOS implementation of OpenFile(), opening a file already stored on iOS "my documents"
-        /// directory.
-        /// </summary>
-        /// <param name="fileToOpen">relative filename of file to open</param>
-        public void OpenFile(string fileToOpen)
-        {
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            var fileName = Path.Combine(documents, fileToOpen);
-
-            if (NSFileManager.DefaultManager.FileExists(fileName))
-            {
-                var url = new NSUrl(fileName, true);
-                this.OpenFile(url);
-            }
-        }
-
-        /// <summary>
-        /// iOS implementation of OpenFile(), opening a picked file in an external viewer. The
-        /// picked file is saved to iOS "my documents" directory before opening.
-        /// </summary>
-        /// <param name="fileToOpen">picked file data</param>
-        public async void OpenFile(FileData fileToOpen)
-        {
-            var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            var fileName = Path.Combine(documents, fileToOpen.FileName);
-
-            if (NSFileManager.DefaultManager.FileExists(fileName))
-            {
-                var url = new NSUrl(fileName, true);
-
-                this.OpenFile(url);
-            }
-            else
-            {
-                await this.SaveFile(fileToOpen);
-                this.OpenFile(fileToOpen);
-            }
         }
     }
 }

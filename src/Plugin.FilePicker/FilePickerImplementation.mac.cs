@@ -47,75 +47,9 @@ namespace Plugin.FilePicker
             return Task.FromResult(data);
         }
 
-        public Task<bool> SaveFile(FileData fileToSave)
+        public Task<FileData> CreateOrOverwriteFile(string[] allowedTypes = null)
         {
-            try
-            {
-                var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-                var savePanel = new NSSavePanel();
-                savePanel.Title = $"Save {fileToSave.FileName}";
-                savePanel.CanCreateDirectories = true;
-
-                var result = savePanel.RunModal(documents, fileToSave.FileName);
-
-                if (result == 1)
-                {
-                    var path = savePanel.Url.Path;
-
-                    File.WriteAllBytes(path, fileToSave.DataArray);
-
-                    return Task.FromResult(true);
-                }
-
-                return Task.FromResult(false);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                return Task.FromResult(false);
-            }
-        }
-
-        public void OpenFile(string fileToOpen)
-        {
-            try
-            {
-                if (!NSWorkspace.SharedWorkspace.OpenFile(fileToOpen))
-                {
-                    Debug.WriteLine($"Unable to open file at path: {fileToOpen}.");
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                // ignore exceptions
-            }
-            catch (Exception)
-            {
-                // ignore exceptions
-            }
-        }
-
-        public async void OpenFile(FileData fileToOpen)
-        {
-            try
-            {
-                if (!NSWorkspace.SharedWorkspace.OpenFile(fileToOpen.FilePath))
-                {
-                    Debug.WriteLine($"Unable to open file at path: {fileToOpen.FilePath}.");
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                // this could be some strange UI behavior.
-                // user would get prompted to save the file in order to open the file
-                await SaveFile(fileToOpen);
-                OpenFile(fileToOpen);
-            }
-            catch (Exception)
-            {
-                // ignore exceptions
-            }
+            throw new NotImplementedException();
         }
     }
 }

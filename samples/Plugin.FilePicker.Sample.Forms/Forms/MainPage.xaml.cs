@@ -43,6 +43,33 @@ namespace Plugin.FilePicker.Sample.Forms
             await PickAndShowFile(fileTypes);
         }
 
+        private async void SaveSomeText_Clicked(object sender, EventArgs e)
+        {
+            string[] fileTypes = null;
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                fileTypes = new string[] { "text/plain" };
+            }
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                fileTypes = new string[] { "public.text" }; // same as iOS constant UTType.Image
+            }
+
+            if (Device.RuntimePlatform == Device.UWP)
+            {
+                fileTypes = new string[] { ".txt" };
+            }
+
+            if (Device.RuntimePlatform == Device.WPF)
+            {
+                fileTypes = new string[] { "Text files (*.txt)|*.txt"};
+            }
+
+            await CreateOrSaveText("hello world", fileTypes);
+        }
+
         private async Task PickAndShowFile(string[] fileTypes)
         {
             try
@@ -64,6 +91,28 @@ namespace Plugin.FilePicker.Sample.Forms
                     {
                         FileImagePreview.IsVisible = false;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileNameLabel.Text = ex.ToString();
+                FilePathLabel.Text = string.Empty;
+                FileImagePreview.IsVisible = false;
+            }
+        }
+
+        private async Task CreateOrSaveText(string textToSave, string[] fileTypes)
+        {
+            try
+            {
+                var saveFile = await CrossFilePicker.Current.CreateOrOverwriteFile(fileTypes);
+
+                if (saveFile != null)
+                {
+                    FileNameLabel.Text = saveFile.FileName;
+                    FilePathLabel.Text = saveFile.FilePath;
+
+                    //Save to file
                 }
             }
             catch (Exception ex)

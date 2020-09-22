@@ -65,81 +65,9 @@ namespace Plugin.FilePicker
             return new FileData(file.Path, file.Name, () => file.OpenStreamForReadAsync().Result);
         }
 
-        /// <summary>
-        /// UWP implementation of saving a picked file to the app's local folder directory.
-        /// </summary>
-        /// <param name="fileToSave">picked file data for file to save</param>
-        /// <returns>true when file was saved successfully, false when not</returns>
-        public async Task<bool> SaveFile(FileData fileToSave)
+        public Task<FileData> CreateOrOverwriteFile(string[] allowedTypes = null)
         {
-            try
-            {
-                var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
-                    fileToSave.FileName,
-                    CreationCollisionOption.ReplaceExisting);
-
-                await FileIO.WriteBytesAsync(file, fileToSave.DataArray);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// UWP implementation of OpenFile(), opening a file already stored in the app's local
-        /// folder directory.
-        /// storage.
-        /// </summary>
-        /// <param name="fileToOpen">relative filename of file to open</param>
-        public async void OpenFile(string fileToOpen)
-        {
-            try
-            {
-                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen);
-
-                if (file != null)
-                {
-                    await Launcher.LaunchFileAsync(file);
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                // ignore exceptions
-            }
-            catch (Exception)
-            {
-                // ignore exceptions
-            }
-        }
-
-        /// <summary>
-        /// UWP implementation of OpenFile(), opening a picked file in an external viewer. The
-        /// picked file is saved  the app's local folder directory.
-        /// </summary>
-        /// <param name="fileToOpen">picked file data</param>
-        public async void OpenFile(FileData fileToOpen)
-        {
-            try
-            {
-                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen.FileName);
-
-                if (file != null)
-                {
-                    await Launcher.LaunchFileAsync(file);
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                await this.SaveFile(fileToOpen);
-                this.OpenFile(fileToOpen);
-            }
-            catch (Exception)
-            {
-                // ignore exceptions
-            }
+            throw new NotImplementedException();
         }
     }
 }
