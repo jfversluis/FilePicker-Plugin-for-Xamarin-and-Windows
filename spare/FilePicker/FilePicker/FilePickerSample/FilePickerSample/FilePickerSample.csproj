@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Plugin.FilePicker.Abstractions\Plugin.FilePicker.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Plugin.FilePicker\Plugin.FilePicker.csproj" />
+  </ItemGroup>
+
+</Project>
