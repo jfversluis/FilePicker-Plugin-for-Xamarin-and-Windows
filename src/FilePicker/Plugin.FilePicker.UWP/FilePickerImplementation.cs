@@ -83,13 +83,14 @@ namespace Plugin.FilePicker
                 {
                     if (!type.StartsWith("."))
                     {
+                        fileType = type;
+
                         if (string.IsNullOrEmpty(fileType) || picker.FileTypeChoices.ContainsKey(fileType))
                         {
                             throw new Exception("Bad UWP string ordering");
                         }
 
-                        fileType = type;
-                        picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>(fileType, new List<string>()));
+                        picker.FileTypeChoices.Add(fileType, new List<string>());
                     }
                     else if(!string.IsNullOrEmpty(fileType) && picker.FileTypeChoices.ContainsKey(fileType))
                     {
@@ -104,12 +105,12 @@ namespace Plugin.FilePicker
 
                 if (!hasAtleastOneType)
                 {
-                    picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("All Files", new List<string>{"*"}));
+                    picker.FileTypeChoices.Add("All Files", new List<string>{"*"});
                 }
             }
             else
             {
-                picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("All Files", new List<string> { "*" }));
+                picker.FileTypeChoices.Add("All Files", new List<string> { "*" });
             }
 
             var file = await picker.PickSaveFileAsync();
