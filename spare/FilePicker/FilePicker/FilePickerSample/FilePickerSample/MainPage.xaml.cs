@@ -16,32 +16,118 @@ namespace FilePickerSample
             InitializeComponent();
         }
 
-        private async void Button_OnClicked(object sender, EventArgs e)
+        private async void PickFile_Clicked(object sender, EventArgs args)
         {
-            var file = await CrossFilePicker.Current.PickFile();
+            await PickAndShowFile(null);
+        }
 
-            //hack: Android hurls at the thought of opening a new dialog while returning. Don't know about other platforms
-            //todo: find a more appropriate work-a-round
-            await Task.Delay(300);
+        private async void PickImage_Clicked(object sender, EventArgs args)
+        {
+            string[] fileTypes = null;
 
-            if (file == null)
+            if (Device.RuntimePlatform == Device.Android)
             {
-                await DisplayAlert("Cancelled", "No File Selected", "OK");
-                return;
+                fileTypes = new string[] { "image/png", "image/jpeg" };
             }
 
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                fileTypes = new string[] { "public.image" }; // same as iOS constant UTType.Image
+            }
+
+            if (Device.RuntimePlatform == Device.UWP)
+            {
+                fileTypes = new string[] { ".jpg", ".png" };
+            }
+
+            if (Device.RuntimePlatform == Device.WPF)
+            {
+                fileTypes = new string[] { "JPEG files (*.jpg)|*.jpg", "PNG files (*.png)|*.png" };
+            }
+
+            await PickAndShowFile(fileTypes);
+        }
+
+        private async void SaveSomeText_Clicked(object sender, EventArgs e)
+        {
+            string[] fileTypes = null;
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                fileTypes = new string[] { "text/plain" };
+            }
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                fileTypes = new string[] { "public.text" }; // same as iOS constant UTType.Text
+            }
+
+            if (Device.RuntimePlatform == Device.UWP)
+            {
+                fileTypes = new string[] { "Text Files", ".txt" };
+            }
+
+            if (Device.RuntimePlatform == Device.WPF)
+            {
+                fileTypes = new string[] { "Text files (*.txt)|*.txt" };
+            }
+
+            await CreateOrSaveText("hello world", fileTypes);
+        }
+
+        private async Task PickAndShowFile(string[] fileTypes)
+        {
             try
             {
-                using (var stream = new MemoryStream(file.DataArray))
-                {
-                    stream.Flush();  
-                }
+                var pickedFile = await CrossFilePicker.Current.PickFile(fileTypes);
 
-                await DisplayAlert("Success", $"{file.FileName}: {file.DataArray.Length} bytes", "OK");
+                if (pickedFile != null)
+                {
+                    FileNameLabel.Text = pickedFile.FileName;
+                    FilePathLabel.Text = pickedFile.FilePath;
+
+                    if (pickedFile.FileName.EndsWith("jpg", StringComparison.OrdinalIgnoreCase)
+                        || pickedFile.FileName.EndsWith("png", StringComparison.OrdinalIgnoreCase))
+                    {
+                        FileImagePreview.Source = ImageSource.FromStream(() => pickedFile.GetStream());
+                        FileImagePreview.IsVisible = true;
+                    }
+                    else
+                    {
+                        FileImagePreview.IsVisible = false;
+                    }
+                }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", "Exception: " + ex, "OK");
+                FileNameLabel.Text = ex.ToString();
+                FilePathLabel.Text = string.Empty;
+                FileImagePreview.IsVisible = false;
+            }
+        }
+
+        private async Task CreateOrSaveText(string textToSave, string[] fileTypes)
+        {
+            try
+            {
+                var saveFile = await CrossFilePicker.Current.CreateOrOverwriteFile(fileTypes);
+
+                if (saveFile != null)
+                {
+                    FileNameLabel.Text = saveFile.FileName;
+                    FilePathLabel.Text = saveFile.FilePath;
+
+                    using (var stream = new MemoryStream(Encoding.ASCII.GetBytes(textToSave)))
+                    {
+                        saveFile.SetStream(stream);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileNameLabel.Text = ex.ToString();
+                FilePathLabel.Text = string.Empty;
+                FileImagePreview.IsVisible = false;
             }
         }
     }

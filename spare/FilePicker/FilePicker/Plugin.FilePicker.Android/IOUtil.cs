@@ -11,8 +11,16 @@ namespace Plugin.FilePicker
 {
     public class IOUtil
     {
-
-        public static string getPath(Context context, Android.Net.Uri uri)
+        /// <summary>
+        /// Tries to find a file system path for given Uri. Note that this isn't always possible,
+        /// since the content referenced by the Uri may not be stored on a file system, but is
+        /// returned by the responsible app by using a ContentProvider. In this case, the method
+        /// returns null, and access to the content is only possible by opening a stream.
+        /// </summary>
+        /// <param name="context">Android context to access content resolver</param>
+        /// <param name="uri">Uri to use</param>
+        /// <returns>full file system path, or null</returns>
+        public static string GetPath(Context context, Android.Net.Uri uri)
         {
             bool isKitKat = Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat;
 
@@ -20,7 +28,7 @@ namespace Plugin.FilePicker
             if (isKitKat && DocumentsContract.IsDocumentUri(context, uri))
             {
                 // ExternalStorageProvider
-                if (isExternalStorageDocument(uri))
+                if (IsExternalStorageDocument(uri))
                 {
                     var docId = DocumentsContract.GetDocumentId(uri);
                     string[] split = docId.Split(':');
@@ -33,19 +41,48 @@ namespace Plugin.FilePicker
 
                     // TODO handle non-primary volumes
                 }
-                // DownloadsProvider
-                else if (isDownloadsDocument(uri))
+                else if (IsDownloadsDocument(uri))
                 {
-
+                    // DownloadsProvider
                     string id = DocumentsContract.GetDocumentId(uri);
-                    Android.Net.Uri contentUri = ContentUris.WithAppendedId(
-                            Android.Net.Uri.Parse("content://downloads/public_downloads"), long.Parse(id));
 
-                    return getDataColumn(context, contentUri, null, null);
+                    if (!string.IsNullOrEmpty(id) &&
+                        id.StartsWith("raw:"))
+                    {
+                        return id.Substring(4);
+                    }
+
+                    if (!long.TryParse(id, out long parseId))
+                        return null;
+
+                    string[] contentUriPrefixesToTry = new string[]
+                    {
+                        "content://downloads/public_downloads",
+                        "content://downloads/my_downloads"
+                    };
+
+                    foreach (string contentUriPrefix in contentUriPrefixesToTry)
+                    {
+                        Android.Net.Uri contentUri = ContentUris.WithAppendedId(
+                            Android.Net.Uri.Parse(contentUriPrefix), parseId);
+
+                        try
+                        {
+                            var path = GetDataColumn(context, contentUri, null, null);
+                            if (path != null)
+                            {
+                                return path;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // ignore exception; path can't be retrieved using ContentResolver
+                        }
+                    }
                 }
-                // MediaProvider
-                else if (isMediaDocument(uri))
+                else if (IsMediaDocument(uri))
                 {
+                    // MediaProvider
                     var docId = DocumentsContract.GetDocumentId(uri);
                     string[] split = docId.Split(':');
                     var type = split[0];
@@ -65,19 +102,20 @@ namespace Plugin.FilePicker
                     }
 
                     var selection = "_id=?";
-                    var selectionArgs = new string[] {
+                    var selectionArgs = new string[]
+                    {
                         split[1]
                     };
 
-                    return getDataColumn(context, contentUri, selection, selectionArgs);
+                    return GetDataColumn(context, contentUri, selection, selectionArgs);
                 }
             }
+
             // MediaStore (and general)
-            if (isMediaStore(uri.Scheme))
+            if (IsMediaStore(uri.Scheme))
             {
-                return getDataColumn(context, uri, null, null);
+                return GetDataColumn(context, uri, null, null);
             }
-            // File
             else if ("file".Equals(uri.Scheme, StringComparison.OrdinalIgnoreCase))
             {
                 return uri.Path;
@@ -91,116 +129,94 @@ namespace Plugin.FilePicker
         /// </summary>
         /// <param name="scheme">scheme part of URL</param>
         /// <returns>true when it matches, false when not</returns>
-        public static bool isMediaStore(string scheme)
+        public static bool IsMediaStore(string scheme)
         {
             return scheme.StartsWith("content");
         }
 
-        public static string getDataColumn(Context context, Android.Net.Uri uri, string selection,
-        string[] selectionArgs)
+        /// <summary>
+        /// Returns the "data" column of an Uri from the content resolver.
+        /// </summary>
+        /// <param name="context">Android context to access content resolver</param>
+        /// <param name="uri">content Uri</param>
+        /// <param name="selection">selection 'where' clause, or null</param>
+        /// <param name="selectionArgs">selection arguments, or null</param>
+        /// <returns>data column text, or null when query contained no data column</returns>
+        public static string GetDataColumn(Context context, Android.Net.Uri uri, string selection, string[] selectionArgs)
         {
-
             ICursor cursor = null;
-            var column = MediaStore.Files.FileColumns.Data;
+            string column = MediaStore.Files.FileColumns.Data;
             string[] projection = { column };
 
             try
             {
-                cursor = context.ContentResolver.Query(uri, projection, selection, selectionArgs,
-                        null);
+                cursor = context.ContentResolver.Query(uri, projection, selection, selectionArgs, null);
                 if (cursor != null && cursor.MoveToFirst())
                 {
-                    int column_index = cursor.GetColumnIndexOrThrow(column);
-                    return cursor.GetString(column_index);
+                    int column_index = cursor.GetColumnIndex(column);
+                    if (column_index == -1)
+                    {
+                        return null;
+                    }
+
+                    string path = cursor.GetString(column_index);
+
+                    // When the path has no root (i.e. is relative), better return null so that
+                    // the content uri is used and the file contents can be read
+                    if (path != null && !System.IO.Path.IsPathRooted(path))
+                    {
+                        return null;
+                    }
+
+                    return path;
                 }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.Write(ex);
             }
             finally
             {
                 if (cursor != null)
+                {
                     cursor.Close();
+                }
             }
+
             return null;
         }
 
-        /**
-         * @param uri The Uri to check.
-         * @return Whether the Uri authority is ExternalStorageProvider.
-         */
-        public static bool isExternalStorageDocument(Android.Net.Uri uri)
+        /// <summary>
+        /// Returns if the given Uri is an ExternalStorageProvider Uri
+        /// </summary>
+        /// <param name="uri">the Uri to check</param>
+        /// <returns>whether the Uri authority is an ExternalStorageProvider</returns>
+        public static bool IsExternalStorageDocument(Android.Net.Uri uri)
         {
             return "com.android.externalstorage.documents".Equals(uri.Authority);
         }
 
-        /**
-         * @param uri The Uri to check.
-         * @return Whether the Uri authority is DownloadsProvider.
-         */
-        public static bool isDownloadsDocument(Android.Net.Uri uri)
+        /// <summary>
+        /// Returns if the given Uri is a DownloadsProvider Uri
+        /// </summary>
+        /// <param name="uri">the Uri to check</param>
+        /// <returns>whether the Uri authority is a DownloadsProvider</returns>
+        public static bool IsDownloadsDocument(Android.Net.Uri uri)
         {
             return "com.android.providers.downloads.documents".Equals(uri.Authority);
         }
 
-        /**
-         * @param uri The Uri to check.
-         * @return Whether the Uri authority is MediaProvider.
-         */
-        public static bool isMediaDocument(Android.Net.Uri uri)
+        /// <summary>
+        /// Returns if the given Uri is a MediaProvider Uri
+        /// </summary>
+        /// <param name="uri">the Uri to check</param>
+        /// <returns>whether the Uri authority is a MediaProvider</returns>
+        public static bool IsMediaDocument(Android.Net.Uri uri)
         {
             return "com.android.providers.media.documents".Equals(uri.Authority);
         }
 
-        public static Byte[] readFile(Context context, Android.Net.Uri uri)
-        {
-            using (var inStream = context.ContentResolver.OpenInputStream(uri))
-                return FileData.ReadFully(inStream);
-        }
-
-        public static byte[] readFile(string file)
-        {
-            try
-            {
-                return readFile(new File(file));
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.Write(ex);
-                return new byte[0];
-            }
-        }
-
-        public static byte[] readFile(File file)
-        {
-            // Open file
-            var f = new RandomAccessFile(file, "r");
-
-            try
-            {
-                // Get and check length
-                long longlength = f.Length();
-                var length = (int)longlength;
-
-                if (length != longlength)
-                    throw new IOException("Filesize exceeds allowed size");
-                // Read file and return data
-                byte[] data = new byte[length];
-                f.ReadFully(data);
-                return data;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.Write(ex);
-                return new byte[0];
-            }
-            finally
-            {
-                f.Close();
-            }
-        }
-
+        /// <summary>
+        /// Returns MIME type for given Url
+        /// </summary>
+        /// <param name="url">Url to check</param>
+        /// <returns>MIME type, or null when none can be determined</returns>
         public static string GetMimeType(string url)
         {
             string type = null;
@@ -212,6 +228,18 @@ namespace Plugin.FilePicker
             }
 
             return type;
+        }
+
+        /// <summary>
+        /// Returns a file extension for given content Uri
+        /// </summary>
+        /// <param name="context">context to use</param>
+        /// <param name="uri">content Uri to check</param>
+        /// <returns>file extension, without leading dot, or empty string</returns>
+        public static string GetExtensionFromUri(Context context, Android.Net.Uri uri)
+        {
+            string mimeType = context.ContentResolver.GetType(uri);
+            return mimeType != null ? MimeTypeMap.Singleton.GetExtensionFromMimeType(mimeType) : string.Empty;
         }
     }
 }

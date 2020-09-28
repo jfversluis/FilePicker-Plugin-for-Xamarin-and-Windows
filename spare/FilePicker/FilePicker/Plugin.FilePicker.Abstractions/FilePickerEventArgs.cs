@@ -1,34 +1,49 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Plugin.FilePicker")]
 namespace Plugin.FilePicker.Abstractions
 {
-    public class FilePickerEventArgs : EventArgs
+    /// <summary>
+    /// Event arguments for the event when file picking was completed.
+    /// </summary>
+    internal class FilePickerEventArgs : EventArgs
     {
-        public byte [] FileByte { get; set; }
-
+        /// <summary>
+        /// File name part of picked file, without path
+        /// </summary>
         public string FileName { get; set; }
 
+        /// <summary>
+        /// Complete file path of picked file; on some OS this may contain an Uri
+        /// </summary>
         public string FilePath { get; set; }
 
-        public FilePickerEventArgs ()
+        /// <summary>
+        /// Creates a new and empty file picker event args object
+        /// </summary>
+        public FilePickerEventArgs()
         {
         }
 
-        public FilePickerEventArgs (byte [] fileByte)
+        /// <summary>
+        /// Creates new file picker event args
+        /// </summary>
+        /// <param name="fileName">file name part of picked file</param>
+        public FilePickerEventArgs(string fileName)
         {
-            FileByte = fileByte;
+            this.FileName = fileName;
         }
 
-        public FilePickerEventArgs (byte [] fileByte, string fileName)
-            : this (fileByte)
+        /// <summary>
+        /// Creates new file picker event args
+        /// </summary>
+        /// <param name="fileName">file name part of picked file</param>
+        /// <param name="filePath">complete file path of picked file</param>
+        public FilePickerEventArgs(string fileName, string filePath)
+            : this(fileName)
         {
-            FileName = fileName;
-        }
-
-        public FilePickerEventArgs (byte [] fileByte, string fileName, string filePath)
-            : this (fileByte, fileName)
-        {
-            FilePath = filePath;
+            this.FilePath = filePath;
         }
     }
 }

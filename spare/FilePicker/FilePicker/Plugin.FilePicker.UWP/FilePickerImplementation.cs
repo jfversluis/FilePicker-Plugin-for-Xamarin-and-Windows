@@ -1,5 +1,6 @@
 using Plugin.FilePicker.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -9,80 +10,123 @@ using Windows.System;
 namespace Plugin.FilePicker
 {
     /// <summary>
-    /// Implementation for Feature
+    /// Implementation for file picking on UWP
     /// </summary>
     public class FilePickerImplementation : IFilePicker
     {
-        public async Task<FileData> PickFile()
+        /// <summary>
+        /// Implementation for picking a file on UWP platform.
+        /// </summary>
+        /// <param name="allowedTypes">
+        /// Specifies one or multiple allowed types. When null, all file types
+        /// can be selected while picking.
+        /// On UWP, specify a list of extensions, like this: ".jpg", ".png".
+        /// </param>
+        /// <returns>
+        /// File data object, or null when user cancelled picking file
+        /// </returns>
+        public async Task<FileData> PickFile(string[] allowedTypes)
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker
             {
                 ViewMode = Windows.Storage.Pickers.PickerViewMode.List,
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary
             };
-            picker.FileTypeFilter.Add("*");
+
+            if (allowedTypes != null)
+            {
+                var hasAtleastOneType = false;
+
+                foreach (var type in allowedTypes)
+                {
+                    if (type.StartsWith("."))
+                    {
+                        picker.FileTypeFilter.Add(type);
+                        hasAtleastOneType = true;
+                    }
+                }
+
+                if (!hasAtleastOneType)
+                {
+                    picker.FileTypeFilter.Add("*");
+                }
+            }
+            else
+            {
+                picker.FileTypeFilter.Add("*");
+            }
 
             var file = await picker.PickSingleFileAsync();
-            if (null == file)
+            if (file == null)
+            {
                 return null;
+            }
 
             StorageApplicationPermissions.FutureAccessList.Add(file);
-            return new FileData(file.Path, file.Name, new byte[]{}, () => File.OpenRead(file.Path));
+            return new FileData(file.Path, file.Name, () => file.OpenStreamForReadAsync().Result);
         }
 
-        public async Task<bool> SaveFile(FileData fileToSave)
+        public async Task<FilePlaceholder> CreateOrOverwriteFile(string[] allowedTypes = null)
         {
-            try
+            var picker = new Windows.Storage.Pickers.FileSavePicker
             {
-                var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileToSave.FileName, CreationCollisionOption.ReplaceExisting);
+                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary,
+            };
 
-                await FileIO.WriteBytesAsync(file, fileToSave.DataArray);
-
-                return true;
-            }
-            catch (Exception ex)
+            if (allowedTypes != null)
             {
-                return false;
-            }
-        }
+                var hasAtleastOneType = false;
+                IList<string> list;
+                var fileType = "";
 
-        public async void OpenFile(string fileToOpen)
-        {
-            try
-            {
-                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen);
-
-                if (file != null)
+                foreach (var type in allowedTypes)
                 {
-                    await Launcher.LaunchFileAsync(file);
+                    if (!type.StartsWith("."))
+                    {
+                        if (string.IsNullOrEmpty(fileType) || picker.FileTypeChoices.ContainsKey(fileType))
+                        {
+                            throw new Exception("Bad UWP string ordering");
+                        }
+
+                        fileType = type;
+                        picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>(fileType, new List<string>()));
+                    }
+                    else if(!string.IsNullOrEmpty(fileType) && picker.FileTypeChoices.ContainsKey(fileType))
+                    {
+                        picker.FileTypeChoices[fileType].Add(type);
+                        hasAtleastOneType = true;
+                    }
+                    else
+                    {
+                        throw new Exception("Bad UWP string ordering");
+                    }
+                }
+
+                if (!hasAtleastOneType)
+                {
+                    picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("All Files", new List<string>{"*"}));
                 }
             }
-            catch (FileNotFoundException ex)
+            else
             {
+                picker.FileTypeChoices.Add(new KeyValuePair<string, IList<string>>("All Files", new List<string> { "*" }));
             }
-            catch (Exception ex)
-            {
-            }
+
+            var file = await picker.PickSaveFileAsync();
+
+            if (file == null) return null;
+
+            var placeHolder = new FilePlaceholder(file.Path, file.Name, saveAction);
+
+            return placeHolder;
         }
 
-        public async void OpenFile(FileData fileToOpen)
+        private void saveAction(Stream stream, FilePlaceholder placeholder)
         {
-            try
+            using (var fileStream = File.Create(placeholder.FilePath))
             {
-                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(fileToOpen.FileName);
-
-                if (file != null)
-                {
-                    await Launcher.LaunchFileAsync(file);
-                }
-            }
-            catch (FileNotFoundException ex)
-            {
-                await SaveFile(fileToOpen);
-                OpenFile(fileToOpen);
-            }
-            catch (Exception ex)
-            {
+                stream.CopyTo(fileStream);
+                fileStream.Flush();
             }
         }
     }

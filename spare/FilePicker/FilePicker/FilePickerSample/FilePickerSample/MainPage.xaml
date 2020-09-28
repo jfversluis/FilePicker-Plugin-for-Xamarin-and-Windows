@@ -2,12 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FilePickerSample.MainPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-            <Button Text="Press Me" Clicked="Button_OnClicked"></Button>
+    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+        <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+            <Button Text="Pick file" Clicked="PickFile_Clicked" />
+            <Button Text="Pick image" Clicked="PickImage_Clicked" />
+            <Button Text="Save some text" Clicked="SaveSomeText_Clicked" />
         </StackLayout>
-    </ContentPage.Content>
+        <Label x:Name="FileNameLabel" Text="" VerticalOptions="Center" HorizontalOptions="Center" />
+        <Label x:Name="FilePathLabel" Text="" VerticalOptions="Center" HorizontalOptions="Center" />
+        <Image x:Name="FileImagePreview" VerticalOptions="Center" HorizontalOptions="Center" />
+    </StackLayout>
 </ContentPage>

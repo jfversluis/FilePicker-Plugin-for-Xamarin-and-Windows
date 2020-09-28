@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Plugin.FilePicker.Abstractions
 {
-    /// <summary>
-    /// File data that specifies a file that was picked by the user.
-    /// </summary>
-    public sealed class FileData : IDisposable
+    public class FilePlaceholder : IDisposable
     {
         /// <summary>
         /// Backing store for the FileName property
@@ -32,12 +28,12 @@ namespace Plugin.FilePicker.Abstractions
         /// <summary>
         /// Function to get a stream to the picked file.
         /// </summary>
-        private readonly Func<Stream> _streamGetter;
+        private readonly Action<Stream, FilePlaceholder> _streamSetter;
 
         /// <summary>
         /// Creates a new and empty file data object
         /// </summary>
-        public FileData()
+        public FilePlaceholder()
         {
         }
 
@@ -50,18 +46,18 @@ namespace Plugin.FilePicker.Abstractions
         /// <param name="fileName">
         /// File name of the picked file.
         /// </param>
-        /// <param name="streamGetter">
+        /// <param name="streamSetter">app 
         /// Function to get a stream to the picked file.
         /// </param>
         /// <param name="dispose">
         /// Action to dispose of the underlying resources of the picked file.
         /// </param>
-        public FileData(string filePath, string fileName, Func<Stream> streamGetter, Action<bool> dispose = null)
+        public FilePlaceholder(string filePath, string fileName, Action<Stream, FilePlaceholder> streamSetter, Action<bool> dispose = null)
         {
             _filePath = filePath;
             _fileName = fileName;
             _dispose = dispose;
-            _streamGetter = streamGetter;
+            _streamSetter = streamSetter;
         }
 
         /// <summary>
@@ -76,23 +72,6 @@ namespace Plugin.FilePicker.Abstractions
             {
                 input.CopyTo(ms);
                 return ms.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Returns the raw data bytes for the picked file.
-        /// Note that due to how this property is implemented, you may only
-        /// call this once.  You can always access the underlying stream by
-        /// directly calling GetStream().
-        /// </summary>
-        public byte[] DataArray
-        {
-            get
-            {
-                using (var stream = GetStream())
-                {
-                    return ReadFully(stream);
-                }
             }
         }
 
@@ -149,12 +128,12 @@ namespace Plugin.FilePicker.Abstractions
         /// must be rewinded to the beginning.
         /// </summary>
         /// <returns>stream object</returns>
-        public Stream GetStream()
+        public void SetStream(Stream stream)
         {
             if (_isDisposed)
                 throw new ObjectDisposedException(null);
 
-            return _streamGetter();
+            _streamSetter(stream, this);
         }
 
         #region IDispose implementation
@@ -187,7 +166,7 @@ namespace Plugin.FilePicker.Abstractions
         /// <summary>
         /// Finalizer for this object
         /// </summary>
-        ~FileData()
+        ~FilePlaceholder()
         {
             this.Dispose(false);
         }
