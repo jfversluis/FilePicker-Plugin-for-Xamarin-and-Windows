@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Plugin.FilePicker.Abstractions
 {
@@ -28,7 +29,7 @@ namespace Plugin.FilePicker.Abstractions
         /// <summary>
         /// Function to get a stream to the picked file.
         /// </summary>
-        private readonly Action<Stream, FilePlaceholder> _streamSetter;
+        private readonly Func<Stream, FilePlaceholder, Task> _streamSetter;
 
         /// <summary>
         /// Creates a new and empty file data object
@@ -52,7 +53,7 @@ namespace Plugin.FilePicker.Abstractions
         /// <param name="dispose">
         /// Action to dispose of the underlying resources of the picked file.
         /// </param>
-        public FilePlaceholder(string filePath, string fileName, Action<Stream, FilePlaceholder> streamSetter, Action<bool> dispose = null)
+        public FilePlaceholder(string filePath, string fileName, Func<Stream, FilePlaceholder, Task> streamSetter, Action<bool> dispose = null)
         {
             _filePath = filePath;
             _fileName = fileName;
@@ -128,12 +129,12 @@ namespace Plugin.FilePicker.Abstractions
         /// must be rewinded to the beginning.
         /// </summary>
         /// <returns>stream object</returns>
-        public void SetStream(Stream stream)
+        public Task WriteToFile(Stream stream)
         {
             if (_isDisposed)
                 throw new ObjectDisposedException(null);
 
-            _streamSetter(stream, this);
+            return _streamSetter(stream, this);
         }
 
         #region IDispose implementation

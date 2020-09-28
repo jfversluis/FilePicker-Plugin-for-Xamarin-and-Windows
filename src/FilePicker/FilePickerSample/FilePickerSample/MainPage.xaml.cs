@@ -119,7 +119,7 @@ namespace FilePickerSample
 
                     using (var stream = new MemoryStream(Encoding.ASCII.GetBytes(textToSave)))
                     {
-                        saveFile.SetStream(stream);
+                        await saveFile.WriteToFile(stream);
                     }
                 }
             }

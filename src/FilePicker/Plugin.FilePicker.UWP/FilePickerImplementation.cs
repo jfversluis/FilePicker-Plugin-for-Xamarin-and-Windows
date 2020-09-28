@@ -1,7 +1,9 @@
 using Plugin.FilePicker.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.AccessCache;
 
 
@@ -71,61 +73,76 @@ namespace Plugin.FilePicker
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary,
             };
 
-            //if (allowedTypes != null)
-            //{
-            //    var hasAtleastOneType = false;
-            //    IList<string> list;
-            //    var fileType = "";
+            if (allowedTypes != null)
+            {
+                var hasAtleastOneType = false;
 
-            //    foreach (var type in allowedTypes)
-            //    {
-            //        if (!type.StartsWith("."))
-            //        {
-            //            fileType = type;
+                for (var i = 0; i < allowedTypes.Length; i++)
+                {
+                    var type = allowedTypes[i];
 
-            //            if (string.IsNullOrEmpty(fileType) || picker.FileTypeChoices.ContainsKey(fileType))
-            //            {
-            //                throw new Exception("Bad UWP string ordering");
-            //            }
+                    if (type.StartsWith("."))
+                    {
+                        throw new Exception("Bad UWP string ordering");
+                    }
 
-            //            picker.FileTypeChoices.Add(fileType, new List<string>());
-            //        }
-            //        else if(!string.IsNullOrEmpty(fileType) && picker.FileTypeChoices.ContainsKey(fileType))
-            //        {
-            //            picker.FileTypeChoices[fileType].Add(type);
-            //            hasAtleastOneType = true;
-            //        }
-            //        else
-            //        {
-            //            throw new Exception("Bad UWP string ordering");
-            //        }
-            //    }
+                    var list = new List<string>();
 
-            //    if (!hasAtleastOneType)
-            //    {
-            //        picker.FileTypeChoices.Add("All Files", new List<string>{"*"});
-            //    }
-            //}
-            //else
-            //{
-            //    picker.FileTypeChoices.Add("All Files", new List<string> { "*" });
-            //}
+                    for (int j = i + 1; j < allowedTypes.Length; j++)
+                    {
+                        var extension = allowedTypes[j];
+                        if (!extension.StartsWith("."))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            list.Add(extension);
+                            i = j;
+                        }
+                    }
+
+                    if (list.Count == 0)
+                    {
+                        throw new Exception("Bad UWP string ordering");
+                    }
+
+                    picker.FileTypeChoices.Add(type, list);
+                    hasAtleastOneType = true;
+                }
+
+                if (!hasAtleastOneType)
+                {
+                    picker.FileTypeChoices.Add("All Files", new List<string> { "*" });
+                }
+            }
+            else
+            {
+                picker.FileTypeChoices.Add("All Files", new List<string> { "*" });
+            }
 
             var file = await picker.PickSaveFileAsync();
 
             if (file == null) return null;
 
-            var placeHolder = new FilePlaceholder(file.Path, file.Name, saveAction);
+            var placeHolder = new FilePlaceholder(file.Path, file.Name, (stream, holder) => saveAction(stream, holder, file));
 
             return placeHolder;
         }
 
-        private void saveAction(Stream stream, FilePlaceholder placeholder)
+        private async Task saveAction(Stream stream, FilePlaceholder placeHolder, StorageFile file)
         {
-            using (var fileStream = File.Create(placeholder.FilePath))
+            try
             {
-                stream.CopyTo(fileStream);
-                fileStream.Flush();
+                using (var fileStream = await file.OpenStreamForWriteAsync())
+                {
+                    await stream.CopyToAsync(fileStream);
+                    await fileStream.FlushAsync();
+                }
+            }
+            finally
+            {
+                placeHolder.Dispose();
             }
         }
     }
