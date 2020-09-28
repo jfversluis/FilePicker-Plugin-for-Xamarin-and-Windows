@@ -1,11 +1,9 @@
 using Plugin.FilePicker.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Windows.Storage;
 using Windows.Storage.AccessCache;
-using Windows.System;
+
 
 namespace Plugin.FilePicker
 {
@@ -73,45 +71,45 @@ namespace Plugin.FilePicker
                 SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary,
             };
 
-            if (allowedTypes != null)
-            {
-                var hasAtleastOneType = false;
-                IList<string> list;
-                var fileType = "";
+            //if (allowedTypes != null)
+            //{
+            //    var hasAtleastOneType = false;
+            //    IList<string> list;
+            //    var fileType = "";
 
-                foreach (var type in allowedTypes)
-                {
-                    if (!type.StartsWith("."))
-                    {
-                        fileType = type;
+            //    foreach (var type in allowedTypes)
+            //    {
+            //        if (!type.StartsWith("."))
+            //        {
+            //            fileType = type;
 
-                        if (string.IsNullOrEmpty(fileType) || picker.FileTypeChoices.ContainsKey(fileType))
-                        {
-                            throw new Exception("Bad UWP string ordering");
-                        }
+            //            if (string.IsNullOrEmpty(fileType) || picker.FileTypeChoices.ContainsKey(fileType))
+            //            {
+            //                throw new Exception("Bad UWP string ordering");
+            //            }
 
-                        picker.FileTypeChoices.Add(fileType, new List<string>());
-                    }
-                    else if(!string.IsNullOrEmpty(fileType) && picker.FileTypeChoices.ContainsKey(fileType))
-                    {
-                        picker.FileTypeChoices[fileType].Add(type);
-                        hasAtleastOneType = true;
-                    }
-                    else
-                    {
-                        throw new Exception("Bad UWP string ordering");
-                    }
-                }
+            //            picker.FileTypeChoices.Add(fileType, new List<string>());
+            //        }
+            //        else if(!string.IsNullOrEmpty(fileType) && picker.FileTypeChoices.ContainsKey(fileType))
+            //        {
+            //            picker.FileTypeChoices[fileType].Add(type);
+            //            hasAtleastOneType = true;
+            //        }
+            //        else
+            //        {
+            //            throw new Exception("Bad UWP string ordering");
+            //        }
+            //    }
 
-                if (!hasAtleastOneType)
-                {
-                    picker.FileTypeChoices.Add("All Files", new List<string>{"*"});
-                }
-            }
-            else
-            {
-                picker.FileTypeChoices.Add("All Files", new List<string> { "*" });
-            }
+            //    if (!hasAtleastOneType)
+            //    {
+            //        picker.FileTypeChoices.Add("All Files", new List<string>{"*"});
+            //    }
+            //}
+            //else
+            //{
+            //    picker.FileTypeChoices.Add("All Files", new List<string> { "*" });
+            //}
 
             var file = await picker.PickSaveFileAsync();
 
