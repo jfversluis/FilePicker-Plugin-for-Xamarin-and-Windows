@@ -110,16 +110,17 @@ namespace FilePickerSample
         {
             try
             {
-                var saveFile = await CrossFilePicker.Current.CreateOrOverwriteFile(fileTypes);
-
-                if (saveFile != null)
+                using (var saveFile = await CrossFilePicker.Current.CreateOrOverwriteFile(fileTypes))
                 {
-                    FileNameLabel.Text = saveFile.FileName;
-                    FilePathLabel.Text = saveFile.FilePath;
-
-                    using (var stream = new MemoryStream(Encoding.ASCII.GetBytes(textToSave)))
+                    if (saveFile != null)
                     {
-                        await saveFile.WriteToFile(stream);
+                        FileNameLabel.Text = saveFile.FileName;
+                        FilePathLabel.Text = saveFile.FilePath;
+
+                        using (var stream = new MemoryStream(Encoding.ASCII.GetBytes(textToSave)))
+                        {
+                            await saveFile.WriteToFile(stream);
+                        }
                     }
                 }
             }
