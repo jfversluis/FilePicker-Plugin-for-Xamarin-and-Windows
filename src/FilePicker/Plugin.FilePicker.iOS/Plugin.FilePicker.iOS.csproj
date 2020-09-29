@@ -38,6 +38,7 @@
     <Compile Include="..\Plugin.FilePicker\CrossFilePicker.cs">
       <Link>CrossFilePicker.cs</Link>
     </Compile>
+    <Compile Include="DocumentPicker.cs" />
     <Compile Include="FilePickerImplementation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

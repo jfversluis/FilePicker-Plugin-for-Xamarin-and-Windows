@@ -20,7 +20,7 @@ namespace Plugin.FilePicker
     /// </summary>
     [Activity(ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     [Preserve(AllMembers = true)]
-    public class FilePickerActivity : Activity
+    public class FileSaverActivity : Activity
     {
         /// <summary>
         /// Intent Extra constant to pass list of allowed types to FilePicker activity.
@@ -56,9 +56,15 @@ namespace Plugin.FilePicker
             if (savedInstanceState != null)
                 return;
 
-            if (this.context.PackageManager.CheckPermission(
+            var readPermission = this.context.PackageManager.CheckPermission(
                 Manifest.Permission.ReadExternalStorage,
-                this.context.PackageName) == Permission.Granted)
+                this.context.PackageName);
+
+            var writePermission = this.context.PackageManager.CheckPermission(
+                Manifest.Permission.WriteExternalStorage,
+                this.context.PackageName);
+
+            if (readPermission == Permission.Granted && writePermission == Permission.Granted)
             {
                 this.StartPicker();
             }
@@ -66,7 +72,7 @@ namespace Plugin.FilePicker
             {
                 if ((int)Build.VERSION.SdkInt >= 23)
                 {
-                    this.RequestPermissions(new string[] { Manifest.Permission.ReadExternalStorage }, RequestStorage);
+                    this.RequestPermissions(new string[] { Manifest.Permission.ReadExternalStorage, Manifest.Permission.WriteExternalStorage }, RequestStorage);
                 }
                 else
                 {
@@ -87,8 +93,9 @@ namespace Plugin.FilePicker
         {
             if (requestCode == RequestStorage)
             {
-                if (grantResults.Length > 0 &&
-                    grantResults[0] == Permission.Granted)
+                if (grantResults.Length == 2 &&
+                    grantResults[0] == Permission.Granted &&
+                    grantResults[1] == Permission.Granted)
                 {
                     this.StartPicker();
                 }
@@ -106,7 +113,7 @@ namespace Plugin.FilePicker
         private void StartPicker()
         {
             var intent = new Intent(
-                Build.VERSION.SdkInt < BuildVersionCodes.Kitkat ? Intent.ActionGetContent : Intent.ActionOpenDocument);
+                Build.VERSION.SdkInt < BuildVersionCodes.Kitkat ? throw new Java.Lang.Exception("OS to low... how did you get here???") : Intent.ActionCreateDocument);
 
             var allowedTypes = Intent.GetStringArrayExtra(ExtraAllowedTypes)?.
                 Where(o => !string.IsNullOrEmpty(o) && o.Contains("/")).ToList();
@@ -126,18 +133,11 @@ namespace Plugin.FilePicker
                 intent.SetType("*/*");
             }
 
-            if (Build.VERSION.SdkInt < BuildVersionCodes.Kitkat)
-            {
-                intent.AddCategory(Intent.CategoryOpenable);
-            }
-            else
-            {
-                intent.AddFlags(ActivityFlags.GrantPersistableUriPermission);
-            }
-
+            intent.AddFlags(ActivityFlags.GrantPersistableUriPermission);
+            
             try
             {
-                this.StartActivityForResult(Intent.CreateChooser(intent, "Select file"), 0);
+                this.StartActivityForResult(Intent.CreateChooser(intent, "Save file"), 0);
             }
             catch (Exception ex)
             {

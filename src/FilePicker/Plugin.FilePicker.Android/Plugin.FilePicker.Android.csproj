@@ -47,6 +47,7 @@
     <Compile Include="..\Plugin.FilePicker\CrossFilePicker.cs">
       <Link>CrossFilePicker.cs</Link>
     </Compile>
+    <Compile Include="FileSaverActivity.cs" />
     <Compile Include="FilePickerActivity.cs" />
     <Compile Include="FilePickerImplementation.cs" />
     <Compile Include="IOUtil.cs" />
