@@ -4,11 +4,13 @@ using Android.Runtime;
 using Java.IO;
 using Plugin.FilePicker.Abstractions;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Views;
 using Debug = System.Diagnostics.Debug;
+using File = System.IO.File;
 
 namespace Plugin.FilePicker
 {
@@ -196,7 +198,7 @@ namespace Plugin.FilePicker
                 var pickerIntent = new Intent(this.context, typeof(FileSaverActivity));
                 pickerIntent.SetFlags(ActivityFlags.NewTask);
 
-                pickerIntent.PutExtra(FilePickerActivity.ExtraAllowedTypes, allowedTypes);
+                pickerIntent.PutExtra(FileSaverActivity.ExtraAllowedTypes, allowedTypes);
 
                 this.context.StartActivity(pickerIntent);
 
@@ -207,21 +209,21 @@ namespace Plugin.FilePicker
                 {
                     var tcs = Interlocked.Exchange(ref this.completionCreationSource, null);
 
-                    FilePickerActivity.FilePickCancelled -= cancelledHandler;
-                    FilePickerActivity.FilePicked -= handler;
+                    FileSaverActivity.FilePickCancelled -= cancelledHandler;
+                    FileSaverActivity.FilePicked -= handler;
 
                     tcs?.SetResult(new FilePlaceholder(
                         e.FilePath,
                         e.FileName,
-                        null));
+                        StreamSetter));
                 };
 
                 cancelledHandler = (s, e) =>
                 {
                     var tcs = Interlocked.Exchange(ref this.completionCreationSource, null);
 
-                    FilePickerActivity.FilePickCancelled -= cancelledHandler;
-                    FilePickerActivity.FilePicked -= handler;
+                    FileSaverActivity.FilePickCancelled -= cancelledHandler;
+                    FileSaverActivity.FilePicked -= handler;
 
                     if (e?.Exception != null)
                     {
@@ -233,8 +235,8 @@ namespace Plugin.FilePicker
                     }
                 };
 
-                FilePickerActivity.FilePickCancelled += cancelledHandler;
-                FilePickerActivity.FilePicked += handler;
+                FileSaverActivity.FilePickCancelled += cancelledHandler;
+                FileSaverActivity.FilePicked += handler;
             }
             catch (Exception ex)
             {
@@ -243,6 +245,22 @@ namespace Plugin.FilePicker
             }
 
             return this.completionCreationSource.Task;
+        }
+
+        private async Task StreamSetter(Stream stream, FilePlaceholder placeHolder)
+        {
+            try
+            {
+                using (var fileStream = File.Create(placeHolder.FilePath))
+                {
+                    await stream.CopyToAsync(fileStream);
+                    await fileStream.FlushAsync();
+                }
+            }
+            finally
+            {
+                placeHolder.Dispose();
+            }
         }
 
         /// <summary>
