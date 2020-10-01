@@ -17,6 +17,7 @@ namespace Plugin.FilePicker
     public class FilePickerImplementation : IFilePicker
     {
         private readonly DocumentPicker _documentPicker = new DocumentPicker();
+        private readonly DocumentBrowser _documentBrowser = new DocumentBrowser();
 
         public async Task<FileData> PickFile(string[] allowedTypes)
         {
@@ -27,7 +28,9 @@ namespace Plugin.FilePicker
 
         public Task<FilePlaceholder> CreateOrOverwriteFile(string[] allowedTypes = null)
         {
-            throw new NotImplementedException();
+            var placeHolder = _documentBrowser.PickMediaAsync(allowedTypes);
+
+            return placeHolder;
         }
     }
 }

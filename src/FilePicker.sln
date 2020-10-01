@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{60460F50-01E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{4BE93955-5CB9-47D4-A096-FEB06A7B0524}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.FilePicker.wpf", "FilePicker\Plugin.FilePicker.wpf\Plugin.FilePicker.wpf.csproj", "{B16232A9-86A2-47CC-80E9-92E8F0F31ED0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.FilePicker.wpf", "FilePicker\Plugin.FilePicker.wpf\Plugin.FilePicker.wpf.csproj", "{B16232A9-86A2-47CC-80E9-92E8F0F31ED0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -59,7 +59,7 @@ namespace FilePickerSample
 
             if (Device.RuntimePlatform == Device.iOS)
             {
-                fileTypes = new string[] { "public.text" }; // same as iOS constant UTType.Text
+                fileTypes = new string[] { "public.text", ".txt", ".md" }; // same as iOS constant UTType.Text
             }
 
             if (Device.RuntimePlatform == Device.UWP)
