@@ -33,6 +33,7 @@
     </LinkMode>
     <XamMacArch>
     </XamMacArch>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
@@ -54,6 +55,7 @@
     </LinkMode>
     <XamMacArch>
     </XamMacArch>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
