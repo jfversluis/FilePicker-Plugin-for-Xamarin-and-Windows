@@ -49,7 +49,51 @@ namespace Plugin.FilePicker
 
         public Task<FilePlaceholder> CreateOrOverwriteFile(string[] allowedTypes = null)
         {
-            throw new NotImplementedException();
+            // for consistency with other platforms, only allow selecting of a single file.
+            // would be nice if we passed a "file options" to override picking multiple files & directories
+            var savePanel = new NSSavePanel();
+            savePanel.CanCreateDirectories = true;
+
+            // macOS allows the file types to contain UTIs, filename extensions or a combination of the two.
+            // If no types are specified, all files are selectable.
+            if (allowedTypes != null)
+            {
+                savePanel.AllowedFileTypes = allowedTypes;
+            }
+
+            FilePlaceholder data = null;
+
+            var result = savePanel.RunModal();
+            if (result == 1)
+            {
+                // Nab the first file
+                var url = savePanel.Url;
+
+                if (url != null)
+                {
+                    var path = url.Path;
+                    var fileName = Path.GetFileName(path);
+                    data = new FilePlaceholder(path, fileName, saveAction);
+                }
+            }
+
+            return Task.FromResult(data);
+        }
+
+        private async Task saveAction(Stream stream, FilePlaceholder placeHolder)
+        {
+            try
+            {
+                await using (var fileStream = File.Create(placeHolder.FilePath))
+                {
+                    await stream.CopyToAsync(fileStream);
+                    await fileStream.FlushAsync();
+                }
+            }
+            finally
+            {
+                placeHolder.Dispose();
+            }
         }
     }
 }
