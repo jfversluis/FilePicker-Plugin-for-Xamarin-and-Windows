@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.FilePicker</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.FilePicker.CrossFilePicker">
+            <summary>
+            Cross platform FilePicker implemenations
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.CrossFilePicker.Current">
+            <summary>
+            Current settings to use
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -56,6 +56,7 @@
     <XamMacArch>
     </XamMacArch>
     <LangVersion>8.0</LangVersion>
+    <DocumentationFile>bin\Release\Plugin.FilePicker.Mac.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

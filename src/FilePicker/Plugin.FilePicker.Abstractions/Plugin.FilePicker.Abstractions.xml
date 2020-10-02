@@ -1,0 +1,293 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plugin.FilePicker.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Plugin.FilePicker.Abstractions.FileData">
+            <summary>
+            File data that specifies a file that was picked by the user.
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FileData._fileName">
+            <summary>
+            Backing store for the FileName property
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FileData._filePath">
+            <summary>
+            Backing store for the FilePath property
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FileData._isDisposed">
+            <summary>
+            Indicates if the object is already disposed
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FileData._dispose">
+            <summary>
+            Action to dispose of underlying resources of the picked file.
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FileData._streamGetter">
+            <summary>
+            Function to get a stream to the picked file.
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FileData.#ctor">
+            <summary>
+            Creates a new and empty file data object
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FileData.#ctor(System.String,System.String,System.Func{System.IO.Stream},System.Action{System.Boolean})">
+            <summary>
+            Creates a new file data object with property values
+            </summary>
+            <param name="filePath">
+            Full file path to the picked file.
+            </param>
+            <param name="fileName">
+            File name of the picked file.
+            </param>
+            <param name="streamGetter">
+            Function to get a stream to the picked file.
+            </param>
+            <param name="dispose">
+            Action to dispose of the underlying resources of the picked file.
+            </param>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FileData.ReadFully(System.IO.Stream)">
+            <summary>
+            Completely reads all bytes from the input stream and returns it as byte array. Can be
+            used when the returned file data consists of a stream, not a real filename.
+            </summary>
+            <param name="input">input stream</param>
+            <returns>byte array</returns>
+        </member>
+        <member name="P:Plugin.FilePicker.Abstractions.FileData.DataArray">
+            <summary>
+            Returns the raw data bytes for the picked file.
+            Note that due to how this property is implemented, you may only
+            call this once.  You can always access the underlying stream by
+            directly calling GetStream().
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.Abstractions.FileData.FileName">
+            <summary>
+            Filename of the picked file, without path
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.Abstractions.FileData.FilePath">
+            <summary>
+            Full filepath of the picked file.
+            Note that on specific platforms this can also contain an URI that
+            can't be opened with file related APIs. Use DataArray property or
+            GetStream() method in this cases.
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FileData.GetStream">
+            <summary>
+            Gets stream to access the picked file.
+            Note that when DataArray property was already accessed, the stream
+            must be rewinded to the beginning.
+            </summary>
+            <returns>stream object</returns>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FileData.Dispose">
+            <summary>
+            Disposes of all resources in the object
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FileData.Dispose(System.Boolean)">
+            <summary>
+            Disposes of managed resources
+            </summary>
+            <param name="disposing">
+            True when called from Dispose(), false when called from the destructor
+            </param>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FileData.Finalize">
+            <summary>
+            Finalizer for this object
+            </summary>
+        </member>
+        <member name="T:Plugin.FilePicker.Abstractions.FilePickerCancelledEventArgs">
+            <summary>
+            Event arguments for the event when file picking was cancelled, either
+            by the user or when an exception occured
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.Abstractions.FilePickerCancelledEventArgs.Exception">
+            <summary>
+            Exception that occured that led to cancelling file picking; may be
+            null when file picking was cancelled by the user
+            </summary>
+        </member>
+        <member name="T:Plugin.FilePicker.Abstractions.FilePickerEventArgs">
+            <summary>
+            Event arguments for the event when file picking was completed.
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.Abstractions.FilePickerEventArgs.FileName">
+            <summary>
+            File name part of picked file, without path
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.Abstractions.FilePickerEventArgs.FilePath">
+            <summary>
+            Complete file path of picked file; on some OS this may contain an Uri
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePickerEventArgs.#ctor">
+            <summary>
+            Creates a new and empty file picker event args object
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePickerEventArgs.#ctor(System.String)">
+            <summary>
+            Creates new file picker event args
+            </summary>
+            <param name="fileName">file name part of picked file</param>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePickerEventArgs.#ctor(System.String,System.String)">
+            <summary>
+            Creates new file picker event args
+            </summary>
+            <param name="fileName">file name part of picked file</param>
+            <param name="filePath">complete file path of picked file</param>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FilePlaceholder._fileName">
+            <summary>
+            Backing store for the FileName property
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FilePlaceholder._filePath">
+            <summary>
+            Backing store for the FilePath property
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FilePlaceholder._isDisposed">
+            <summary>
+            Indicates if the object is already disposed
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FilePlaceholder._dispose">
+            <summary>
+            Action to dispose of underlying resources of the picked file.
+            </summary>
+        </member>
+        <member name="F:Plugin.FilePicker.Abstractions.FilePlaceholder._streamSetter">
+            <summary>
+            Function to get a stream to the picked file.
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePlaceholder.#ctor">
+            <summary>
+            Creates a new and empty file data object
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePlaceholder.#ctor(System.String,System.String,System.Func{System.IO.Stream,Plugin.FilePicker.Abstractions.FilePlaceholder,System.Threading.Tasks.Task},System.Action{System.Boolean})">
+            <summary>
+            Creates a new file data object with property values
+            </summary>
+            <param name="filePath">
+            Full file path to the picked file.
+            </param>
+            <param name="fileName">
+            File name of the picked file.
+            </param>
+            <param name="streamSetter">app 
+            Function to get a stream to the picked file.
+            </param>
+            <param name="dispose">
+            Action to dispose of the underlying resources of the picked file.
+            </param>
+        </member>
+        <member name="P:Plugin.FilePicker.Abstractions.FilePlaceholder.FileName">
+            <summary>
+            Filename of the picked file, without path
+            </summary>
+        </member>
+        <member name="P:Plugin.FilePicker.Abstractions.FilePlaceholder.FilePath">
+            <summary>
+            Full filepath of the picked file.
+            Note that on specific platforms this can also contain an URI that
+            can't be opened with file related APIs. Use DataArray property or
+            GetStream() method in this cases.
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePlaceholder.WriteToFile(System.IO.Stream)">
+            <summary>
+            Gets stream to access the picked file.
+            Note that when DataArray property was already accessed, the stream
+            must be rewinded to the beginning.
+            </summary>
+            <returns>stream object</returns>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePlaceholder.Dispose">
+            <summary>
+            Disposes of all resources in the object
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePlaceholder.Dispose(System.Boolean)">
+            <summary>
+            Disposes of managed resources
+            </summary>
+            <param name="disposing">
+            True when called from Dispose(), false when called from the destructor
+            </param>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.FilePlaceholder.Finalize">
+            <summary>
+            Finalizer for this object
+            </summary>
+        </member>
+        <member name="T:Plugin.FilePicker.Abstractions.IFilePicker">
+            <summary>
+            Interface for FilePicker
+            </summary>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.IFilePicker.PickFile(System.String[])">
+            <summary>
+            Starts file picking and returns file data for picked file. File
+            types can be specified in order to limit files that can be
+            selected. Note that this method may throw exceptions that occured
+            during file picking.
+            </summary>
+            <param name="allowedTypes">
+            Specifies one or multiple allowed types. When null, all file types
+            can be selected while picking.
+            On Android you can specify one or more MIME types, e.g.
+            "image/png"; also wild card characters can be used, e.g. "image/*".
+            On iOS you can specify UTType constants, e.g. UTType.Image.
+            On UWP, specify a list of extensions, like this: ".jpg", ".png".
+            On WPF, specify strings like this: "Data type (*.ext)|*.ext", which
+            corresponds how the Windows file open dialog specifies file types.
+            </param>
+            <returns>
+            File data object, or null when user cancelled picking file
+            </returns>
+        </member>
+        <member name="M:Plugin.FilePicker.Abstractions.IFilePicker.CreateOrOverwriteFile(System.String[])">
+            <summary>
+            Starts file picking and returns file data for created or existing file. File
+            types can be specified in order to limit files that can be
+            created. Note that this method may throw exceptions that occured
+            during file picking.
+            </summary>
+            <param name="allowedTypes">
+            Specifies one or multiple allowed types. When null, all file types
+            can be selected while picking.
+            On Android you can specify one or more MIME types, e.g.
+            "image/png"; also wild card characters can be used, e.g. "image/*".
+            On iOS you can specify UTType constants, e.g. UTType.Image.
+            On UWP, specify a list of extensions, like this: ".jpg", ".png".
+            On WPF, specify strings like this: "Data type (*.ext)|*.ext", which
+            corresponds how the Windows file open dialog specifies file types.
+            </param>
+            <returns>
+            File data object, or null when user cancelled picking file
+            </returns>
+        </member>
+    </members>
+</doc>

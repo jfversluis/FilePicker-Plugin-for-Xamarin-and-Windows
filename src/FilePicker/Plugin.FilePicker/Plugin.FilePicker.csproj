@@ -7,6 +7,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE;PORTABLE</DefineConstants>
+    <DocumentationFile>C:\Githubs\FilePicker\src\FilePicker\Plugin.FilePicker\Plugin.FilePicker.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;PORTABLE</DefineConstants>
