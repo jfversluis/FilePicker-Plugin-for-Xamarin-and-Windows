@@ -46,7 +46,7 @@ namespace Plugin.FilePicker
         }
 
         /// <summary>
-        /// File picker implementation for WPF; uses the Win32 SaveFileDialog from
+        /// File creater implementation for WPF; uses the Win32 SaveFileDialog from
         /// PresentationFoundation reference assembly.
         /// </summary>
         /// <param name="allowedTypes">
@@ -56,13 +56,9 @@ namespace Plugin.FilePicker
         /// corresponds how the Windows file open dialog specifies file types.
         /// </param>
         /// <returns>file data of picked file, or null when picking was cancelled</returns>
-        public Task<FileData> CreateOrOverwriteFile(string[] allowedTypes = null)
+        public Task<FilePlaceholder> CreateOrOverwriteFile(string[] allowedTypes = null)
         {
             var picker = new Microsoft.Win32.SaveFileDialog();
-
-            picker.InitialDirectory =
-
-            picker.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             if (allowedTypes != null)
             {
@@ -73,14 +69,30 @@ namespace Plugin.FilePicker
 
             if (result == null || result == false)
             {
-                return Task.FromResult<FileData>(null);
+                return Task.FromResult<FilePlaceholder>(null);
             }
 
             var fileName = Path.GetFileName(picker.FileName);
 
-            var data = new FileData(picker.FileName, fileName, () => File.OpenRead(picker.FileName), (x) => { });
+            var data = new FilePlaceholder(picker.FileName, fileName, saveAction);
 
-            return Task.FromResult(data);
+            return Task.FromResult<FilePlaceholder>(data);
+        }
+
+        private async Task saveAction(Stream stream, FilePlaceholder placeHolder)
+        {
+            try
+            {
+                await using (var fileStream = File.Create(placeHolder.FilePath))
+                {
+                    await stream.CopyToAsync(fileStream);
+                    await fileStream.FlushAsync();
+                }
+            }
+            finally
+            {
+                placeHolder.Dispose();
+            }
         }
     }
 }
