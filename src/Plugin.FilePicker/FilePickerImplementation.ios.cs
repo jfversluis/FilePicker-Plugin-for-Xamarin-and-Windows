@@ -154,7 +154,7 @@ namespace Plugin.FilePicker
             // while opening (UIDocumentPickerMode.Open) opens the document directly. We do the
             // first, so the user has to read the file immediately.
             var documentPicker = new UIDocumentPickerViewController(allowedUtis, UIDocumentPickerMode.Import);
-
+            documentPicker.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             documentPicker.DidPickDocument += this.DocumentPicker_DidPickDocument;
             documentPicker.WasCancelled += this.DocumentPicker_WasCancelled;
             documentPicker.DidPickDocumentAtUrls += this.DocumentPicker_DidPickDocumentAtUrls;
