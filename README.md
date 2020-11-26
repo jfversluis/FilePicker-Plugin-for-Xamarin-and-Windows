@@ -4,7 +4,7 @@ Simple cross-platform plug-in that allows you to pick files and work with them.
 
 The original project can be found [here](https://github.com/Studyxnet/FilePicker-Plugin-for-Xamarin-and-Windows/), but seems abandoned, this one was forked and further developed.
 
-### The future: [Xamarin.Essentials](https://docs.microsoft.com/de-de/xamarin/essentials/)
+### The future: [Xamarin.Essentials](https://docs.microsoft.com/xamarin/essentials/)
 
 Since version 1.6.0 the [Xamarin.Essentials](https://github.com/xamarin/Essentials)
 project also supports file picking! See the [Migration Guide](#migration-guide)
@@ -27,8 +27,8 @@ Add this as a source to your IDE to find the latest packages: [https://www.myget
 
 | Platform              |Supported| Version |Remarks|
 | ------------------------ | :-: | :------: | :------------------: |
-|Xamarin.iOS Classic       | Yes | iOS 6+   ||
-|Xamarin.iOS Unified       | Yes | iOS 6+   ||
+|Xamarin.iOS Classic       | Yes | iOS 8+   ||
+|Xamarin.iOS Unified       | Yes | iOS 8+   ||
 |Xamarin.Android           | Yes | API 10+  ||
 |Windows Phone Silverlight | No  |          ||
 |Windows Phone RT          | Yes | 8.1+     |Up to package version 1.4.x|
@@ -146,7 +146,7 @@ originated from this plugin. Here's a little guide on how to do it.
 1. If you don't have the Xamarin.Essentials NuGet package installed yet, install
    it into the Android, iOS and UWP projects. Also install it into your Forms
    project, if you're calling the FilePicker from there. Be sure to also
-   properly [initialize Essentials](https://docs.microsoft.com/de-de/xamarin/essentials/get-started).
+   properly [initialize Essentials](https://docs.microsoft.com/xamarin/essentials/get-started).
    You can remove the Xamarin.Plugin.FilePicker NuGet package now or afterwards.
 
 2. Rename the namespaces, types and method calls. Replace
